@@ -15,6 +15,7 @@ import Connes.Nonisomorphism
 
 namespace Connes
 
+/-- Completion of the four headline properties. Paper: §7. -/
 theorem theoremA :
     ∃ Γ₁ Γ₂ : CountableDiscreteGroup.{0},
       HasKazhdanPropertyT Γ₁ ∧ HasKazhdanPropertyT Γ₂ ∧

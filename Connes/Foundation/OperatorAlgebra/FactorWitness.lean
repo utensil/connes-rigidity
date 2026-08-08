@@ -12,11 +12,13 @@ import Connes.Core
 namespace Connes
 namespace FactorWitness
 
+/-- Spatial witness data for a factor equivalence. Paper: §3. -/
 structure SpatialWitness (G H : CountableDiscreteGroup) where
   unitaryWitness : Prop
   conjugatesRegularRepresentations : Prop
   preservesTrace : Prop
 
+/-- Spatial-to-tracial transfer. Paper: §3. -/
 theorem tracialEquiv_of_spatialWitness {G H : CountableDiscreteGroup}
     (w : SpatialWitness G H) : TracialGroupFactorsIsomorphic G H := by
   sorry

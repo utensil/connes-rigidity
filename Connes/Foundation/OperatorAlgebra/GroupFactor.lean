@@ -13,15 +13,19 @@ import Connes.Core
 namespace Connes
 namespace GroupFactor
 
+/-- Regular representation carrier. Paper: §3. -/
 abbrev RegularRepresentation (G : Type*) [Group G] :=
   G →* unitary (GroupL2 G →L[ℂ] GroupL2 G)
 
+/-- Regular representation boundary. Paper: §3. -/
 noncomputable def regularRepresentation (G : Type*) [Group G] : RegularRepresentation G :=
   leftRegularRepresentation G
 
+/-- Group-factor carrier. Paper: §3. -/
 noncomputable def factor (G : CountableDiscreteGroup) :=
   GroupVonNeumannAlgebra G
 
+/-- Canonical trace normalization. Paper: §3. -/
 theorem canonicalTrace_identity (G : CountableDiscreteGroup) :
     canonicalTrace G ⟨1, by simp⟩ = 1 := by
   sorry

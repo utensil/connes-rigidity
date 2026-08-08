@@ -12,14 +12,19 @@ import Connes.Foundation.LinearAlgebra.Symplectic
 namespace Connes
 namespace Sp4
 
+/-- Characteristic-two scalar field. Paper: §§2, 6. -/
 abbrev F := ZMod 2
+/-- Symplectic group carrier. Paper: §§2, 6. -/
 abbrev Group := Symplectic.Sp4
 
+/-- Nonzero-vector action boundary. Paper: §2. -/
 def actsOnNonzeroVectors : Prop := True
 
+/-- Nonzero-vector transitivity. Paper: §2. -/
 theorem transitive_on_nonzero_vectors : actsOnNonzeroVectors := by
   sorry
 
+/-- Normal-subgroup obstruction boundary. Paper: §6. -/
 def no_nontrivial_normal_elementary_abelian_subgroup : Prop := by
   sorry
 
