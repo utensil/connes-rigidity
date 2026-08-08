@@ -5,6 +5,8 @@ project:
   authors:
     - "utensil"
   license: "Apache-2.0"
+  toolchain: "leanprover/lean4:v4.32.2"
+  mathlib_revision: "905b95818eb32af7874a58b427f50c1711a5e96c"
 
 sources:
   - title: "ICC property(T) groups without W*-superrigidity"
