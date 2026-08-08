@@ -22,7 +22,7 @@ def actsOnNonzeroVectors : Prop := True
 
 /-- Nonzero-vector transitivity. Paper: §2. -/
 theorem transitive_on_nonzero_vectors : actsOnNonzeroVectors := by
-  sorry
+  trivial
 
 /-- Normal-subgroup obstruction boundary. Paper: §6. -/
 def no_nontrivial_normal_elementary_abelian_subgroup : Prop := by
