@@ -22,8 +22,8 @@ the repository, and it does not accept a URL or an implicit current checkout.
 
 | Zhou area | Project file | OpenAI source block | Status |
 | --- | --- | --- | --- |
-| §3 factor vocabulary | `Connes/Porting/CoreTransfer.lean` | `l2Reindex_apply`, `l2Reindex_symm`, `leftRegularUnitary_apply` | exact proof transfer |
-| §4 property-(T) transfer | `Connes/Porting/CoreTransfer.lean` | `hasAlmostInvariantUnitVectors_comp`, `hasKazhdanPropertyT_of_surjective`, `hasKazhdanPropertyT_iff_of_mulEquiv` | exact proof transfer |
+| §3 factor vocabulary | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:137-157` | proof transfer with namespace adaptation |
+| §4 property-(T) transfer | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:252-285` | proof transfer with namespace adaptation |
 | §2 construction | `Connes/Construction.lean` | OpenAI tensor and action blocks | not type-compatible with the Zhou interface; retain skeleton boundary |
 | §3 analytic shear | `Connes/FactorIsomorphism.lean` | OpenAI factor blocks | different group and dual data; port by later local slice |
 | §4 detector argument | `Connes/PropertyT.lean` | OpenAI detector blocks | different external input boundary; port by later local slice |
