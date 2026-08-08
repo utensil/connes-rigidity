@@ -24,7 +24,8 @@ def evaluation {M : Type*} [AddCommGroup M] (χ : dual M) (m : M) : ZMod 2 :=
 /-- Dual-coordinate existence boundary. Paper: §3. -/
 theorem dual_coordinates_exist (M : Type*) [AddCommGroup M] :
     Nonempty (dual M) := by
-  sorry
+  change Nonempty (M →+ ZMod 2)
+  exact ⟨0⟩
 
 /-- Fourier-coordinate transform boundary. Paper: §3. -/
 def FourierTransform (M : Type*) [AddCommGroup M] :
