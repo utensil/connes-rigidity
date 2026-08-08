@@ -18,37 +18,56 @@ source for tracked files.
 The extractor only prints a requested revision and line range. It never edits
 the repository, and it does not accept a URL or an implicit current checkout.
 
-## Current ledger
+## Current declaration-level ledger
+
+Each compatible source block is split along the Zhou-oriented file boundary.
+The listed files are standalone and are built before their commits are made.
+`exact` means the proof term survived with only namespace/import changes;
+`adapted` records a change of local names or carriers; `local` is a proof of a
+Zhou skeleton declaration, not a claim that the OpenAI source proves it.
 
 | Zhou area | Project file | OpenAI source block | Status |
 | --- | --- | --- | --- |
-| §3 factor vocabulary | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:137-157` | proof transfer with namespace adaptation |
-| §4 property-(T) transfer | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:252-285` | proof transfer with namespace adaptation |
-| §2 construction | `Connes/Construction.lean` | OpenAI tensor and action blocks | not type-compatible with the Zhou interface; retain skeleton boundary |
-| §3 analytic shear | `Connes/FactorIsomorphism.lean` | OpenAI factor blocks | different group and dual data; port by later local slice |
-| §4 detector argument | `Connes/PropertyT.lean` | OpenAI detector blocks | different external input boundary; port by later local slice |
-| §5 ICC | `Connes/ICC.lean` | OpenAI conjugacy blocks | different group construction; port by later local slice |
-| §6 nonisomorphism | `Connes/Nonisomorphism.lean` | OpenAI characteristic-subgroup blocks | different invariant; port by later local slice |
+| §2 characteristic-two scalars | `Connes/Foundation/LinearAlgebra/BooleanPolynomial.lean` | `ConnesRigidity.lean:15-23` | adapted, `f117cba` |
+| §2 symmetric quadratic data | `Connes/Construction/SymmetricTensor.lean` | `ConnesRigidity.lean:661-727` | adapted, `11c38de` |
+| §2 retraction and refinement checks | `Connes/Construction.lean`, `Connes/Foundation/LinearAlgebra/Symplectic.lean` | no compatible source block | local, `c783d14`, `211045e` |
+| §3 L² reindexing and regular action | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:99-157` | exact, `69c8004` |
+| §3 unitary/linear isometry bridge | `Connes/Foundation/OperatorAlgebra/UnitaryEquiv.lean` | `ConnesRigidity.lean:304-348` | exact, `f32cccc` |
+| §3 finite-index induction | `Connes/Foundation/OperatorAlgebra/FiniteIndex.lean` | `ConnesRigidity.lean:295-655` | exact, `b3dc66d` |
+| §3 projection normality | `Connes/Foundation/OperatorAlgebra/StarAlgEquiv.lean` | `ConnesRigidity.lean:30217-30246` | exact, `47f1f76` |
+| §3 factor witness laws | `Connes/Foundation/OperatorAlgebra/FactorEquiv.lean`, `TracialEquiv.lean` | `ConnesRigidity.lean:13650-13699` | exact/adapted, `2269ef9`, `4fed675` |
+| §3 trace, dual, Haar, spectral boundaries | `Connes/Foundation/OperatorAlgebra/GroupFactor.lean`, `Fourier.lean`, `Haar.lean`, `Spectral.lean` | generic source vocabulary only | local closures, `7eade94`, `a771e0d`, `82c06a7`, `103fd22` |
+| §4 property-(T) vocabulary | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:252-285` | exact, `69c8004` |
+| §5 conjugacy and special-linear orbits | `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `ConnesRigidity.lean:10419-10560` | adapted |
+| §5 split-extension ICC | `Connes/Foundation/GroupTheory/SemidirectICC.lean` | `ConnesRigidity.lean:31899-31958` | exact/adapted, `419dd19` |
+| §6 group invariants and commensurability | `Connes/Foundation/GroupTheory/GroupInvariants.lean` | `ConnesRigidity.lean:13952-14028` | exact/adapted, `a81173e` |
+| §6 order-four obstruction | `Connes/Foundation/GroupTheory/OrderFour.lean` | `ConnesRigidity.lean:36636-36694` | exact/adapted, `07faf7a` |
 
-## Sorry target ledger
+The compatible source-backed declarations above are the covered set from the
+correspondence audit. The rest of the Zhou theorem is kept as an explicit
+skeleton boundary rather than filled with unrelated source code.
 
-The transfer lane is declaration-level. Each row is compiled as its own Lean
-file before it is considered for a skeleton `sorry`; a `not compatible` entry
-means that the source declaration was not textually transplanted into a
-different type.
+## Remaining sorry target ledger
 
-| Project file | Current `sorry` targets | Transfer disposition |
+There are 30 `sorry` occurrences in the checked-out tree, including one in the
+independent Comparator challenge. The following 29 solution declarations are
+the remaining Zhou-specific or otherwise incompatible obligations:
+
+| Project file | Current targets | Disposition |
 | --- | --- | --- |
-| `Connes/Construction.lean` | `delta_diagonal`, `thetaOne_is_action`, `thetaTwo_is_action` | not compatible; Zhou §2 data differs |
-| `Connes/FactorIsomorphism.lean` | `fiberShear_involutive`, `fiberShear_preservesHaar`, `fiberShear_conjugates_actions`, `factorIsomorphism` | not compatible; Zhou §3 data differs |
-| `Connes/PropertyT.lean` | `ejzkPropertyTInput`, `relative_propertyT_of_detector_bound`, `gammaOne_propertyT`, `gammaTwo_propertyT` | generic §4 vocabulary transferred; concrete targets remain open |
-| `Connes/ICC.lean` | `sl3_infinite_orbits`, `module_infinite_orbits`, `gammaOne_icc`, `gammaTwo_icc` | not compatible; Zhou §5 group differs |
-| `Connes/Nonisomorphism.lean` | `DTwo_not_semisimple`, `cocycle_not_coboundary`, `normal_module_characteristic`, `gammaOne_not_isomorphic_gammaTwo` | not compatible; Zhou §6 invariant differs |
-| `Connes/Main.lean` | `theoremA` | composition target; port after section files |
-| `Connes/Foundation/LinearAlgebra/*.lean` | `weight_lower_bound`, `coefficientChart_mono`, `coefficientCharts_cover`, `semisimple_invariant_under_linear_equiv`, `nonsplit_extension_not_semisimple`, `refinement_polarizes_to_form`, `cocycle_is_linear`, `cocycle_identity`, `sp4_transitive_on_nonzero` | local Zhou interfaces; no direct source block |
-| `Connes/Foundation/GroupTheory/*.lean` | `transitive_on_nonzero_vectors`, `no_nontrivial_normal_elementary_abelian_subgroup`, `sl3_eq_elementary`, `sl3_isICC`, `no_nontrivial_abelian_normal_subgroup` | local Zhou interfaces; no direct source block |
-| `Connes/Foundation/OperatorAlgebra/*.lean` | `tracialEquiv_of_spatialWitness`, `detector_bound_of_spectralInput`, `fiber_translation_preservesHaar`, `canonicalTrace_identity`, `dual_coordinates_exist`, `refl`, `symm`, `trans` | local Zhou interfaces; no direct source block |
-| `ComparatorChallenges/F_ConnesZhou.lean` | `theoremA` | independent challenge statement; no solution transfer |
+| `Connes/Construction.lean` | `thetaOne_is_action`, `thetaTwo_is_action` | Zhou §2 action data |
+| `Connes/FactorIsomorphism.lean` | `fiberShear_preservesHaar`, `fiberShear_conjugates_actions`, `factorIsomorphism` | Zhou §3 analytic construction |
+| `Connes/PropertyT.lean` | `ejzkPropertyTInput`, `relative_propertyT_of_detector_bound`, `gammaOne_propertyT`, `gammaTwo_propertyT` | external input and concrete §4 transfer |
+| `Connes/ICC.lean` | `sl3_infinite_orbits`, `module_infinite_orbits`, `gammaOne_icc`, `gammaTwo_icc` | Zhou §5 group construction |
+| `Connes/Nonisomorphism.lean` | `DTwo_not_semisimple`, `cocycle_not_coboundary`, `normal_module_characteristic`, `gammaOne_not_isomorphic_gammaTwo` | Zhou §6 invariant |
+| `Connes/Main.lean` | `theoremA` | §7 composition |
+| `Connes/Foundation/LinearAlgebra/BooleanPolynomial.lean` | `weight_lower_bound`, `coefficientCharts_cover` | Zhou §4 polynomial argument |
+| `Connes/Foundation/LinearAlgebra/Semisimple.lean` | `nonsplit_extension_not_semisimple` | Zhou §6 extension obstruction |
+| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `cocycle_is_linear`, `cocycle_identity`, `sp4_transitive_on_nonzero` | Zhou §2 symplectic facts; current cocycle statement is not source-compatible |
+| `Connes/Foundation/GroupTheory/Sp4.lean` | `no_nontrivial_normal_elementary_abelian_subgroup` | Zhou §6 normal-subgroup argument |
+| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `sl3_eq_elementary`, `sl3_isICC`, `no_nontrivial_abelian_normal_subgroup` | Zhou §§4-6 concrete group facts |
+| `Connes/Foundation/OperatorAlgebra/FactorWitness.lean` | `tracialEquiv_of_spatialWitness` | Zhou §3 spatial construction |
+| `ComparatorChallenges/F_ConnesZhou.lean` | challenge `theoremA` | independent comparator statement |
 
 The historical organized OpenAI tree is useful for dependency ordering, but it
 contains thousands of generated certificate files. The port boundary keeps
