@@ -34,7 +34,7 @@ def fiberShear : DualCoordinates → DualCoordinates := fun p =>
 /-- Fiber-shear involution. Paper: §3. -/
 theorem fiberShear_involutive (p : DualCoordinates) :
     fiberShear (fiberShear p) = p := by
-  sorry
+  ext <;> simp [fiberShear, quadraticMap]
 
 /-- Haar-preservation boundary. Paper: §3. -/
 def fiberShear_preservesHaar : Prop := by
