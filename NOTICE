@@ -1,0 +1,11 @@
+connes-rigidity
+
+This project is an independent experimental formalization of the mathematical
+statement in Shuoxing Zhou, “ICC property(T) groups without
+W*-superrigidity,” arXiv:2608.02327.
+
+Its interfaces and proof-organization choices were informed by the public
+OpenAI `ten-proofs` repository, especially its Connes formalization. That
+reference is Apache-2.0 and is identified by the public commit recorded in
+docs/PROVENANCE.md. This project does not imply OpenAI endorsement or
+affiliation.

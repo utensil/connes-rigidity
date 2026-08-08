@@ -1,0 +1,13 @@
+{
+  "challenge_module": "ComparatorChallenges.F_ConnesZhou",
+  "solution_module": "Connes",
+  "theorem_names": [
+    "Connes.theoremA"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}
