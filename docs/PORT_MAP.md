@@ -28,20 +28,20 @@ Zhou skeleton declaration, not a claim that the OpenAI source proves it.
 
 | Zhou area | Project file | OpenAI source block | Status |
 | --- | --- | --- | --- |
-| §2 characteristic-two scalars | `Connes/Foundation/LinearAlgebra/BooleanPolynomial.lean` | `ConnesRigidity.lean:15-23` | adapted, `f117cba` |
-| §2 symmetric quadratic data | `Connes/Construction/SymmetricTensor.lean` | `ConnesRigidity.lean:661-727` | adapted, `11c38de` |
-| §2 retraction and refinement checks | `Connes/Construction.lean`, `Connes/Foundation/LinearAlgebra/Symplectic.lean` | no compatible source block | local, `c783d14`, `211045e` |
-| §3 L² reindexing and regular action | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:99-157` | exact, `69c8004` |
-| §3 unitary/linear isometry bridge | `Connes/Foundation/OperatorAlgebra/UnitaryEquiv.lean` | `ConnesRigidity.lean:304-348` | exact, `f32cccc` |
-| §3 finite-index induction | `Connes/Foundation/OperatorAlgebra/FiniteIndex.lean` | `ConnesRigidity.lean:295-655` | exact, `b3dc66d` |
-| §3 projection normality | `Connes/Foundation/OperatorAlgebra/StarAlgEquiv.lean` | `ConnesRigidity.lean:30217-30246` | exact, `47f1f76` |
-| §3 factor witness laws | `Connes/Foundation/OperatorAlgebra/FactorEquiv.lean`, `TracialEquiv.lean` | `ConnesRigidity.lean:13650-13699` | exact/adapted, `2269ef9`, `4fed675` |
-| §3 trace, dual, Haar, spectral boundaries | `Connes/Foundation/OperatorAlgebra/GroupFactor.lean`, `Fourier.lean`, `Haar.lean`, `Spectral.lean` | generic source vocabulary only | local closures, `7eade94`, `a771e0d`, `82c06a7`, `103fd22` |
-| §4 property-(T) vocabulary | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:252-285` | exact, `69c8004` |
-| §5 conjugacy and special-linear orbits | `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `ConnesRigidity.lean:10419-10560` | adapted |
-| §5 split-extension ICC | `Connes/Foundation/GroupTheory/SemidirectICC.lean` | `ConnesRigidity.lean:31899-31958` | exact/adapted, `419dd19` |
-| §6 group invariants and commensurability | `Connes/Foundation/GroupTheory/GroupInvariants.lean` | `ConnesRigidity.lean:13952-14028` | exact/adapted, `a81173e` |
-| §6 order-four obstruction | `Connes/Foundation/GroupTheory/OrderFour.lean` | `ConnesRigidity.lean:36636-36694` | exact/adapted, `07faf7a` |
+| §2 characteristic-two scalars | `Connes/Foundation/LinearAlgebra/BooleanPolynomial.lean` | `ConnesRigidity.lean:15-23` | adapted, `c2c619c` |
+| §2 symmetric quadratic data | `Connes/Construction/SymmetricTensor.lean` | `ConnesRigidity.lean:661-727` | adapted, `aa0b456` |
+| §2 retraction and refinement checks | `Connes/Construction.lean`, `Connes/Foundation/LinearAlgebra/Symplectic.lean` | no compatible source block | local, `ee6a907`, `cb6e39e` |
+| §3 L² reindexing and regular action | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:99-157` | exact, base `69c8004` |
+| §3 unitary/linear isometry bridge | `Connes/Foundation/OperatorAlgebra/UnitaryEquiv.lean` | `ConnesRigidity.lean:304-348` | exact, `3771cb0` |
+| §3 finite-index induction | `Connes/Foundation/OperatorAlgebra/FiniteIndex.lean` | `ConnesRigidity.lean:295-655` | exact, `574685f` |
+| §3 projection normality | `Connes/Foundation/OperatorAlgebra/StarAlgEquiv.lean` | `ConnesRigidity.lean:30217-30246` | exact, `b743a492` |
+| §3 factor witness laws | `Connes/Foundation/OperatorAlgebra/FactorEquiv.lean`, `TracialEquiv.lean` | `ConnesRigidity.lean:13650-13699` | exact/adapted, `15679ee`, `c51d3dd` |
+| §3 trace, dual, Haar, spectral boundaries | `Connes/Foundation/OperatorAlgebra/GroupFactor.lean`, `Fourier.lean`, `Haar.lean`, `Spectral.lean` | generic source vocabulary only | local closures, `b43a492`, `8b56cb5`, `5df6ecf`, `bf927cf` |
+| §4 property-(T) vocabulary | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:252-285` | exact, base `69c8004` |
+| §5 conjugacy and special-linear orbits | `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `ConnesRigidity.lean:10419-10560` | adapted, `6764db2` |
+| §5 split-extension ICC | `Connes/Foundation/GroupTheory/SemidirectICC.lean` | `ConnesRigidity.lean:31899-31958` | exact/adapted, `6200953` |
+| §6 group invariants and commensurability | `Connes/Foundation/GroupTheory/GroupInvariants.lean` | `ConnesRigidity.lean:13952-14028` | exact/adapted, `1f8f2f3` |
+| §6 order-four obstruction | `Connes/Foundation/GroupTheory/OrderFour.lean` | `ConnesRigidity.lean:36636-36694` | exact/adapted, `e8308c7` |
 
 The compatible source-backed declarations above are the covered set from the
 correspondence audit. The rest of the Zhou theorem is kept as an explicit
