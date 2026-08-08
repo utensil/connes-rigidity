@@ -16,6 +16,16 @@ namespace BooleanPolynomial
 /-- Characteristic-two scalar field. Paper: §4. -/
 abbrev F := ZMod 2
 
+/-- Characteristic-two numeral reduction. Paper: §2, source: OpenAI `ConnesRigidity.lean:15-16`. -/
+@[simp] theorem two_eq_zero : (2 : F) = 0 := by
+  rfl
+
+/-- Nonzero characteristic-two scalars are one. Paper: §2, source: OpenAI `ConnesRigidity.lean:18-23`. -/
+theorem eq_one_of_ne_zero (a : F) (ha : a ≠ 0) : a = 1 := by
+  fin_cases a
+  · exact (ha rfl).elim
+  · rfl
+
 /-- Boolean polynomial carrier. Paper: §4. -/
 abbrev Polynomial (n : ℕ) := (Fin n → F) → F
 
