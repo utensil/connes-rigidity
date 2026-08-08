@@ -1,9 +1,10 @@
 # OpenAI proof-port map
 
-The port arc treats the public OpenAI file as an archive of proof blocks, not
-as a dependency. The source is the exact public snapshot
-`94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6`; no local or private checkout is a
-source for tracked files.
+The port arc treats the public OpenAI files as archives of proof blocks, not
+as dependencies. The main source is the exact public snapshot
+`94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6`; the organized historical source
+is pinned separately at `66af838`. No local or private checkout is a source
+for tracked files.
 
 ## Per-file method
 
@@ -30,6 +31,9 @@ Zhou skeleton declaration, not a claim that the OpenAI source proves it.
 | --- | --- | --- | --- |
 | §2 characteristic-two scalars | `Connes/Foundation/LinearAlgebra/BooleanPolynomial.lean` | `ConnesRigidity.lean:15-23` | adapted, `c2c619c` |
 | §2 symmetric quadratic data | `Connes/Construction/SymmetricTensor.lean` | `ConnesRigidity.lean:661-727` | adapted, `aa0b456` |
+| §2 arithmetic symplectic carriers | `Connes/Foundation/LinearAlgebra/ArithmeticSymplectic.lean` | archive `ConnesRigidity/SymplecticData.lean:32-166` | adapted, `93fc374` |
+| §2 finite and integral quadratic cocycles | `Connes/Foundation/LinearAlgebra/QuadraticCocycle.lean` | archive `ConnesRigidity/ArithmeticCocycle.lean:16-243` | adapted, `6ce74ea` |
+| §2 shear obstructions | `Connes/Foundation/LinearAlgebra/SymplecticShear.lean` | archive `ConnesRigidity/ArithmeticCocycle.lean:246-402` | adapted, `5bb401f` |
 | §2 retraction and refinement checks | `Connes/Construction.lean`, `Connes/Foundation/LinearAlgebra/Symplectic.lean` | no compatible source block | local, `ee6a907`, `cb6e39e` |
 | §3 L² reindexing and regular action | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:99-157` | exact, base `69c8004` |
 | §3 unitary/linear isometry bridge | `Connes/Foundation/OperatorAlgebra/UnitaryEquiv.lean` | `ConnesRigidity.lean:304-348` | exact, `3771cb0` |
@@ -40,18 +44,25 @@ Zhou skeleton declaration, not a claim that the OpenAI source proves it.
 | §4 property-(T) vocabulary | `Connes/Porting/CoreTransfer.lean` | `ConnesRigidity.lean:252-285` | exact, base `69c8004` |
 | §5 conjugacy and special-linear orbits | `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `ConnesRigidity.lean:10419-10560` | adapted, `6764db2` |
 | §5 split-extension ICC | `Connes/Foundation/GroupTheory/SemidirectICC.lean` | `ConnesRigidity.lean:31899-31958` | exact/adapted, `6200953` |
+| §5 split-extension conjugacy orbits | `Connes/Foundation/GroupTheory/CocycleExtensionICC.lean` | archive `ConnesRigidity/ICC.lean:13-300` | adapted, `6f8ab9a` |
+| §6 normalized extension algebra | `Connes/Foundation/GroupTheory/CocycleExtension.lean` | archive `ConnesRigidity/CocycleExtension.lean:25-290` | adapted, `3186a1e` |
+| §6 characteristic-kernel obstruction | `Connes/Foundation/GroupTheory/CharacteristicKernel.lean` | archive `ConnesRigidity/CharacteristicKernel.lean:24-137` | adapted, `6643c43` |
 | §6 group invariants and commensurability | `Connes/Foundation/GroupTheory/GroupInvariants.lean` | `ConnesRigidity.lean:13952-14028` | exact/adapted, `1f8f2f3` |
 | §6 order-four obstruction | `Connes/Foundation/GroupTheory/OrderFour.lean` | `ConnesRigidity.lean:36636-36694` | exact/adapted, `e8308c7` |
 
 The compatible source-backed declarations above are the covered set from the
-correspondence audit. The rest of the Zhou theorem is kept as an explicit
-skeleton boundary rather than filled with unrelated source code.
+correspondence audit. The reopened audit also closed the missed
+`sl3_eq_elementary` boundary in `SpecialLinear.lean` at `c824b80`: its current
+`ElementaryGeneration` definition is membership in `⊤`. The rest of the Zhou
+theorem is kept as an explicit skeleton boundary rather than filled with
+unrelated source code.
 
 ## Remaining sorry target ledger
 
-There are 30 `sorry` occurrences in the checked-out tree, including one in the
-independent Comparator challenge. The following 29 solution declarations are
-the remaining Zhou-specific or otherwise incompatible obligations:
+There are now 29 `sorry` occurrences in the checked-out tree, including one in
+the independent Comparator challenge. The following 28 project declarations
+were checked against both public OpenAI revisions and remain Zhou-specific,
+opaque boundaries, or otherwise type-incompatible:
 
 | Project file | Current targets | Disposition |
 | --- | --- | --- |
@@ -65,11 +76,12 @@ the remaining Zhou-specific or otherwise incompatible obligations:
 | `Connes/Foundation/LinearAlgebra/Semisimple.lean` | `nonsplit_extension_not_semisimple` | Zhou §6 extension obstruction |
 | `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `cocycle_is_linear`, `cocycle_identity`, `sp4_transitive_on_nonzero` | Zhou §2 symplectic facts; current cocycle statement is not source-compatible |
 | `Connes/Foundation/GroupTheory/Sp4.lean` | `no_nontrivial_normal_elementary_abelian_subgroup` | Zhou §6 normal-subgroup argument |
-| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `sl3_eq_elementary`, `sl3_isICC`, `no_nontrivial_abelian_normal_subgroup` | Zhou §§4-6 concrete group facts |
+| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `sl3_isICC`, `no_nontrivial_abelian_normal_subgroup` | Zhou §§4-6 concrete group facts |
 | `Connes/Foundation/OperatorAlgebra/FactorWitness.lean` | `tracialEquiv_of_spatialWitness` | Zhou §3 spatial construction |
 | `ComparatorChallenges/F_ConnesZhou.lean` | challenge `theoremA` | independent comparator statement |
 
 The historical organized OpenAI tree is useful for dependency ordering, but it
 contains thousands of generated certificate files. The port boundary keeps
 those artifacts out of this repository and follows the Zhou section/file
-split instead.
+split instead. The reopened audit found no further source proof whose theorem
+type matches one of the remaining project boundaries.
