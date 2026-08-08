@@ -7,7 +7,7 @@ The repository is distributed under the [Apache License, Version
 
 | Source | License/status | Use here |
 | --- | --- | --- |
-| [OpenAI `ten-proofs`](https://github.com/openai/ten-proofs) | Apache-2.0 | Public reading reference for group-factor vocabulary, Comparator shape, and proof organization. No repository import. |
+| [OpenAI `ten-proofs`](https://github.com/openai/ten-proofs) | Apache-2.0 | Public reading reference plus selected proof fragments in `Connes/Porting/CoreTransfer.lean`; no repository import. |
 | [Mathlib](https://github.com/leanprover-community/mathlib4) | Apache-2.0 | Sole Lake dependency. |
 | [Zhou, arXiv:2608.02327](https://arxiv.org/abs/2608.02327) | arXiv non-exclusive distribution license for the submitted article | Mathematical source and citation. This repository does not copy the article text. |
 
