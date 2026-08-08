@@ -21,27 +21,35 @@ namespace FactorIsomorphism
 
 open Construction
 
+/-- Dual coordinate carrier. Paper: §3. -/
 abbrev DualCoordinates := (A →ₗ[k] V) × (C → k)
 
+/-- Quadratic fiber correction boundary. Paper: §3. -/
 def quadraticMap (z : A →ₗ[k] V) : C → k := fun _ => 0
 
+/-- Fiber-shear map. Paper: §3. -/
 def fiberShear : DualCoordinates → DualCoordinates := fun p =>
   (p.1, fun c => p.2 c + quadraticMap p.1 c)
 
+/-- Fiber-shear involution. Paper: §3. -/
 theorem fiberShear_involutive (p : DualCoordinates) :
     fiberShear (fiberShear p) = p := by
   sorry
 
+/-- Haar-preservation boundary. Paper: §3. -/
 def fiberShear_preservesHaar : Prop := by
   sorry
 
+/-- Action-conjugacy boundary. Paper: §3. -/
 def fiberShear_conjugates_actions : Prop := by
   sorry
 
+/-- Spatial-to-tracial factor witness. Paper: §3. -/
 theorem factorIsomorphism :
     TracialGroupFactorsIsomorphic gammaOne gammaTwo := by
   sorry
 
+/-- Public factor-isomorphism alias. Paper: §3. -/
 theorem groupFactors_isomorphic :
     TracialGroupFactorsIsomorphic gammaOne gammaTwo :=
   factorIsomorphism

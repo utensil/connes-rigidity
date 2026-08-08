@@ -11,20 +11,24 @@ import Mathlib
 namespace Connes
 namespace Semisimple
 
+/-- Semisimplicity predicate wrapper. Paper: §6. -/
 abbrev IsSemisimple (R M : Type*) [Ring R] [AddCommGroup M] [Module R M] : Prop :=
   IsSemisimpleModule R M
 
+/-- Splitting witness boundary. Paper: §6. -/
 def Splits (R M N E : Type*) [Ring R]
     [AddCommGroup M] [AddCommGroup N] [AddCommGroup E]
     [Module R M] [Module R N] [Module R E] : Prop :=
   Nonempty (E ≃ₗ[R] M × N)
 
+/-- Transport of semisimplicity. Paper: §6. -/
 theorem semisimple_invariant_under_linear_equiv {R M N : Type*}
     [Ring R] [AddCommGroup M] [AddCommGroup N]
     [Module R M] [Module R N] (e : M ≃ₗ[R] N)
     (hM : IsSemisimple R M) : IsSemisimple R N := by
   sorry
 
+/-- Nonsplit-extension obstruction. Paper: §6. -/
 theorem nonsplit_extension_not_semisimple {R M N E : Type*}
     [Ring R] [AddCommGroup M] [AddCommGroup N] [AddCommGroup E]
     [Module R M] [Module R N] [Module R E]
