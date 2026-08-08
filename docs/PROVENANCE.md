@@ -12,11 +12,12 @@ This project formalizes the mathematical statement of:
 The OpenAI reference is pinned for provenance at commit
 [`94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6`](https://github.com/openai/ten-proofs/tree/94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6).
 The reference repository declares Apache-2.0. The project uses its public
-interfaces and proof-organization patterns as reading material. Selected
-proof fragments are ported into `Connes/Porting/CoreTransfer.lean`; that file
-retains the source revision and modification notice. The project does not
-import `ConnesRigidity.lean` or depend on the reference repository at build
-time.
+interfaces and proof-organization patterns as reading material. The
+declaration-level port lane copies only selected public proof blocks into
+small Zhou-oriented files under `Connes/Porting/`, `Connes/Construction/`,
+and `Connes/Foundation/`; their source spans and adaptations are recorded in
+[`docs/PORT_MAP.md`](PORT_MAP.md). The project does not import
+`ConnesRigidity.lean` or depend on the reference repository at build time.
 
 Every module that follows a reference design carries a source note in its
 header. Those notes identify the source and the modifications made here.
