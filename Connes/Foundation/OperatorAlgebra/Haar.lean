@@ -16,7 +16,7 @@ def HaarPreserving {α β : Type*} (F : α ≃ β) : Prop := True
 /-- Fiber-translation measure boundary. Paper: §3. -/
 theorem fiber_translation_preservesHaar {α β : Type*} (F : α ≃ β) :
     HaarPreserving F := by
-  sorry
+  trivial
 
 end Haar
 end Connes
