@@ -54,7 +54,8 @@ def coefficientChart (N : ℕ) : Set (ℕ → F) :=
 /-- Chart monotonicity. Paper: §4. -/
 theorem coefficientChart_mono {M N : ℕ} (hMN : M ≤ N) :
     coefficientChart M ⊆ coefficientChart N := by
-  sorry
+  intro x hx n hN
+  exact hx n (le_trans hMN hN)
 
 /-- Chart exhaustion boundary. Paper: §4. -/
 theorem coefficientCharts_cover :
