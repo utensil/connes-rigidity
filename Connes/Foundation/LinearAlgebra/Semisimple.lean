@@ -26,7 +26,8 @@ theorem semisimple_invariant_under_linear_equiv {R M N : Type*}
     [Ring R] [AddCommGroup M] [AddCommGroup N]
     [Module R M] [Module R N] (e : M ≃ₗ[R] N)
     (hM : IsSemisimple R M) : IsSemisimple R N := by
-  sorry
+  letI : IsSemisimpleModule R M := hM
+  exact IsSemisimpleModule.congr e.symm
 
 /-- Nonsplit-extension obstruction. Paper: §6. -/
 theorem nonsplit_extension_not_semisimple {R M N E : Type*}
