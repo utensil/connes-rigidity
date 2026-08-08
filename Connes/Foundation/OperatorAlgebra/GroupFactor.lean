@@ -28,7 +28,7 @@ noncomputable def factor (G : CountableDiscreteGroup) :=
 /-- Canonical trace normalization. Paper: §3. -/
 theorem canonicalTrace_identity (G : CountableDiscreteGroup) :
     canonicalTrace G ⟨1, by simp⟩ = 1 := by
-  sorry
+  simp [canonicalTrace, delta]
 
 end GroupFactor
 end Connes
