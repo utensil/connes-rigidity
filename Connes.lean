@@ -1,4 +1,7 @@
 import Connes.Porting.CoreTransfer
+import Connes.Foundation.LinearAlgebra.ArithmeticSymplectic
+import Connes.Foundation.LinearAlgebra.QuadraticCocycle
+import Connes.Foundation.LinearAlgebra.SymplecticShear
 import Connes.Construction.SymmetricTensor
 import Connes.Foundation.LinearAlgebra.BooleanPolynomial
 import Connes.Foundation.LinearAlgebra.Semisimple
@@ -6,6 +9,9 @@ import Connes.Foundation.LinearAlgebra.Symplectic
 import Connes.Foundation.GroupTheory.GroupInvariants
 import Connes.Foundation.GroupTheory.OrderFour
 import Connes.Foundation.GroupTheory.SemidirectICC
+import Connes.Foundation.GroupTheory.CocycleExtension
+import Connes.Foundation.GroupTheory.CharacteristicKernel
+import Connes.Foundation.GroupTheory.CocycleExtensionICC
 import Connes.Foundation.GroupTheory.SpecialLinear
 import Connes.Foundation.OperatorAlgebra.FactorEquiv
 import Connes.Foundation.OperatorAlgebra.FactorWitness
