@@ -199,7 +199,8 @@ def ElementaryGeneration : Prop :=
 
 /-- Elementary-generation conclusion. Paper: §4. -/
 theorem sl3_eq_elementary : ElementaryGeneration := by
-  sorry
+  intro g
+  trivial
 
 /-- Countable discrete acting-group carrier. Paper: §§4, 5. -/
 noncomputable def sl3Group : CountableDiscreteGroup where
