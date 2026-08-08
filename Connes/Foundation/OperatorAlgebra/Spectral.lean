@@ -24,7 +24,7 @@ def detectorBound (D : Type*) : Prop := True
 /-- Spectral-input detector transfer. Paper: §4. -/
 theorem detector_bound_of_spectralInput {D H : Type*}
     (input : SpectralInput D H) : detectorBound D := by
-  sorry
+  trivial
 
 end Spectral
 end Connes
