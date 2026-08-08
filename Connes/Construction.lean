@@ -42,7 +42,7 @@ def delta (c : C) : A := c.1
 
 /-- Retraction check for diagonal data. Paper: §2. -/
 theorem delta_diagonal (a : A) : delta (diagonal a) = a := by
-  sorry
+  rfl
 
 /-- Quadratic cocycle boundary. Paper: §2. -/
 def quadraticCocycle : H → C → k := fun _ _ => 0
