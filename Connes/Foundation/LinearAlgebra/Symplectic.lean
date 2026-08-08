@@ -33,7 +33,9 @@ def polarization (q : V → F) (v w : V) : F :=
 /-- Polarization compatibility. Paper: §2. -/
 theorem refinement_polarizes_to_form :
     ∀ v w : V, polarization quadraticRefinement v w = form v w := by
-  sorry
+  intro v w
+  simp [polarization, quadraticRefinement, form]
+  ring
 
 /-- Symplectic group carrier. Paper: §2. -/
 abbrev Sp4 := Matrix.symplecticGroup (Fin 2) F
