@@ -54,12 +54,28 @@ def thetaOne (h : H) (d : D) : D := d
 def thetaTwo (h : H) (d : D) : D := d
 
 /-- First action law. Paper: §2. -/
-def thetaOne_is_action : Prop := by
-  sorry
+def thetaOne_is_action : Prop :=
+  (∀ d, thetaOne 1 d = d) ∧
+    ∀ h₁ h₂ d, thetaOne (h₁ * h₂) d = thetaOne h₁ (thetaOne h₂ d)
 
 /-- Second action law. Paper: §2. -/
-def thetaTwo_is_action : Prop := by
-  sorry
+def thetaTwo_is_action : Prop :=
+  (∀ d, thetaTwo 1 d = d) ∧
+    ∀ h₁ h₂ d, thetaTwo (h₁ * h₂) d = thetaTwo h₁ (thetaTwo h₂ d)
+
+theorem thetaOne_is_action_proof : thetaOne_is_action := by
+  constructor
+  · intro d
+    rfl
+  · intro h₁ h₂ d
+    rfl
+
+theorem thetaTwo_is_action_proof : thetaTwo_is_action := by
+  constructor
+  · intro d
+    rfl
+  · intro h₁ h₂ d
+    rfl
 
 /-- Multiplicative semidirect carrier. Paper: §2. -/
 abbrev GammaCarrier := Multiplicative D
