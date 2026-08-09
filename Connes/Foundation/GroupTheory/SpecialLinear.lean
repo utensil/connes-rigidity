@@ -202,6 +202,36 @@ theorem sl3_eq_elementary : ElementaryGeneration := by
   intro g
   trivial
 
+private theorem sl3_scalar_eq_one
+    (g : SL3)
+    (hscalar : (g : Matrix (Fin 3) (Fin 3) R) ∈ Set.range (Matrix.scalar (Fin 3))) :
+    (g : Matrix (Fin 3) (Fin 3) R) = 1 := by
+  obtain ⟨a, ha⟩ := hscalar
+  have hroot : a ^ Fintype.card (Fin 3) = 1 := by
+    simpa only [← ha, Matrix.scalar_apply, Matrix.det_diagonal, Finset.prod_const,
+      Finset.card_univ] using g.property
+  have hroot3 : a ^ 3 = 1 := by
+    simpa using hroot
+  have hunit : IsUnit a := IsUnit.of_pow_eq_one hroot3 (by norm_num)
+  have hdegree : a.degree = 0 := Polynomial.degree_eq_zero_of_isUnit hunit
+  have haC : a = Polynomial.C (a.coeff 0) :=
+    Polynomial.eq_C_of_degree_eq_zero hdegree
+  have hcoeff : a.coeff 0 = 1 := by
+    have hrootC := hroot3
+    rw [haC] at hrootC
+    generalize hb : a.coeff 0 = b
+    have hc : b = 0 ∨ b = 1 := by
+      fin_cases b
+      · exact Or.inl rfl
+      · exact Or.inr rfl
+    rcases hc with hzero | hone
+    · exfalso
+      have hzero' : a.coeff 0 = 0 := hb.trans hzero
+      simpa [hzero'] using hrootC
+    · exact hone
+  rw [← ha, haC, hcoeff]
+  simp
+
 /-- Countable discrete acting-group carrier. Paper: §§4, 5. -/
 noncomputable def sl3Group : CountableDiscreteGroup where
   Carrier := SL3
@@ -210,7 +240,40 @@ noncomputable def sl3Group : CountableDiscreteGroup where
 
 /-- ICC boundary for the special-linear group. Paper: §5. -/
 theorem sl3_isICC : IsICC sl3Group := by
-  sorry
+  let transvection : R → SL3 :=
+    Matrix.SpecialLinearGroup.transvection (i := 0) (j := 1) (by decide)
+  have htrans_inj : Function.Injective transvection :=
+    specialLinear_transvection_injective (i := 0) (j := 1) (by decide)
+  change Infinite SL3 ∧ ∀ g : SL3, g ≠ 1 →
+    Set.Infinite {h : SL3 | ∃ x : SL3, h = x * g * x⁻¹}
+  constructor
+  · exact Infinite.of_injective transvection htrans_inj
+  · intro g hg
+    have hnot_scalar :
+        ¬(g.val : Matrix (Fin 3) (Fin 3) R) ∈
+          Set.range (Matrix.scalar (Fin 3)) := by
+      intro hscalar
+      have hidentity := sl3_scalar_eq_one g hscalar
+      apply hg
+      apply Subtype.ext
+      simpa using hidentity
+    have hnot_all : ¬∀ (i j : Fin 3), i ≠ j →
+        Commute (Matrix.single i j (1 : R))
+          (g.val : Matrix (Fin 3) (Fin 3) R) := by
+      intro hcomm
+      exact hnot_scalar (Matrix.mem_range_scalar_of_commute_single hcomm)
+    push Not at hnot_all
+    obtain ⟨i, j, hij, hnot⟩ := hnot_all
+    let lift (a : R) : SL3 :=
+      Matrix.SpecialLinearGroup.transvection hij a
+    have hinj : Function.Injective (fun a : R => lift a * g * (lift a)⁻¹) := by
+      intro a b hab
+      apply transvection_conjugates_injective_of_not_commute_matrixUnit
+        hij g hnot
+      simpa [lift] using hab
+    apply (Set.infinite_range_of_injective hinj).mono
+    rintro _ ⟨a, rfl⟩
+    exact ⟨lift a, rfl⟩
 
 /-- Abelian-normal-subgroup obstruction boundary. Paper: §6. -/
 def no_nontrivial_abelian_normal_subgroup : Prop := by
