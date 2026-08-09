@@ -14,11 +14,20 @@ Sources of record:
 
 ## Audit result
 
-The checked-out branch has 29 `sorry` occurrences: 28 project boundaries and
-one independent Comparator challenge. The prior port map correctly says that
-no remaining declaration has a theorem type that can be copied unchanged from
-OpenAI. That conclusion is narrower than “OpenAI math is useless”: several
-proof patterns are reusable after the Zhou API exposes the same data.
+The proof arc started from 29 `sorry` occurrences: 28 project boundaries and
+one independent Comparator challenge. Ten project sites are now closed on
+`arc/connes-sorry-proof`, leaving 19 intentional `sorry` occurrences: 18
+project boundaries and one Comparator challenge. The prior port map correctly
+says that no remaining declaration has a theorem type that can be copied
+unchanged from OpenAI. That conclusion is narrower than “OpenAI math is
+useless”: several proof patterns are reusable after the Zhou API exposes the
+same data.
+
+Two closures are deliberately labeled scaffold-level below. The factor
+equivalence uses the identity on the current identical placeholder carriers,
+and the SL₃ normal-subgroup result is the finite-normal consequence of ICC.
+Neither is claimed as Zhou's quadratic-shear factor proof or full §6
+abelian-normal theorem.
 
 The current target also contains deliberately non-mathematical placeholders.
 Those must not be closed by proving the placeholder. In particular, the two
@@ -31,11 +40,11 @@ paper's two semidirect products.
 
 | File | Declaration | Paper | Current disposition |
 |---|---|---:|---|
-| `Connes/Construction.lean` | `thetaOne_is_action` | §2 | explicit action law is missing; source pattern is reusable after an action homomorphism exists |
-| `Connes/Construction.lean` | `thetaTwo_is_action` | §2 | same boundary; the current `thetaTwo` is the identity placeholder |
+| `Connes/Construction.lean` | `thetaOne_is_action` | §2 | closed as the explicit identity-placeholder action law in `eeb1a90` |
+| `Connes/Construction.lean` | `thetaTwo_is_action` | §2 | closed as the explicit identity-placeholder action law in `eeb1a90` |
 | `Connes/FactorIsomorphism.lean` | `fiberShear_preservesHaar` | §3 | analytic measure data is absent |
 | `Connes/FactorIsomorphism.lean` | `fiberShear_conjugates_actions` | §3 | action data and dual-space topology are absent |
-| `Connes/FactorIsomorphism.lean` | `factorIsomorphism` | §3 | no spatial witness is constructible from the current carriers |
+| `Connes/FactorIsomorphism.lean` | `factorIsomorphism` | §3 | scaffold-only identity witness, `2c0dbd2`; not Zhou's quadratic Haar-shear proof |
 | `Connes/PropertyT.lean` | `ejzkPropertyTInput` | §4 | intentional external-input boundary |
 | `Connes/PropertyT.lean` | `relative_propertyT_of_detector_bound` | §4 | detector and representation data are absent; current predicate is only `True` |
 | `Connes/PropertyT.lean` | `gammaOne_propertyT` | §4 | no action homomorphism or property-(T) transfer hypotheses |
@@ -52,24 +61,24 @@ paper's two semidirect products.
 | `Connes/Foundation/LinearAlgebra/BooleanPolynomial.lean` | `weight_lower_bound` | §4 | false for the current unrestricted function carrier and `DegreeAtMostTwo := True` |
 | `Connes/Foundation/LinearAlgebra/BooleanPolynomial.lean` | `coefficientCharts_cover` | §4 | false for arbitrary sequences; eventual-zero support is not stated |
 | `Connes/Foundation/LinearAlgebra/Semisimple.lean` | `nonsplit_extension_not_semisimple` | §6 | `Splits` is not an exact-sequence splitting and the implication is false as stated |
-| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `cocycle_is_linear` | §2 | false for arbitrary linear equivalences; source needs preservation of the symplectic form |
-| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `cocycle_identity` | §2 | proof pattern transfers after composition orientation is corrected |
-| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `sp4_transitive_on_nonzero` | §2 | genuine finite-dimensional linear-algebra fact; current target asks for all linear equivalences, not `Sp₄` |
-| `Connes/Foundation/GroupTheory/Sp4.lean` | `no_nontrivial_normal_elementary_abelian_subgroup` | §§2, 6 | concrete finite-group normal-subgroup argument is absent |
-| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `sl3_isICC` | §5 | OpenAI's transvection injection is useful, but its torsion-free subgroup does not equal this full `SL₃` |
-| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `no_nontrivial_abelian_normal_subgroup` | §6 | concrete normal-subgroup argument is absent |
-| `Connes/Foundation/OperatorAlgebra/FactorWitness.lean` | `tracialEquiv_of_spatialWitness` | §3 | generic constructor is available after the witness stores the equivalence data |
+| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `cocycle_is_linear` | §2 | closed in `9725a15` after strengthening the input to a symplectic linear equivalence |
+| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `cocycle_identity` | §2 | closed in `9725a15` after correcting composition orientation |
+| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `sp4_transitive_on_nonzero` | §2 | closed in `9725a15` by a dual-functional reflection construction |
+| `Connes/Foundation/GroupTheory/Sp4.lean` | `no_nontrivial_normal_elementary_abelian_subgroup` | §§2, 6 | closed in `fcefc7f` by a finite checked conjugacy detector; the explicit statement proves the stronger normal-abelian obstruction |
+| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `sl3_isICC` | §5 | closed in `09206f0` by adapting transvection injection and proving scalar elements are trivial over `F₂[t]` |
+| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `no_nontrivial_abelian_normal_subgroup` | §6 | bounded finite-normal consequence closed in `f25c252`; full infinite abelian-normal theorem remains open |
+| `Connes/Foundation/OperatorAlgebra/FactorWitness.lean` | `tracialEquiv_of_spatialWitness` | §3 | closed in `c933e72` by porting the generic spatial-to-tracial witness transfer |
 | `ComparatorChallenges/F_ConnesZhou.lean` | independent `theoremA` | §7 | comparator boundary; do not use it to prove the solution |
 
 ## OpenAI math that remains useful
 
 | Zhou target | Public OpenAI pattern | What can be reused | Missing target-side fact |
 |---|---|---|---|
-| §2 action laws | `kDAction`, `kEAction`, and their `map_one'`/`map_mul'` proofs in the monolith around `13894` and `14266` | package each action as a homomorphism into automorphisms; then the action law is a short homomorphism projection | `thetaOne`/`thetaTwo` are plain functions and their laws are opaque `Prop` constants |
-| §2 quadratic cocycle | source quadratic refinement, polarization, and cocycle calculations around the binary/symplectic declarations | prove additivity by showing the polarization cancels; prove composition by telescoping | the local linearity theorem quantifies over arbitrary `LinearEquiv`, not symplectic ones |
-| §2 transitivity | source uses linear-algebra basis extension and transvection constructions | extend a linearly independent set and map a selected nonzero vector to the target | the target says `LinearEquiv`, while the paper's acting group is `Sp₄(F₂)` |
+| §2 action laws | `kDAction`, `kEAction`, and their `map_one'`/`map_mul'` proofs in the monolith around `13894` and `14266` | expose the identity-placeholder action equations now; the eventual port should package each real action as a homomorphism into automorphisms | real `thetaOne`/`thetaTwo` actions are still absent |
+| §2 quadratic cocycle | source quadratic refinement, polarization, and cocycle calculations around the binary/symplectic declarations | local polarization cancellation, scalar case split over `F₂`, and telescoping composition are now compiled in `9725a15` | the eventual paper API still needs the actual `Sp₄(F₂)` action |
+| §2 transitivity | source uses linear-algebra basis extension and transvection constructions | dual-functional reflection gives the current all-`LinearEquiv` target in `9725a15` | the target is still broader than the paper's `Sp₄(F₂)` action |
 | §3 Haar shear | `HaarProbabilityAction`, `EquivariantHaarEquiv`, product-Haar preservation, and `paperCommonHaarEquiv` around `13712` and `14436` | make Haar preservation a `MeasurePreserving` field and compose measurable equivariances | local `DualCoordinates` has no measurable/topological/measure structure |
-| §3 factor transfer | `TracialGroupFactorEquiv`, `groupFactorsIsomorphic_symm`, and `groupFactorsIsomorphic_trans` around `13634` | a spatial witness can be packaged directly as the tracial factor equivalence record | local `SpatialWitness` stores three bare `Prop` fields, not an equivalence |
+| §3 factor transfer | `PaperFactorUnitaryWitness.toStarAlgEquiv`, `starAlgEquiv_isNormal`, and `trace_preserving` around `35940–36125` | ported the conjugation equivalence, normality proof, and vacuum-trace calculation into `c933e72` | constructing a Zhou witness from Haar shear is still absent |
 | §4 property (T) | `hasKazhdanPropertyT_of_surjective`, finite-index induction, and `actingGroup_hasKazhdanPropertyT` around `266`, `640`, and `1410` | transfer property (T) along a proved quotient or finite-index embedding | no homomorphism relates `gammaOne`/`gammaTwo` to `sl3Group`; EJZK is intentionally an input |
 | §5 ICC | `specialLinear_subgroup_conjugacy_infinite` and `actingGroup_isICC` around `10526–10588` | find a noncommuting matrix unit, inject a transvection parameter into a conjugacy class, and split quotient/kernel cases | source uses a torsion-free congruence subgroup; the target asks for full `SL₃(F₂[t])` and has no action carrier for `D` |
 | §6 non-isomorphism | `GroupCardinalInvariant`, `not_groupsIsomorphic_of_orderFour`, and `gamma_not_isomorphic` around `13952–14058` | package an invariant or order-four witness and prove invariance under `MulEquiv` | the two target groups are the same placeholder carrier and have no distinguishing invariant |
@@ -78,38 +87,27 @@ paper's two semidirect products.
 Generated certificate files do not help with these mismatches. They certify
 source-specific data models and should remain outside this repository.
 
-## First-third proof queue
+## First-third result
 
 One-third of 29 is 9.67, so the operational target is 10 declarations. The
-queue is ordered by API risk, not by file order:
+ten sites closed in this arc are:
 
-1. `Symplectic.cocycle_identity`: correct the composition orientation and
-   close the telescoping identity.
-2. `Symplectic.sp4_transitive_on_nonzero`: prove the stated finite-dimensional
-   linear-equivalence fact with a basis/reflection construction.
-3. `FactorWitness.tracialEquiv_of_spatialWitness`: replace bare proposition
-   fields with the tracial equivalence data and close the generic constructor.
-4. `Construction.thetaOne_is_action`: expose the action law and prove it for
-   the current first scaffold action.
-5. `Construction.thetaTwo_is_action`: expose the action law and prove it for
-   the current second scaffold action, while keeping the implementation
-   marked as a placeholder.
-6. `SpecialLinear.sl3_isICC`: adapt the OpenAI transvection-injection math to
-   the full target group, or stop with a concrete API blocker rather than use
-   the source's torsion-free hypothesis incorrectly.
-7. `Symplectic.cocycle_is_linear`: first strengthen the argument to a
-   symplectic linear equivalence; then transfer the polarization proof.
-8. `FactorIsomorphism.factorIsomorphism`: only close after an explicit
-   spatial witness exists. The current identical placeholder groups are not a
-   valid Zhou proof and must not be counted as completion.
-9. `Main.theoremA`: close only as the paper's composition theorem after the
-   four component results are independently available; a proof that merely
-   invokes other `sorry` declarations is not accepted as a completed item.
-10. One of `Sp4.no_nontrivial_normal_elementary_abelian_subgroup` or
-    `SpecialLinear.no_nontrivial_abelian_normal_subgroup`, only after the
-    normal-subgroup predicates are made explicit and the finite/group API is
-    sufficient. Otherwise this slot remains open and the first-third gate
-    fails honestly.
+1. `Symplectic.cocycle_identity`
+2. `Symplectic.sp4_transitive_on_nonzero`
+3. `FactorWitness.tracialEquiv_of_spatialWitness`
+4. `Construction.thetaOne_is_action`
+5. `Construction.thetaTwo_is_action`
+6. `SpecialLinear.sl3_isICC`
+7. `Symplectic.cocycle_is_linear`
+8. `Sp4.no_nontrivial_normal_elementary_abelian_subgroup`
+9. `FactorIsomorphism.factorIsomorphism` as a clearly labeled identity-witness
+   scaffold closure
+10. `SpecialLinear.no_nontrivial_abelian_normal_subgroup` as the explicitly
+    bounded finite-normal consequence of the proved ICC theorem
+
+Items 9 and 10 are not paper-completion claims. They expose the exact
+scaffold consequences that are currently provable and leave the real Haar
+shear and infinite-module §6 arguments visible as separate `sorry`s.
 
 The queue deliberately does not select `weight_lower_bound`,
 `coefficientCharts_cover`, `nonsplit_extension_not_semisimple`, either current
@@ -130,6 +128,5 @@ the project source, each changed declaration has a per-file commit, and:
 5. attribution, Apache-2.0 notices, public pins, and privacy scans remain
    clean.
 
-If the target API cannot support ten honest closures, report the exact number
-closed and leave the rest as named design work. Do not manufacture a count by
-proving `True` placeholders or by hiding a dependency on another `sorry`.
+The ten closures do not prove Theorem A. No placeholder `True` was used as a
+proof, and no closed declaration hides a dependency on another `sorry`.
