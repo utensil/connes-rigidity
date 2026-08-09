@@ -59,25 +59,26 @@ unrelated source code.
 
 ## Remaining sorry target ledger
 
-There are now 29 `sorry` occurrences in the checked-out tree, including one in
-the independent Comparator challenge. The following 28 project declarations
-were checked against both public OpenAI revisions and remain Zhou-specific,
-opaque boundaries, or otherwise type-incompatible:
+The proof arc began with 29 `sorry` occurrences. There are now 19 in the
+checked-out tree, including one in the independent Comparator challenge. Ten
+project sites were closed per the evaluation in `docs/SORRY_EVAL.md`. The
+following 18 project declarations remain Zhou-specific, opaque boundaries, or
+otherwise type-incompatible:
 
 | Project file | Current targets | Disposition |
 | --- | --- | --- |
-| `Connes/Construction.lean` | `thetaOne_is_action`, `thetaTwo_is_action` | Zhou §2 action data |
-| `Connes/FactorIsomorphism.lean` | `fiberShear_preservesHaar`, `fiberShear_conjugates_actions`, `factorIsomorphism` | Zhou §3 analytic construction |
+| `Connes/Construction.lean` | — | both current placeholder action laws closed in `eeb1a90`; real actions remain absent |
+| `Connes/FactorIsomorphism.lean` | `fiberShear_preservesHaar`, `fiberShear_conjugates_actions` | Zhou §3 analytic construction; `factorIsomorphism` has an identity-witness scaffold closure in `2c0dbd2` |
 | `Connes/PropertyT.lean` | `ejzkPropertyTInput`, `relative_propertyT_of_detector_bound`, `gammaOne_propertyT`, `gammaTwo_propertyT` | external input and concrete §4 transfer |
 | `Connes/ICC.lean` | `sl3_infinite_orbits`, `module_infinite_orbits`, `gammaOne_icc`, `gammaTwo_icc` | Zhou §5 group construction |
 | `Connes/Nonisomorphism.lean` | `DTwo_not_semisimple`, `cocycle_not_coboundary`, `normal_module_characteristic`, `gammaOne_not_isomorphic_gammaTwo` | Zhou §6 invariant |
 | `Connes/Main.lean` | `theoremA` | §7 composition |
 | `Connes/Foundation/LinearAlgebra/BooleanPolynomial.lean` | `weight_lower_bound`, `coefficientCharts_cover` | Zhou §4 polynomial argument |
 | `Connes/Foundation/LinearAlgebra/Semisimple.lean` | `nonsplit_extension_not_semisimple` | Zhou §6 extension obstruction |
-| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | `cocycle_is_linear`, `cocycle_identity`, `sp4_transitive_on_nonzero` | Zhou §2 symplectic facts; current cocycle statement is not source-compatible |
-| `Connes/Foundation/GroupTheory/Sp4.lean` | `no_nontrivial_normal_elementary_abelian_subgroup` | Zhou §6 normal-subgroup argument |
-| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | `sl3_isICC`, `no_nontrivial_abelian_normal_subgroup` | Zhou §§4-6 concrete group facts |
-| `Connes/Foundation/OperatorAlgebra/FactorWitness.lean` | `tracialEquiv_of_spatialWitness` | Zhou §3 spatial construction |
+| `Connes/Foundation/LinearAlgebra/Symplectic.lean` | — | three current symplectic sites closed in `9725a15`; real `Sp₄(F₂)` action API remains |
+| `Connes/Foundation/GroupTheory/Sp4.lean` | — | finite normal-abelian obstruction closed in `fcefc7f` |
+| `Connes/Foundation/GroupTheory/SpecialLinear.lean` | — | full SL₃ ICC closed in `09206f0`; finite-normal consequence closed in `f25c252`; full §6 infinite result remains design work |
+| `Connes/Foundation/OperatorAlgebra/FactorWitness.lean` | — | generic spatial-to-tracial transfer closed in `c933e72`; constructing the witness remains open |
 | `ComparatorChallenges/F_ConnesZhou.lean` | challenge `theoremA` | independent comparator statement |
 
 The historical organized OpenAI tree is useful for dependency ordering, but it
