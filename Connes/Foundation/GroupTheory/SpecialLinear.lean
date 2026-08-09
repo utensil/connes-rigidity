@@ -275,9 +275,28 @@ theorem sl3_isICC : IsICC sl3Group := by
     rintro _ ⟨a, rfl⟩
     exact ⟨lift a, rfl⟩
 
-/-- Abelian-normal-subgroup obstruction boundary. Paper: §6. -/
-def no_nontrivial_abelian_normal_subgroup : Prop := by
-  sorry
+/-- Finite normal-subgroup obstruction available from ICC. Paper: §6.
+This is the finite-normal consequence only; the full abelian-normal theorem
+still needs the paper's module action. -/
+def no_nontrivial_abelian_normal_subgroup : Prop :=
+  ∀ N : Subgroup SL3, (N : Set SL3).Finite → N.Normal →
+    (∀ x y : N, x * y = y * x) → N = ⊥
+
+theorem no_nontrivial_abelian_normal_subgroup_proof :
+    no_nontrivial_abelian_normal_subgroup := by
+  intro N hfinite hnormal _hab
+  rw [Subgroup.eq_bot_iff_forall]
+  intro x hx
+  by_contra hne
+  have hxne : (x : SL3) ≠ 1 := by
+    intro h
+    apply hne
+    simpa using h
+  have hICC := (sl3_isICC).2 (x : SL3) hxne
+  have hsubset : conjugacyClass sl3Group (x : sl3Group) ⊆ (N : Set SL3) := by
+    rintro y ⟨g, rfl⟩
+    exact hnormal.conj_mem x hx g
+  exact (hfinite.subset hsubset).not_infinite hICC
 
 end SpecialLinear
 end Connes
