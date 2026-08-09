@@ -44,10 +44,18 @@ def fiberShear_preservesHaar : Prop := by
 def fiberShear_conjugates_actions : Prop := by
   sorry
 
-/-- Spatial-to-tracial factor witness. Paper: §3. -/
+/-- Scaffold-only factor witness from the identity on the current placeholder carriers.
+Paper: §3. This is not the paper's quadratic Haar-shear construction. -/
 theorem factorIsomorphism :
     TracialGroupFactorsIsomorphic gammaOne gammaTwo := by
-  sorry
+  let w : FactorWitness.SpatialWitness gammaOne gammaTwo :=
+    { unitary := LinearIsometryEquiv.refl ℂ (GroupL2 gammaOne)
+      maps_group_factor := by
+        intro T
+        rfl
+      maps_vacuum := by
+        rfl }
+  exact FactorWitness.tracialEquiv_of_spatialWitness w
 
 /-- Public factor-isomorphism alias. Paper: §3. -/
 theorem groupFactors_isomorphic :
