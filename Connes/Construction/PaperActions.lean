@@ -141,23 +141,6 @@ theorem delta_equivariant_of_squareSpanData (l : SpecialLinear.SL3)
     delta (sl3CAction l c) = sl3AAction l (delta c) := by
   exact deltaTensor_equivariant_on_squareSpan l (data.squares_span c)
 
-/-- Full retraction data used by the second Zhou action. Paper: §2. -/
-structure RetractionData where
-  delta : C →ₗ[k] A
-  delta_diagonal : ∀ a, delta (diagonal a) = a
-  delta_surjective : Function.Surjective delta
-  squares_span : SquareSpanData
-  delta_equivariant : ∀ l c,
-    delta (sl3CAction l c) = sl3AAction l (delta c)
-
-/-- The candidate packaged with the still-open spanning certificate. Paper: §2. -/
-def candidateRetractionData (data : SquareSpanData) : RetractionData where
-  delta := delta
-  delta_diagonal := delta_diagonal
-  delta_surjective := delta_surjective
-  squares_span := data
-  delta_equivariant := fun l c => delta_equivariant_of_squareSpanData l data c
-
 end
 end PaperKernel
 end Construction

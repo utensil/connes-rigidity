@@ -46,12 +46,12 @@ def GroupsIsomorphic (G H : CountableDiscreteGroup) : Prop :=
 /-- Unitary-representation carrier. Paper: §4. -/
 abbrev UnitaryRepresentation
     (G : Type u) [Group G]
-    (H : Type u) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] :=
+    (H : Type v) [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] :=
   G →* unitary (H →L[ℂ] H)
 
 namespace UnitaryRepresentation
 
-variable {G H : Type u} [Group G]
+variable {G : Type u} {H : Type v} [Group G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /-- Invariant-vector predicate. Paper: §4. -/

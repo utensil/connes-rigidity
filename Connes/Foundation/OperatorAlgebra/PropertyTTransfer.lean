@@ -32,13 +32,6 @@ end CountableDiscreteGroup
 
 namespace PropertyTTransfer
 
-/- The two hypotheses of Zhou's Lemma 4.7, with the quotient made explicit. -/
-structure RelativeExtensionData
-    (G Q : CountableDiscreteGroup.{u}) (N : Subgroup G) where
-  normal : N.Normal
-  relative : HasRelativePropertyT G N
-  quotientEquiv : CountableDiscreteGroup.quotient G N normal ≃* Q
-
 /- The finite extension in Zhou Proposition 4.8, before applying Lemma 4.7. -/
 structure FiniteExtensionData
     (L G Q : CountableDiscreteGroup.{u}) where
@@ -170,7 +163,8 @@ theorem normalFixedQuotient_hasAlmostInvariantUnitVectors
     have hsum : ‖p‖ + ‖z‖ < (1 - α / κ) + α / κ :=
       add_lt_add_of_le_of_lt hpupper hzbound
     have hsum' : ‖p‖ + ‖z‖ < 1 := by
-      convert hsum using 1 <;> ring
+      convert hsum using 1
+      all_goals ring
     exact (not_lt_of_ge htriangle) hsum'
   have halpha_kappa : α / κ ≤ 1 / 4 := by
     apply (div_le_iff₀ hκ).2

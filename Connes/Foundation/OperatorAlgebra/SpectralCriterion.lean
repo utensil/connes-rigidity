@@ -45,6 +45,8 @@ def dualCharacterAction
     exact map_mul χ _ _
   continuous_toFun := continuous_of_discreteTopology
 
+omit [MeasurableSpace (PontryaginDual (Multiplicative A))]
+  [BorelSpace (PontryaginDual (Multiplicative A))] in
 @[simp] theorem dualCharacterAction_trivial
     (action : H →* Multiplicative (AddAut A)) (h : H) :
     dualCharacterAction action h (1 : DiscreteCharacterSpace A) = 1 := by
@@ -113,28 +115,6 @@ structure SpectralMeasureInterface
             (π (E.inclusion (Multiplicative.ofAdd a)) : K →L[ℂ] K) η = η) ∧
           (∀ h : H, (π (E.splitting h) : K →L[ℂ] K) η = η)
 
-/- Kernel and quotient fixedness give full invariance. Paper: §4. -/
-omit [TopologicalSpace A] [DiscreteTopology A]
-  [MeasurableSpace (DiscreteCharacterSpace A)]
-  [BorelSpace (DiscreteCharacterSpace A)] in
-theorem invariant_of_kernel_and_quotient
-    (E : SplitAbelianExtension A G H)
-    {K : Type u} [NormedAddCommGroup K]
-    [InnerProductSpace ℂ K] [CompleteSpace K]
-    (π : UnitaryRepresentation G K) (ξ : K)
-    (hkernel : ∀ a : A,
-      (π (E.inclusion (Multiplicative.ofAdd a)) : K →L[ℂ] K) ξ = ξ)
-    (hquotient : ∀ h : H,
-      (π (E.splitting h) : K →L[ℂ] K) ξ = ξ) :
-    π.IsInvariant ξ := by
-  intro g
-  obtain ⟨a, h, rfl⟩ := E.exists_kernel_mul_splitting g
-  rw [map_mul]
-  change
-    (π (E.inclusion (Multiplicative.ofAdd a)) : K →L[ℂ] K)
-      ((π (E.splitting h) : K →L[ℂ] K) ξ) = ξ
-  rw [hquotient h, hkernel a]
-
 /-- Finite spectral detection inequality. Paper: §4. -/
 def HasFiniteSpectralDetection
     (E : SplitAbelianExtension A G H) (J : Finset A) (c : ℝ) : Prop :=
@@ -180,7 +160,8 @@ theorem spectral_criterion_representation
     exists_positive_spectral_atom E π spectral hH hπ J hc hdetection
   obtain ⟨η, hη, hkernel, hquotient⟩ :=
     spectral.positive_atom_invariant ξ hatom
-  exact ⟨η, hη, invariant_of_kernel_and_quotient E π η hkernel hquotient⟩
+  exact ⟨η, hη,
+    E.invariant_of_kernel_and_quotient π η hkernel hquotient⟩
 
 omit [BorelSpace (DiscreteCharacterSpace A)] in
 theorem spectral_criterion

@@ -74,7 +74,8 @@ variable {K : Type u} [NormedAddCommGroup K]
   [InnerProductSpace ℂ K] [CompleteSpace K]
 variable {π : UnitaryRepresentation G K}
 
-omit [BorelSpace (DiscreteCharacterSpace A)] in
+omit [BorelSpace (DiscreteCharacterSpace A)]
+  [MeasurableSingletonClass (DiscreteCharacterSpace A)] in
 
 /-- The scalar spectral measure has total mass equal to squared norm. Paper: §4. -/
 theorem scalar_univ_real
@@ -85,7 +86,8 @@ theorem scalar_univ_real
     Complex.coe_algebraMap, RCLike.re_to_complex] using
     (inner_self_eq_norm_sq (𝕜 := ℂ) x)
 
-omit [BorelSpace (DiscreteCharacterSpace A)] in
+omit [BorelSpace (DiscreteCharacterSpace A)]
+  [MeasurableSingletonClass (DiscreteCharacterSpace A)] in
 
 /-- A unit vector normalizes its scalar spectral measure. Paper: §4. -/
 theorem scalar_isProbabilityMeasure
@@ -105,7 +107,8 @@ def probabilityMeasure
     ProbabilityMeasure (DiscreteCharacterSpace A) :=
   ⟨P.scalar x, P.scalar_isProbabilityMeasure x hx⟩
 
-omit [BorelSpace (DiscreteCharacterSpace A)] in
+omit [BorelSpace (DiscreteCharacterSpace A)]
+  [MeasurableSingletonClass (DiscreteCharacterSpace A)] in
 
 /-- Quotient-fixed vectors produce invariant scalar spectral measures. Paper: §4. -/
 theorem probabilityMeasure_invariant
@@ -118,7 +121,8 @@ theorem probabilityMeasure_invariant
     P.scalar x.vector
   rw [P.scalar_covariance h x.vector, x.quotient_fixed h]
 
-omit [BorelSpace (DiscreteCharacterSpace A)] in
+omit [BorelSpace (DiscreteCharacterSpace A)]
+  [MeasurableSingletonClass (DiscreteCharacterSpace A)] in
 
 /-- The scalar spectral energy is the kernel displacement energy. Paper: §4. -/
 theorem probabilityMeasure_energy
@@ -148,7 +152,8 @@ theorem trivialProjection_ne_zero_of_atom_pos
   rw [hatom] at hx
   norm_num at hx
 
-omit [BorelSpace (DiscreteCharacterSpace A)] in
+omit [BorelSpace (DiscreteCharacterSpace A)]
+  [MeasurableSingletonClass (DiscreteCharacterSpace A)] in
 
 /-- The trivial spectral projection is fixed by every kernel element. Paper: §4. -/
 theorem trivialProjection_kernel_fixed
@@ -158,6 +163,9 @@ theorem trivialProjection_kernel_fixed
         (P.projection {1} x) = P.projection {1} x := by
   simpa only [PontryaginDual.one_apply, Circle.coe_one, one_smul] using
     P.kernel_eigenprojection a 1 x
+
+omit [BorelSpace (DiscreteCharacterSpace A)]
+  [MeasurableSingletonClass (DiscreteCharacterSpace A)] in
 
 /-- The trivial spectral projection is fixed by every quotient section. Paper: §4. -/
 theorem trivialProjection_quotient_fixed
@@ -169,6 +177,8 @@ theorem trivialProjection_quotient_fixed
   rw [Set.image_singleton, dualCharacterAction_trivial] at hcov
   rw [x.quotient_fixed h] at hcov
   exact hcov
+
+omit [BorelSpace (DiscreteCharacterSpace A)] in
 
 /-- A positive trivial atom yields a vector fixed by the split extension. Paper: §4. -/
 theorem positive_atom_invariant
@@ -201,6 +211,10 @@ def HasQuotientFixedApproximation
 orthogonal complement of the fixed vectors.  Projecting a sufficiently almost
 invariant unit vector to the fixed subspace therefore preserves any prescribed
 finite family of displacement estimates. -/
+omit [TopologicalSpace A] [DiscreteTopology A]
+  [MeasurableSpace (DiscreteCharacterSpace A)]
+  [BorelSpace (DiscreteCharacterSpace A)]
+  [MeasurableSingletonClass (DiscreteCharacterSpace A)] in
 theorem exists_quotientFixedUnitVector_with_displacement
     (hH : HasKazhdanPropertyT H)
     (hπ : π.HasAlmostInvariantUnitVectors)
@@ -295,7 +309,8 @@ theorem exists_quotientFixedUnitVector_with_displacement
     have hsum : ‖p‖ + ‖z‖ < (1 - α / κ) + α / κ :=
       add_lt_add_of_le_of_lt hpupper hzbound
     have hsum' : ‖p‖ + ‖z‖ < 1 := by
-      convert hsum using 1 <;> ring
+      convert hsum using 1
+      all_goals ring
     exact (not_lt_of_ge htriangle) hsum'
   have halpha_kappa : α / κ ≤ 1 / 4 := by
     apply (div_le_iff₀ hκ).2
@@ -369,6 +384,11 @@ theorem exists_quotientFixedUnitVector_with_displacement
   rw [hscalar]
   simpa only [Submodule.coe_norm, div_eq_mul_inv, mul_comm] using hfrac
 
+omit [TopologicalSpace A] [DiscreteTopology A]
+  [MeasurableSpace (DiscreteCharacterSpace A)]
+  [BorelSpace (DiscreteCharacterSpace A)]
+  [MeasurableSingletonClass (DiscreteCharacterSpace A)] in
+
 /- Consequently the quotient-fixed approximation field is not additional
 spectral data: it follows from quotient property (T) and almost invariance. -/
 theorem hasQuotientFixedApproximation :
@@ -422,6 +442,8 @@ def toSpectralMeasureInterface
   positive_atom_invariant := fun x hx => P.positive_atom_invariant x hx
 
 end ProjectionValuedSpectralMeasure
+
+omit [BorelSpace (DiscreteCharacterSpace A)] in
 
 /-- Relative property-(T) from an analytic PVM and detector.  Quotient
 approximation follows generically from quotient property (T). Paper: §4. -/

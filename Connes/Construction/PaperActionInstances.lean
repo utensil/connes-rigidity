@@ -16,35 +16,28 @@ noncomputable section
 
 open Connes.OpenAIPort
 
-/-- Tensor-product transport of two linear equivalences. Paper: §2. -/
-def tensorProductLinearEquiv
-    {M N : Type*} [AddCommMonoid M] [AddCommMonoid N]
-    [Module k M] [Module k N]
-    (e : M ≃ₗ[k] M) (f : N ≃ₗ[k] N) :
-    TensorProduct k M N ≃ₗ[k] TensorProduct k M N := by
-  refine LinearEquiv.ofLinear
-    (TensorProduct.map e.toLinearMap f.toLinearMap)
-    (TensorProduct.map e.symm.toLinearMap f.symm.toLinearMap) ?_ ?_
-  · apply LinearMap.ext
-    intro x
-    refine TensorProduct.induction_on x ?_ ?_ ?_
-    · simp
-    · intro x y
-      simp [TensorProduct.map_map]
-    · intro x y hx hy
-      simp [map_add, hx, hy]
-  · apply LinearMap.ext
-    intro x
-    refine TensorProduct.induction_on x ?_ ?_ ?_
-    · simp
-    · intro x y
-      simp [TensorProduct.map_map]
-    · intro x y hx hy
-      simp [map_add, hx, hy]
+/-- Target-coordinate formula for an elementary `SL₃` transvection. Paper: §2. -/
+lemma transvection_action_apply_target {i j : Fin 3} (hij : i ≠ j)
+    (a : SpecialLinear.R) (x : Construction.A) :
+    sl3AAction (Matrix.SpecialLinearGroup.transvection hij a) x i =
+      x i + a * x j := by
+  change (Matrix.mulVec (Matrix.transvection i j a) x) i = x i + a * x j
+  rw [Matrix.transvection, Matrix.add_mulVec, Matrix.one_mulVec,
+    Matrix.single_mulVec_eq]
+  simp
+
+/-- Off-target coordinates are fixed by an elementary `SL₃` transvection. Paper: §2. -/
+lemma transvection_action_apply_of_ne_target {i j r : Fin 3} (hij : i ≠ j)
+    (hri : r ≠ i) (a : SpecialLinear.R) (x : A) :
+    sl3AAction (Matrix.SpecialLinearGroup.transvection hij a) x r = x r := by
+  change (Matrix.mulVec (Matrix.transvection i j a) x) r = x r
+  rw [Matrix.transvection, Matrix.add_mulVec, Matrix.one_mulVec,
+    Matrix.single_mulVec_eq]
+  simp [hri]
 
 /-- The linear action on the first summand of the paper kernel. Paper: §2. -/
 def avStarAction (l : SpecialLinear.SL3) (q : Q) : AVStar ≃ₗ[k] AVStar :=
-  tensorProductLinearEquiv (sl3AAction l) (qVStarActionHom q)
+  TensorProduct.congr (sl3AAction l) (qVStarActionHom q)
 
 /-- The first-summand action is a homomorphism. Paper: §2. -/
 def avStarActionHom : H →* (AVStar ≃ₗ[k] AVStar) where
@@ -53,18 +46,18 @@ def avStarActionHom : H →* (AVStar ≃ₗ[k] AVStar) where
     apply LinearEquiv.ext
     intro u
     refine TensorProduct.induction_on u ?_ ?_ ?_
-    · simp [avStarAction, tensorProductLinearEquiv]
+    · simp [avStarAction]
     · intro a f
-      simp [avStarAction, tensorProductLinearEquiv]
+      simp [avStarAction]
     · intro x y hx hy
       simp only [map_add, hx, hy]
   map_mul' h h' := by
     apply LinearEquiv.ext
     intro u
     refine TensorProduct.induction_on u ?_ ?_ ?_
-    · simp [avStarAction, tensorProductLinearEquiv]
+    · simp [avStarAction]
     · intro a f
-      simp [avStarAction, tensorProductLinearEquiv, TensorProduct.map_map]
+      simp [avStarAction]
     · intro x y hx hy
       simp only [map_add, hx, hy]
 
@@ -77,7 +70,7 @@ theorem sl3TensorAction_mul (l m : SpecialLinear.SL3) :
   refine TensorProduct.induction_on x ?_ ?_ ?_
   · simp
   · intro a b
-    simp [sl3TensorAction, TensorProduct.map_map]
+    simp [sl3TensorAction]
   · intro x y hx hy
     simp only [map_add, hx, hy]
 
@@ -216,15 +209,13 @@ def paperThetaOneHom : H →* MulAut (Multiplicative D) where
     apply MulEquiv.ext
     intro d
     change paperThetaOneLinearHom 1 d.toAdd = d.toAdd
-    simpa using congrArg (fun e : D ≃ₗ[k] D => e d.toAdd)
-      (paperThetaOneLinearHom.map_one)
+    simp
   map_mul' h h' := by
     apply MulEquiv.ext
     intro d
     change paperThetaOneLinearHom (h * h') d.toAdd =
       paperThetaOneLinearHom h (paperThetaOneLinearHom h' d.toAdd)
-    simpa using congrArg (fun e : D ≃ₗ[k] D => e d.toAdd)
-      (paperThetaOneLinearHom.map_mul h h')
+    simp
 
 /-- The finite quadratic-defect functional obeys the paper cocycle law. Paper: §2. -/
 theorem quadraticDefectLinear_cocycle (p q : Q) :
@@ -331,7 +322,7 @@ theorem thetaTwoLinearMap_mul (h h' : H) :
     have hterm : avStarAction h.1 h.2 (thetaTwoTermMap h' c) =
         sl3AAction h.1 (delta (sl3CAction h'.1 c)) ⊗ₜ[k]
           (qVStarActionHom h.2) (quadraticDefectLinear h'.2) := by
-      simp [thetaTwoTermMap, avStarAction, tensorProductLinearEquiv]
+      simp [thetaTwoTermMap, avStarAction]
     rw [hd'] at hterm
     rw [huv, map_add, hterm]
     change
@@ -431,7 +422,7 @@ def paperThetaTwoLinearHom : H →* (D ≃ₗ[k] D) where
   map_one' := by
     apply LinearEquiv.ext
     intro d
-    simpa [paperThetaTwoLinearEquiv, thetaTwoLinearMap_one]
+    simp [paperThetaTwoLinearEquiv, thetaTwoLinearMap_one]
   map_mul' h h' := by
     apply LinearEquiv.ext
     intro d
@@ -446,15 +437,57 @@ def paperThetaTwoHom : H →* MulAut (Multiplicative D) where
     apply MulEquiv.ext
     intro d
     change paperThetaTwoLinearHom 1 d.toAdd = d.toAdd
-    simpa using congrArg (fun e : D ≃ₗ[k] D => e d.toAdd)
-      (paperThetaTwoLinearHom.map_one)
+    simp
   map_mul' h h' := by
     apply MulEquiv.ext
     intro d
     change paperThetaTwoLinearHom (h * h') d.toAdd =
       paperThetaTwoLinearHom h (paperThetaTwoLinearHom h' d.toAdd)
-    simpa using congrArg (fun e : D ≃ₗ[k] D => e d.toAdd)
-      (paperThetaTwoLinearHom.map_mul h h')
+    simp
+
+/-- Contract the finite-dual factor of `A ⊗ V⋆`. Paper: §2. -/
+def contractStar (ψ : VStar →ₗ[k] k) : AVStar →ₗ[k] A :=
+  TensorProduct.lift (LinearMap.mk₂ k (fun a f => ψ f • a)
+    (by intros; rw [smul_add])
+    (by intros; rw [smul_smul, smul_smul, mul_comm])
+    (by intros; rw [map_add, add_smul])
+    (by intros; rw [map_smul, smul_smul, smul_eq_mul]))
+
+@[simp] theorem contractStar_tmul (ψ : VStar →ₗ[k] k) (a : A) (f : VStar) :
+    contractStar ψ (a ⊗ₜ[k] f) = ψ f • a := by
+  rfl
+
+/-- The constant-one polynomial used in the §4 detector and §§5–6 witnesses. -/
+def a0 : A := fun _ => 1
+
+theorem a0_ne_zero : a0 ≠ 0 := by
+  intro h
+  have h0 := congrFun h (0 : Fin 3)
+  simp [a0] at h0
+
+/-- The finite quotient acts only on the dual tensor factor of `a0 ⊗ f`. -/
+theorem avStar_q_action (q : Q) (f : VStar) :
+    avStarAction (1 : SpecialLinear.SL3) q (a0 ⊗ₜ[k] f) =
+      a0 ⊗ₜ[k] qVStarActionHom q f := by
+  simp [avStarAction]
+
+/-- The two Zhou actions agree on the `SL₃` factor. This is part of the
+action construction, used independently by the §4 detector and §5 orbit
+arguments. Paper: §2. -/
+theorem thetaTwoLinearMap_sl3 (s : SpecialLinear.SL3) (d : D) :
+    thetaTwoLinearMap (s, (1 : Q)) d =
+      (avStarAction s (1 : Q) d.1, sl3CAction s d.2) := by
+  rcases d with ⟨u, c⟩
+  apply Prod.ext
+  · change avStarAction s (1 : Q) u + thetaTwoTermMap (s, (1 : Q)) c =
+      avStarAction s (1 : Q) u
+    rw [thetaTwoTermMap_apply]
+    have hq : OpenAIPort.quadraticDefectLinear (1 : Q) = 0 := by
+      ext w
+      simp [OpenAIPort.quadraticDefectLinear, CharTwo.add_self_eq_zero]
+    rw [hq]
+    simp
+  · rfl
 
 /-- The concrete pair of Zhou actions. Paper: §2. -/
 noncomputable def paperActionData : ActionData where

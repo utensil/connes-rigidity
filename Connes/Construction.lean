@@ -1,23 +1,19 @@
 /-
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
-
-Paper-shaped construction for Zhou §2. The declarations are new standalone
-scaffolding, informed by the public OpenAI/ten-proofs Connes formalization at
-commit 94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6. Modifications: Zhou's
-finite-field polynomial-ring construction replaces the reference example;
-the retraction remains paper-shaped, while the current identity actions are
-packaged as homomorphisms so the semidirect-product API is explicit.
 -/
 import Mathlib
 import Connes.Core
-import Connes.Foundation.GroupTheory.SpecialLinear
-import Connes.Foundation.GroupTheory.Sp4
+import Connes.Foundation.GroupTheory.SpecialLinear.Basic
+import Connes.Foundation.GroupTheory.Sp4Basic
 import Connes.Foundation.LinearAlgebra.ArithmeticSymplectic
-import Connes.Foundation.LinearAlgebra.BooleanPolynomial
-import Connes.Foundation.LinearAlgebra.Symplectic
-import Connes.Foundation.LinearAlgebra.Semisimple
-import Connes.Foundation.GroupTheory.SemidirectICC
+
+/-!
+Zhou's construction of the two groups in §2. The declarations are a standalone
+formalization informed by the public OpenAI/ten-proofs Connes formalization at
+commit 94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6. The concrete tensor kernel,
+retraction, acting group, and semidirect-product boundary follow the paper.
+-/
 
 namespace Connes
 namespace Construction
@@ -28,171 +24,14 @@ abbrev k := ZMod 2
 abbrev R := Polynomial k
 /-- Polynomial module for the construction. Paper: §2. -/
 abbrev A := Fin 3 → R
-/-- Finite symplectic module. Paper: §2. -/
-abbrev V := Fin 4 → k
-/-- Symmetric-data carrier placeholder. Paper: §2. -/
-abbrev C := A × A
-/-- Abelian-kernel carrier placeholder. Paper: §2. -/
-abbrev D := (A × V) × C
 /-- Acting-group carrier. Paper: §2. -/
-abbrev H := SpecialLinear.SL3 × Symplectic.Sp4
+abbrev H := SpecialLinear.SL3 × Sp4.Group
 
 /-- Countable discrete wrapper for the acting group. Paper: §2. -/
 noncomputable def actingGroup : CountableDiscreteGroup where
   Carrier := H
   group := inferInstance
   countable := by infer_instance
-
-/-- Multiplicative view of the additive kernel used by the semidirect product.
-Paper: §2. -/
-abbrev GammaKernel := Multiplicative D
-
-/-- Countability of the multiplicative kernel. Paper: §2. -/
-noncomputable instance : Countable GammaKernel := by
-  change Countable D
-  infer_instance
-
-/-- Countable discrete wrapper for the kernel. Paper: §2. -/
-noncomputable def kernelGroup : CountableDiscreteGroup where
-  Carrier := GammaKernel
-  group := inferInstance
-  countable := by infer_instance
-
-/-- Diagonal symmetric data. Paper: §2. -/
-def diagonal (a : A) : C := (a, a)
-
-/-- Retraction boundary for diagonal data. Paper: §2. -/
-def delta (c : C) : A := c.1
-
-/-- Retraction check for diagonal data. Paper: §2. -/
-theorem delta_diagonal (a : A) : delta (diagonal a) = a := by
-  rfl
-
-/-- Quadratic cocycle boundary. Paper: §2. -/
-def quadraticCocycle : H → C → k := fun _ _ => 0
-
-/-- Action data for the two paper constructions. Paper: §2.
-
-The two maps share the kernel and acting group but are supplied separately.
-This keeps the eventual action formulas at an API boundary instead of making
-the semidirect-product layer depend on a placeholder definition. -/
-structure ActionData where
-  thetaOneAction : H →* MulAut GammaKernel
-  thetaTwoAction : H →* MulAut GammaKernel
-
-private noncomputable def identityAction : H →* MulAut GammaKernel where
-  toFun _ := 1
-  map_one' := rfl
-  map_mul' _ _ := by rfl
-
-/-- Current scaffold input. Paper: §2. Replace this value with the two real
-actions after the kernel and cocycle APIs are available. -/
-noncomputable def placeholderActionData : ActionData where
-  thetaOneAction := identityAction
-  thetaTwoAction := identityAction
-
-/-- First action homomorphism boundary. Paper: §2. -/
-noncomputable abbrev thetaOneAction : H →* MulAut GammaKernel :=
-  placeholderActionData.thetaOneAction
-
-/-- Second action homomorphism boundary. Paper: §2. -/
-noncomputable abbrev thetaTwoAction : H →* MulAut GammaKernel :=
-  placeholderActionData.thetaTwoAction
-
-/-- First action boundary in additive coordinates. Paper: §2. -/
-noncomputable def thetaOneOf (actions : ActionData) (h : H) (d : D) : D :=
-  (actions.thetaOneAction h (Multiplicative.ofAdd d)).toAdd
-
-/-- Second action boundary in additive coordinates. Paper: §2. -/
-noncomputable def thetaTwoOf (actions : ActionData) (h : H) (d : D) : D :=
-  (actions.thetaTwoAction h (Multiplicative.ofAdd d)).toAdd
-
-/-- Current scaffold action boundaries. Paper: §2. -/
-noncomputable abbrev thetaOne (h : H) (d : D) : D :=
-  thetaOneOf placeholderActionData h d
-
-/-- Current scaffold action boundaries. Paper: §2. -/
-noncomputable abbrev thetaTwo (h : H) (d : D) : D :=
-  thetaTwoOf placeholderActionData h d
-
-/-- First action law. Paper: §2. -/
-def thetaOne_is_action : Prop :=
-  (∀ d, thetaOne 1 d = d) ∧
-    ∀ h₁ h₂ d, thetaOne (h₁ * h₂) d = thetaOne h₁ (thetaOne h₂ d)
-
-/-- Second action law. Paper: §2. -/
-def thetaTwo_is_action : Prop :=
-  (∀ d, thetaTwo 1 d = d) ∧
-    ∀ h₁ h₂ d, thetaTwo (h₁ * h₂) d = thetaTwo h₁ (thetaTwo h₂ d)
-
-theorem thetaOne_is_action_proof : thetaOne_is_action := by
-  constructor
-  · intro d
-    rfl
-  · intro h₁ h₂ d
-    rfl
-
-theorem thetaTwo_is_action_proof : thetaTwo_is_action := by
-  constructor
-  · intro d
-    rfl
-  · intro h₁ h₂ d
-    rfl
-
-/-- First semidirect carrier for an action input. Paper: §2. -/
-abbrev GammaOneCarrierOf (actions : ActionData) :=
-  SemidirectProduct GammaKernel H actions.thetaOneAction
-
-/-- Second semidirect carrier for an action input. Paper: §2. -/
-abbrev GammaTwoCarrierOf (actions : ActionData) :=
-  SemidirectProduct GammaKernel H actions.thetaTwoAction
-
-/-- First group wrapper for an action input. Paper: §2. -/
-noncomputable def gammaOneOf (actions : ActionData) : CountableDiscreteGroup where
-  Carrier := GammaOneCarrierOf actions
-  group := inferInstance
-  countable := by
-    exact SemidirectProduct.equivProd.injective.countable
-
-/-- Second group wrapper for an action input. Paper: §2. -/
-noncomputable def gammaTwoOf (actions : ActionData) : CountableDiscreteGroup where
-  Carrier := GammaTwoCarrierOf actions
-  group := inferInstance
-  countable := by
-    exact SemidirectProduct.equivProd.injective.countable
-
-/-- Current scaffold carriers. Paper: §2. -/
-abbrev GammaOneCarrier := GammaOneCarrierOf placeholderActionData
-
-/-- Current scaffold carriers. Paper: §2. -/
-abbrev GammaTwoCarrier := GammaTwoCarrierOf placeholderActionData
-
-/-- Current scaffold group boundary. Paper: §2. -/
-noncomputable def gammaOne : CountableDiscreteGroup :=
-  gammaOneOf placeholderActionData
-
-/-- Current scaffold group boundary. Paper: §2. -/
-noncomputable def gammaTwo : CountableDiscreteGroup :=
-  gammaTwoOf placeholderActionData
-
-/-- The current placeholder action makes both group wrappers definitionally
-equal. Paper: §2. -/
-theorem gammaOne_eq_gammaTwo : gammaOne = gammaTwo := by
-  rfl
-
-/-- The current placeholder groups have the identity group equivalence. Paper:
-§2. -/
-theorem gammaOne_groupsIsomorphic_gammaTwo :
-    GroupsIsomorphic gammaOne gammaTwo := by
-  exact ⟨MulEquiv.refl _⟩
-
-/-- First group countability witness. Paper: §2. -/
-theorem gammaOne_countable : Countable (gammaOne : Type) := by
-  infer_instance
-
-/-- Second group countability witness. Paper: §2. -/
-theorem gammaTwo_countable : Countable (gammaTwo : Type) := by
-  infer_instance
 
 namespace PaperKernel
 
@@ -358,26 +197,10 @@ noncomputable instance paperGammaKernelCountable :
   change Countable D
   infer_instance
 
-/-- Retraction candidate before the paper equivariance check. Paper: §2. -/
-structure RetractionCandidate where
-  delta : C →ₗ[k] A
-  delta_diagonal : ∀ a, delta (diagonal a) = a
-
-/-- Coefficientwise retraction candidate. Paper: §2. -/
-def retractionCandidate : RetractionCandidate where
-  delta := delta
-  delta_diagonal := delta_diagonal
-
 /-- Action pair over the paper-shaped kernel carrier. Paper: §2. -/
 structure ActionData where
   thetaOne : H →* MulAut (Multiplicative D)
   thetaTwo : H →* MulAut (Multiplicative D)
-
-/-- Countable discrete wrapper for the paper-shaped kernel. Paper: §2. -/
-noncomputable def paperKernelGroup : CountableDiscreteGroup where
-  Carrier := Multiplicative D
-  group := inferInstance
-  countable := by infer_instance
 
 /-- First paper-shaped semidirect group for an action input. Paper: §2. -/
 noncomputable def paperGammaOneOf

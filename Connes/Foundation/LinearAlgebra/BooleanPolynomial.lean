@@ -5,8 +5,8 @@ SPDX-License-Identifier: Apache-2.0
 New standalone interfaces for the Boolean-polynomial part of Zhou §4. The
 organization is informed by OpenAI/ten-proofs at commit
 94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6; no code is imported from it.
-Modifications: this file exposes paper-facing definitions; the weight
-estimate remains open, while chart exhaustion is stated for finite support.
+Modifications: this file exposes the reusable finite-coordinate support and
+weight theorem used by the paper's chart detector.
 -/
 import Mathlib
 
@@ -16,43 +16,41 @@ namespace BooleanPolynomial
 /-- Characteristic-two scalar field. Paper: §4. -/
 abbrev F := ZMod 2
 
-/-- Characteristic-two numeral reduction. Paper: §2, source: OpenAI `ConnesRigidity.lean:15-16`. -/
-@[simp] theorem two_eq_zero : (2 : F) = 0 := by
-  rfl
-
 /-- Nonzero characteristic-two scalars are one. Paper: §2, source: OpenAI `ConnesRigidity.lean:18-23`. -/
 theorem eq_one_of_ne_zero (a : F) (ha : a ≠ 0) : a = 1 := by
   fin_cases a
   · exact (ha rfl).elim
   · rfl
 
-/-- Boolean polynomial carrier. Paper: §4. -/
-abbrev Polynomial (n : ℕ) := (Fin n → F) → F
+/-- Boolean functions on an arbitrary finite coordinate type. Paper: §4. -/
+abbrev PolynomialOn (ι : Type*) := (ι → F) → F
 
-/-- Polynomial support boundary. Paper: §4. -/
-def support {n : ℕ} (P : Polynomial n) : Finset (Fin n → F) :=
-  Finset.univ.filter (fun x => P x ≠ 0)
+/-- Support of a Boolean function on arbitrary finite coordinates. Paper: §4. -/
+noncomputable def supportOn {ι : Type*} [Fintype ι] (P : PolynomialOn ι) :
+    Finset (ι → F) := by
+  classical
+  exact Finset.univ.filter (fun x => P x ≠ 0)
 
-/-- Polynomial support weight. Paper: §4. -/
-def weight {n : ℕ} (P : Polynomial n) : ℕ :=
-  (support P).card
+/-- Support weight on arbitrary finite coordinates. Paper: §4. -/
+noncomputable def weightOn {ι : Type*} [Fintype ι] (P : PolynomialOn ι) : ℕ :=
+  (supportOn P).card
 
-/-- Coefficient data for a degree-two Boolean polynomial. Paper: §4. -/
-structure QuadraticPolynomial (n : ℕ) where
+/-- Degree-two coefficient data on arbitrary finite Boolean coordinates. Paper: §4. -/
+structure QuadraticData (ι : Type*) [Fintype ι] where
   constant : F
-  linear : Fin n → F
-  quadratic : Fin n → Fin n → F
+  linear : ι → F
+  quadratic : ι → ι → F
 
-/-- Evaluation of a degree-two Boolean polynomial. Paper: §4. -/
-def QuadraticPolynomial.eval {n : ℕ} (q : QuadraticPolynomial n)
-    (x : Fin n → F) : F :=
+/-- Evaluation of degree-two coefficient data. Paper: §4. -/
+def QuadraticData.eval {ι : Type*} [Fintype ι]
+    (q : QuadraticData ι) (x : ι → F) : F :=
   q.constant +
     ∑ i, q.linear i * x i +
       ∑ i, ∑ j, q.quadratic i j * x i * x j
 
-/-- Degree restriction boundary. Paper: §4. -/
-def DegreeAtMostTwo {n : ℕ} (P : Polynomial n) : Prop :=
-  ∃ q : QuadraticPolynomial n, ∀ x, q.eval x = P x
+/-- Degree restriction on arbitrary finite Boolean coordinates. Paper: §4. -/
+def IsQuadratic {ι : Type*} [Fintype ι] (P : PolynomialOn ι) : Prop :=
+  ∃ q : QuadraticData ι, ∀ x, q.eval x = P x
 
 /-- Four-point support cover for quadratic functions. Paper: §4. -/
 theorem quadratic_support_quarter
@@ -65,9 +63,11 @@ theorem quadratic_support_quarter
       4 * ((Finset.univ : Finset W).filter (fun x => f x ≠ 0)).card := by
   classical
   have hchar2 (x : W) : x + x = 0 := by
-    rw [← two_smul F x, two_eq_zero, zero_smul]
+    rw [← two_smul F x]
+    have htwo : (2 : F) = 0 := CharTwo.two_eq_zero
+    rw [htwo, zero_smul]
   have hchar2F (a : F) : a + a = 0 := by
-    rw [← two_smul F a, two_eq_zero, zero_smul]
+    exact CharTwo.add_self_eq_zero a
   let support : Finset W := Finset.univ.filter (fun x => f x ≠ 0)
   let offset (u v : W) (c : Fin 2 × Fin 2) : W :=
     (if c.1 = 0 then 0 else u) + (if c.2 = 0 then 0 else v)
@@ -110,7 +110,7 @@ theorem quadratic_support_quarter
     · refine ⟨(⟨x + v, by simpa only [support, Finset.mem_filter,
         Finset.mem_univ, true_and] using hxv⟩, (0, 1)), ?_⟩
       simp only [Fin.isValue, ↓reduceIte, one_ne_zero, zero_add, add_assoc,
-        add_zero, cover, offset]
+        cover, offset]
       rw [hchar2]
       simp only [add_zero]
     have hxuv : f ((x + u) + v) ≠ 0 := by
@@ -166,31 +166,29 @@ theorem quadratic_support_quarter
       rw [hsupport, Finset.card_univ]
       omega
 
-/-- Low-degree support estimate. Paper: §4. -/
-theorem weight_lower_bound {n : ℕ} (P : Polynomial n)
-    (hdeg : DegreeAtMostTwo P) (hP : P ≠ 0) :
-    weight P ≥ 2 ^ (n - 2) := by
+/-- Low-degree support estimate on arbitrary finite Boolean coordinates. Paper: §4. -/
+theorem quadratic_weight_lower_bound
+    {ι : Type*} [Fintype ι] (P : PolynomialOn ι)
+    (hdeg : IsQuadratic P) (hP : P ≠ 0) :
+    weightOn P ≥ 2 ^ (Fintype.card ι - 2) := by
   classical
   obtain ⟨q, hq⟩ := hdeg
-  have hchar2F (a : F) : a + a = 0 := by
-    rw [← two_smul F a, two_eq_zero, zero_smul]
-  let b : (Fin n → F) → (Fin n → F) → F := fun x y =>
+  let b : (ι → F) → (ι → F) → F := fun x y =>
     ∑ i, ∑ j, q.quadratic i j * (x i * y j + y i * x j)
   have hq0 : q.eval 0 = q.constant := by
-    simp [QuadraticPolynomial.eval]
-  have hadd (x y : Fin n → F) :
+    simp [QuadraticData.eval]
+  have hadd (x y : ι → F) :
       q.eval (x + y) = q.eval x + q.eval y + q.eval 0 + b x y := by
     rw [hq0]
-    simp only [QuadraticPolynomial.eval, b, Pi.add_apply, add_mul, mul_add,
+    simp only [QuadraticData.eval, b, Pi.add_apply, add_mul, mul_add,
       Finset.sum_add_distrib]
     have hthree : (3 : F) = 1 := by decide
     have hc3 : q.constant * 3 = q.constant := by rw [hthree, mul_one]
     ring_nf
     try rw [hc3]
-    all_goals abel
-  have hbadd (x y z : Fin n → F) : b (x + y) z = b x z + b y z := by
+  have hbadd (x y z : ι → F) : b (x + y) z = b x z + b y z := by
     dsimp [b]
-    simp only [Pi.add_apply, add_mul, mul_add]
+    simp only [add_mul, mul_add]
     rw [← Finset.sum_add_distrib]
     apply Finset.sum_congr rfl
     intro i hi
@@ -198,7 +196,7 @@ theorem weight_lower_bound {n : ℕ} (P : Polynomial n)
     apply Finset.sum_congr rfl
     intro j hj
     ring
-  have hf : ∃ x : Fin n → F, q.eval x ≠ 0 := by
+  have hf : ∃ x : ι → F, q.eval x ≠ 0 := by
     by_contra h
     apply hP
     funext x
@@ -206,68 +204,38 @@ theorem weight_lower_bound {n : ℕ} (P : Polynomial n)
     exact not_ne_iff.mp (not_exists.mp h x)
   have hcard := quadratic_support_quarter q.eval b hadd hbadd hf
   have hweight :
-      ((Finset.univ : Finset (Fin n → F)).filter (fun x => q.eval x ≠ 0)).card =
-        weight P := by
-    unfold weight support
+      ((Finset.univ : Finset (ι → F)).filter (fun x => q.eval x ≠ 0)).card =
+        weightOn P := by
+    unfold weightOn supportOn
     congr 1
     ext x
     simp only [Finset.mem_filter, Finset.mem_univ, true_and]
     rw [← hq x]
-  rw [Fintype.card_fun, Fintype.card_fin, ZMod.card] at hcard
+  rw [Fintype.card_fun, ZMod.card] at hcard
   rw [hweight] at hcard
-  by_cases hn : 2 ≤ n
-  · have hexp : (n - 2) + 2 = n := by omega
-    have hpow : 2 ^ n = 4 * 2 ^ (n - 2) := by
+  by_cases hn : 2 ≤ Fintype.card ι
+  · have hexp : (Fintype.card ι - 2) + 2 = Fintype.card ι := by omega
+    have hpow : 2 ^ Fintype.card ι = 4 * 2 ^ (Fintype.card ι - 2) := by
       rw [← hexp, pow_add]
       norm_num [Nat.mul_comm]
     rw [hpow] at hcard
     exact Nat.le_of_mul_le_mul_left hcard (by norm_num)
-  · have hn' : n = 0 ∨ n = 1 := by omega
-    rcases hn' with rfl | rfl
-    · simp only [Nat.zero_sub, pow_zero]
-      obtain ⟨x, hx⟩ := hf
-      have hPx : P x ≠ 0 := by simpa only [← hq x] using hx
-      exact Finset.card_pos.mpr ⟨x, by
-        simpa only [support, Finset.mem_filter, Finset.mem_univ, true_and] using hPx⟩
-    · simp only [Nat.one_sub, pow_zero]
-      obtain ⟨x, hx⟩ := hf
-      have hPx : P x ≠ 0 := by simpa only [← hq x] using hx
-      exact Finset.card_pos.mpr ⟨x, by
-        simpa only [support, Finset.mem_filter, Finset.mem_univ, true_and] using hPx⟩
-
-/-- Finite coefficient-chart boundary. Paper: §4. -/
-def coefficientChart (N : ℕ) : Set (ℕ → F) :=
-  {x | ∀ n, N ≤ n → x n = 0}
-
-/-- Finite-support coefficient data used by the chart exhaustion. Paper: §4. -/
-def FiniteSupport (x : ℕ → F) : Prop :=
-  (Function.support x).Finite
-
-/-- Chart monotonicity. Paper: §4. -/
-theorem coefficientChart_mono {M N : ℕ} (hMN : M ≤ N) :
-    coefficientChart M ⊆ coefficientChart N := by
-  intro x hx n hN
-  exact hx n (le_trans hMN hN)
-
-/-- Chart exhaustion boundary. Paper: §4. -/
-theorem coefficientCharts_cover (x : ℕ → F) (hx : FiniteSupport x) :
-    ∃ N, x ∈ coefficientChart N := by
-  change (Function.support x).Finite at hx
-  classical
-  by_cases hsupp : (Function.support x).Nonempty
-  · let s : Finset ℕ := hx.toFinset
-    have hs : s.Nonempty := hx.toFinset_nonempty.mpr hsupp
-    refine ⟨s.max' hs + 1, ?_⟩
-    intro n hn
-    by_contra hxn
-    have hnmem : n ∈ Function.support x := hxn
-    have hnfin : n ∈ s := hx.mem_toFinset.mpr hnmem
-    have hle : n ≤ s.max' hs := s.le_max' n hnfin
-    omega
-  · refine ⟨0, ?_⟩
-    intro n _
-    by_contra hxn
-    exact hsupp ⟨n, hxn⟩
+  · have hn' : Fintype.card ι = 0 ∨ Fintype.card ι = 1 := by omega
+    rcases hn' with hzero | hone
+    · have hsupport : 0 < weightOn P := by
+        obtain ⟨x, hx⟩ := hf
+        have hPx : P x ≠ 0 := by simpa only [← hq x] using hx
+        exact Finset.card_pos.mpr ⟨x, by
+          simpa [supportOn] using hPx⟩
+      have hle : 1 ≤ weightOn P := by omega
+      simpa [hzero] using hle
+    · have hsupport : 0 < weightOn P := by
+        obtain ⟨x, hx⟩ := hf
+        have hPx : P x ≠ 0 := by simpa only [← hq x] using hx
+        exact Finset.card_pos.mpr ⟨x, by
+          simpa [supportOn] using hPx⟩
+      have hle : 1 ≤ weightOn P := by omega
+      simpa [hone] using hle
 
 end BooleanPolynomial
 end Connes

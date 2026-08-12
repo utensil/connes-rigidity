@@ -204,7 +204,7 @@ theorem repr_support_swap_mem (c : C) {p : OrderedTensorIndex}
   rw [← repr_swap_eq c p, hzero]
 
 /-- The Zhou fixed tensor module is spanned by square tensors. Paper: §2. -/
-noncomputable def concreteSquareSpanData : SquareSpanData where
+theorem concreteSquareSpanData : SquareSpanData where
   squares_span c := by
     classical
     let r := orderedTensorBasis.repr (c : TensorAA)
@@ -262,10 +262,6 @@ noncomputable def concreteSquareSpanData : SquareSpanData where
       q (c : TensorAA) = ∑ p ∈ r.support, f p := hexpand
       _ = ∑ p ∈ diagonalSupport, f p + ∑ p ∈ offDiagonalSupport, f p := hsplit
       _ = 0 := by rw [hdiagonal, hoffDiagonal, zero_add]
-
-/-- The concrete Zhou retraction candidate with its square-span proof. Paper: §2. -/
-noncomputable def concreteRetractionData : RetractionData :=
-  candidateRetractionData concreteSquareSpanData
 
 end
 end PaperKernel

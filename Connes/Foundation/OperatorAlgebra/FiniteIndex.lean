@@ -5,10 +5,9 @@ SPDX-License-Identifier: Apache-2.0
 Mechanical transfer of the finite-index induction infrastructure from
 OpenAI/ten-proofs, `ConnesRigidity.lean:295-655`. The source is public
 Apache-2.0 code. This Zhou §4 support file preserves the proof terms in a
-small namespace and imports only the local core vocabulary and unitary bridge.
+small namespace and imports only the local core vocabulary.
 -/
 import Connes.Core
-import Connes.Foundation.OperatorAlgebra.UnitaryEquiv
 
 namespace Connes
 namespace OpenAIPort
@@ -104,7 +103,7 @@ noncomputable def inducedLinearIsometryEquiv
   exact
     (LinearIsometryEquiv.piLpCongrLeft 2 ℂ H (MulAction.toPerm g)).trans
       (LinearIsometryEquiv.piLpCongrRight 2
-        (fun q ↦ unitaryLinearIsometryEquiv
+        (fun q ↦ Unitary.linearIsometryEquiv
           (π (correction S g (g⁻¹ • q)))))
 
 /-- Pointwise formula for the induced linear isometry. Paper: §4. -/
@@ -120,7 +119,7 @@ noncomputable def inducedLinearIsometryEquiv
 noncomputable def inducedUnitary
     (π : UnitaryRepresentation S H) (g : G) :
     unitary (InducedSpace (H := H) S →L[ℂ] InducedSpace (H := H) S) :=
-  linearIsometryEquivUnitary (inducedLinearIsometryEquiv S π g)
+  Unitary.linearIsometryEquiv.symm (inducedLinearIsometryEquiv S π g)
 
 /-- Pointwise formula for the induced unitary. Paper: §4. -/
 @[simp] theorem inducedUnitary_apply
@@ -159,6 +158,7 @@ noncomputable def inducedRepresentation
         (ξ (g⁻¹ • q)) :=
   rfl
 
+omit [InnerProductSpace ℂ H] [CompleteSpace H] in
 /-- Sum-of-coordinate norm bound for the induced space. Paper: §4. -/
 theorem inducedSpace_norm_le_sum_norm_apply
     (ξ : InducedSpace (H := H) S) :
@@ -293,6 +293,7 @@ theorem inducedInvariant_baseCoset_ne_zero
   apply hq
   rw [← heval', hzero, map_zero]
 
+omit [S.FiniteIndex] in
 /-- Correction conjugacy at the base coset. Paper: §4. -/
 theorem correction_conjugate_at_baseCoset
     (s : S) :
