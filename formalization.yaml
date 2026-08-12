@@ -1,0 +1,32 @@
+version: "0.1"
+
+project:
+  name: "connes-rigidity"
+  authors:
+    - "utensil"
+  license: "Apache-2.0"
+  toolchain: "leanprover/lean4:v4.32.2"
+  mathlib_revision: "905b95818eb32af7874a58b427f50c1711a5e96c"
+
+sources:
+  - title: "ICC property(T) groups without W*-superrigidity"
+    authors:
+      - "Shuoxing Zhou"
+    id: "https://arxiv.org/abs/2608.02327"
+    publication_date: "2026-08-03"
+    type: "paper"
+  - title: "Ten Advances in Mathematics and Theoretical Computer Science"
+    authors:
+      - "OpenAI"
+    id: "https://github.com/openai/ten-proofs"
+    revision: "94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6"
+    license: "Apache-2.0"
+
+status:
+  stage: "skeleton"
+  sorry_count: "intentional"
+  comparator_challenge: "ComparatorChallenges/F_ConnesZhou.json"
+  permitted_axioms:
+    - "propext"
+    - "Classical.choice"
+    - "Quot.sound"
