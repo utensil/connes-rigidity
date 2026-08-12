@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+status=0
+while IFS= read -r file; do
+  awk '
+    BEGIN { has_doc = 0 }
+    {
+      if ($0 ~ /^\/--.*Paper: §/) { has_doc = 1; next }
+      if ($0 ~ /^[[:space:]]*@/) next
+      declaration = ($0 ~ /^[[:space:]]*(noncomputable[[:space:]]+)?(theorem|lemma|def|abbrev|structure|class|inductive|instance|opaque)\b/)
+      if (declaration && !has_doc) {
+        print FILENAME ":" NR ": declaration lacks a paper-section docstring"
+        failed = 1
+      }
+      if (declaration) has_doc = 0
+      else if ($0 !~ /^[[:space:]]*$/) has_doc = 0
+    }
+    END { if (failed) exit 1 }
+  ' "$file" || status=1
+done < <(rg --files -g '*.lean' | sort)
+
+exit "$status"
