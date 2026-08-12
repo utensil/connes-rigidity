@@ -565,6 +565,10 @@ end ElementaryGenerationProof
 theorem sl3_eq_elementary : ElementaryGeneration :=
   ElementaryGenerationProof.all_mem_elementarySubgroup
 
+/-- The elementary subgroup is all of `SL₃(R)`. Paper: §4, Proposition 4.1(a). -/
+theorem elementarySubgroup_eq_top : elementarySubgroup = ⊤ :=
+  (Subgroup.eq_top_iff' _).2 ElementaryGenerationProof.all_mem_elementarySubgroup
+
 private theorem sl3_scalar_eq_one
     (g : SL3)
     (hscalar : (g : Matrix (Fin 3) (Fin 3) R) ∈ Set.range (Matrix.scalar (Fin 3))) :
@@ -600,6 +604,17 @@ noncomputable def sl3Group : CountableDiscreteGroup where
   Carrier := SL3
   group := inferInstance
   countable := by infer_instance
+
+/-- The elementary subgroup appearing in the cited EJZK theorem. Paper: §4. -/
+noncomputable def elementaryGroup : CountableDiscreteGroup where
+  Carrier := elementarySubgroup
+  group := inferInstance
+  countable := inferInstance
+
+/-- Zhou Proposition 4.1(a) identifies the elementary group with `SL₃(R)`.
+Paper: §4. -/
+noncomputable def elementaryEquivSL3 : elementarySubgroup ≃* SL3 :=
+  (MulEquiv.subgroupCongr elementarySubgroup_eq_top).trans Subgroup.topEquiv
 
 /-- ICC boundary for the special-linear group. Paper: §5. -/
 theorem sl3_isICC : IsICC sl3Group := by

@@ -21,7 +21,15 @@ universe u
 
 /-- The external EJZK property-(T) input used by Zhou §4. Paper: §4. -/
 structure EJZKInput where
-  propertyT : HasKazhdanPropertyT SpecialLinear.sl3Group
+  propertyT : HasKazhdanPropertyT SpecialLinear.elementaryGroup
+
+/-- Transport the cited elementary-group theorem across Zhou Proposition 4.1(a).
+Paper: §4. -/
+theorem sl3_propertyT_from_EJZK (input : EJZKInput) :
+    HasKazhdanPropertyT SpecialLinear.sl3Group := by
+  exact (OpenAIPort.hasKazhdanPropertyT_iff_of_mulEquiv
+    SpecialLinear.elementaryGroup SpecialLinear.sl3Group
+      SpecialLinear.elementaryEquivSL3).mp input.propertyT
 
 /-- The acting group in the actual paper construction. Paper: §2, §4. -/
 noncomputable def actingGroup : CountableDiscreteGroup where
@@ -122,7 +130,8 @@ theorem lambdaOne_propertyT
       (CountableDiscreteGroup.quotient
         (lambdaOneOf actions) (lambdaOneKernelSubgroup actions)
         data.lambdaOne.normal)
-      SpecialLinear.sl3Group data.lambdaOne.quotientEquiv).mpr input.propertyT)
+      SpecialLinear.sl3Group data.lambdaOne.quotientEquiv).mpr
+        (sl3_propertyT_from_EJZK input))
 
 /-- The actual second intermediate group has property-(T). Paper: §4. -/
 theorem lambdaTwo_propertyT
@@ -135,7 +144,8 @@ theorem lambdaTwo_propertyT
       (CountableDiscreteGroup.quotient
         (lambdaTwoOf actions) (lambdaTwoKernelSubgroup actions)
         data.lambdaTwo.normal)
-      SpecialLinear.sl3Group data.lambdaTwo.quotientEquiv).mpr input.propertyT)
+      SpecialLinear.sl3Group data.lambdaTwo.quotientEquiv).mpr
+        (sl3_propertyT_from_EJZK input))
 
 /-- Property-(T) for the first actual Zhou group. Paper: §4. -/
 theorem gammaOne_propertyT

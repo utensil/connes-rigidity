@@ -50,10 +50,10 @@ theorem theoremA_of_data
     hT.1, hT.2, hICC₁, hICC₂, hFactor, hNoniso⟩
 
 /- Zhou's Theorem A. The only external mathematical input is the cited EJZK
-property-(T) theorem for `SL₃(𝔽₂[t])`; every construction and all other
+property-(T) theorem for `EL₃(𝔽₂[t])`; every construction and all other
 paper arguments are proved in this project. Paper: §7. -/
 theorem theoremA
-    (hEJZK : HasKazhdanPropertyT SpecialLinear.sl3Group) :
+    (hEJZK : HasKazhdanPropertyT SpecialLinear.elementaryGroup) :
     ∃ Γ₁ Γ₂ : CountableDiscreteGroup.{0},
       HasKazhdanPropertyT Γ₁ ∧ HasKazhdanPropertyT Γ₂ ∧
       IsICC Γ₁ ∧ IsICC Γ₂ ∧

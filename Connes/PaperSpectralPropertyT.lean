@@ -150,14 +150,16 @@ theorem lambdaOne_propertyT_of_spectralData
     (input : EJZKInput) (data : LambdaOneSpectralData) :
     HasKazhdanPropertyT (lambdaOneOf PaperKernel.paperActionData) := by
   exact spectral_criterion_unconditional
-    lambdaOneExtension input.propertyT data.J data.c_pos data.detection
+    lambdaOneExtension (PaperPropertyT.sl3_propertyT_from_EJZK input)
+      data.J data.c_pos data.detection
 
 /-- The second concrete intermediate group is property-(T) from its spectral data. Paper: §4. -/
 theorem lambdaTwo_propertyT_of_spectralData
     (input : EJZKInput) (data : LambdaTwoSpectralData) :
     HasKazhdanPropertyT (lambdaTwoOf PaperKernel.paperActionData) := by
   exact spectral_criterion_unconditional
-    lambdaTwoExtension input.propertyT data.J data.c_pos data.detection
+    lambdaTwoExtension (PaperPropertyT.sl3_propertyT_from_EJZK input)
+      data.J data.c_pos data.detection
 
 /-- Build the first relative transfer record from its stronger spectral conclusion. Paper: §4. -/
 def lambdaOneRelativeData_of_spectralData

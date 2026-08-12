@@ -247,8 +247,12 @@ noncomputable instance : Countable SL3 := by
   change Countable {A : Matrix (Fin 3) (Fin 3) R // A.det = 1}
   infer_instance
 
-noncomputable def sl3Group : CountableDiscreteGroup where
-  Carrier := SL3
+noncomputable def elementarySubgroup : Subgroup SL3 :=
+  Subgroup.closure {g | ∃ (i j : Fin 3) (hij : i ≠ j) (a : R),
+    g = Matrix.SpecialLinearGroup.transvection hij a}
+
+noncomputable def elementaryGroup : CountableDiscreteGroup where
+  Carrier := elementarySubgroup
   group := inferInstance
   countable := inferInstance
 
@@ -256,7 +260,7 @@ end SpecialLinear
 
 /-- Comparator headline theorem. Paper: §7. -/
 theorem theoremA
-    (hEJZK : HasKazhdanPropertyT SpecialLinear.sl3Group) :
+    (hEJZK : HasKazhdanPropertyT SpecialLinear.elementaryGroup) :
     ∃ Γ₁ Γ₂ : CountableDiscreteGroup.{0},
       HasKazhdanPropertyT Γ₁ ∧ HasKazhdanPropertyT Γ₂ ∧
       IsICC Γ₁ ∧ IsICC Γ₂ ∧
