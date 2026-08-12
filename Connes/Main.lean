@@ -1,0 +1,27 @@
+/-
+Copyright 2026 utensil
+SPDX-License-Identifier: Apache-2.0
+-/
+import Connes.Core
+import Connes.Paper.Section7
+
+/-!
+Completion boundary for Zhou's Theorem A.
+-/
+
+namespace Connes
+
+/-- Zhou's Theorem A. The only external mathematical input is the cited EJZK
+property-(T) theorem for `EL₃(𝔽₂[t])`; every construction and all other
+paper arguments are proved in this project. Paper: §7. -/
+theorem theoremA
+    (hEJZK : HasKazhdanPropertyT PaperPropertyT.elementaryGroup) :
+    ∃ Γ₁ Γ₂ : CountableDiscreteGroup.{0},
+      HasKazhdanPropertyT Γ₁ ∧ HasKazhdanPropertyT Γ₂ ∧
+      IsICC Γ₁ ∧ IsICC Γ₂ ∧
+      TracialGroupFactorsIsomorphic Γ₁ Γ₂ ∧
+      ¬ GroupsIsomorphic Γ₁ Γ₂ := by
+  exact PaperTheoremACompletion.theoremA
+    ⟨hEJZK⟩
+
+end Connes
