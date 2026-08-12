@@ -23,7 +23,7 @@ sources:
     license: "Apache-2.0"
 
 status:
-  stage: "skeleton"
+  stage: "complete-relative-to-cited-ejzk-input"
   sorry_count: "intentional"
   comparator_challenge: "ComparatorChallenges/F_ConnesZhou.json"
   permitted_axioms:

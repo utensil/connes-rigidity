@@ -5,16 +5,17 @@ This audit compares the active declarations with Zhou,
 [OpenAI ten-proofs](https://github.com/openai/ten-proofs) tree is used only for
 proof patterns and provenance. It is not imported.
 
-## Result at `e2d22bd`
+## Result in the current refactor candidate
 
 The active paper-facing path uses the actual tensor kernel and the two Zhou
 actions. It constructs every certificate required by §§2--6 and concludes
-Theorem A from the EJZK property-(T) theorem cited in §4. The cited result is
-an explicit theorem parameter, not a project axiom.
+Theorem A from the EJZK property-(T) theorem for `EL₃(F₂[t])` cited in §4,
+together with the internal proof that `EL₃ = SL₃`. The cited result is an
+explicit theorem parameter, not a project axiom.
 
-The old identity-action path remains in compatibility files only. It is a
-negative countercheck: its two groups are equal and isomorphic, so it cannot
-be the theorem in the paper.
+The retired identity-action compatibility path has been deleted. The only
+exported construction path uses `Construction.PaperKernel` and the two
+concrete Zhou actions.
 
 ## Section-by-section comparison
 
@@ -25,14 +26,10 @@ be the theorem in the paper.
 | §2 | `PaperKernel.paperGammaOneOf`, `paperGammaTwoOf` | Faithful semidirect-product carriers parameterized by the concrete action pair. |
 | §3 | `PaperFactorIsomorphism.quadraticMap`, `fiberShear` | The algebraic dual coordinates, diagonal identity, and characteristic-two involution are proved. |
 | §3 | `PaperFactorClosure.paperGroupFactors_isomorphic` | The raw compact dual, Haar probability action, crossed-product Fourier model, continuous character closure, fiber shear, spatial equivalence, vacuum transport, and trace-preserving factor equivalence are constructed. |
-| §4 | `PaperSpectralFiniteDetection.lambdaOneSpectralData`, `lambdaTwoSpectralData` | The actual intermediate groups, scalar spectral measures, finite detectors, quotient identifications, and finite `Q` extension are constructed. Only the cited EJZK property-(T) theorem is a parameter. |
-| §5 | `PaperICCOrbits.paperICCDataPair` | The actual `SL₃(R) × Sp₄(F₂)` quotient is used. Kernel-orbit and finite-quotient displacement facts instantiate the direct three-case proof. |
-| §6 | `PaperConcreteCompletion.paperGamma_not_isomorphic` | Characteristic-kernel transport, quotient representations under arbitrary quotient automorphisms, the semisimplicity split, and finite quadratic cocycle obstruction are constructed. |
-| §7 | `Connes.theoremA` | The headline theorem takes exactly the cited EJZK result and constructs the two concrete groups and all four conclusions. |
-
-The top-level `Construction.C`, `Construction.D`, `gammaOne`, and `gammaTwo`
-are deliberately retained as legacy countercheck scaffolding. They are not
-used by `Connes.Main`.
+| §4 | `SpecialLinear.elementarySubgroup_eq_top`, `PaperPropertyT.elementaryEquivSL3`, `PaperSpectralFiniteDetection.lambdaOneSpectralData`, `lambdaTwoSpectralData` | The actual intermediate groups, scalar spectral measures, finite detectors, quotient identifications, and finite `Q` extension are constructed. Only the cited EJZK property-(T) theorem for `EL₃` is a parameter; its transport to `SL₃` is internal. |
+| §5 | `PaperICC.paper_dataPair`, `PaperICC.paper_gammaOne_icc`, `paper_gammaTwo_icc` | The actual `SL₃(R) × Sp₄(F₂)` quotient is used. Kernel-orbit and finite-quotient displacement facts instantiate the direct three-case proof. |
+| §6 | `PaperModuleSemisimpleTransport.paperGroups_not_isomorphic` | Characteristic-kernel transport, quotient representations definitionally attached to `paperThetaOneLinearHom` and `paperThetaTwoLinearHom`, arbitrary quotient twists, the semisimplicity split, and finite quadratic cocycle obstruction are constructed. |
+| §7 | `Connes.theoremA` | The headline theorem takes exactly the cited EJZK result for `EL₃` and constructs the two concrete groups and all four conclusions. |
 
 ## Mathematical mismatch audit
 
@@ -47,15 +44,17 @@ The original targets had four material mismatches:
 3. The old non-isomorphism field accepted arbitrary propositions and a direct
    module equivalence. Zhou's argument first identifies a characteristic
    kernel and may twist the quotient action by an automorphism. The active
-   target now exposes that automorphism and asks for non-semisimplicity for
-   every such twist.
+   target now fixes the actual two quotient representations, exposes that
+   automorphism, and proves non-semisimplicity for every such twist; no
+   generic conclusion-carrying `Data` remains.
 4. The old factor target accepted an identity factor witness unrelated to the
-   paper's shear. The active file proves the shear algebra and names the
-   measure, dual-action, and spatial implementation obligations explicitly.
+   paper's shear. The factor conclusion now routes directly through the
+   concrete Haar, dual-action, fiber-shear, generator-closure, and spatial
+   implementation chain; no caller-supplied factor witness remains.
 
-These corrections are all discharged in the concrete completion modules. No
-free data structure carrying a Zhou-internal conclusion reaches the final
-theorem.
+These corrections are discharged at the direct section endpoints and composed
+by `PaperTheoremACompletion.theoremA`. No free data structure carrying a
+Zhou-internal conclusion reaches the final theorem.
 
 ## OpenAI correspondence
 
@@ -69,10 +68,11 @@ OpenAI theorem without local carrier and analytic adaptation.
 ## Current source audit
 
 - Lean toolchain: `leanprover/lean4:v4.32.2`.
-- Literal `sorry` declarations: one, the independent Comparator challenge at
-  `ComparatorChallenges/F_ConnesZhou.lean:265`.
+- Literal `sorry` declarations: one, in the independent Comparator
+  `theoremA` challenge in `ComparatorChallenges/F_ConnesZhou.lean`.
 - Project `axiom` and `admit` declarations: none.
 - `#print axioms Connes.theoremA`: `propext`, `Classical.choice`, and
   `Quot.sound` only.
-- Full gate: `lake build Connes ComparatorChallenges`, 8759 jobs.
+- Full gate: `lake build Connes ComparatorChallenges` passes on the refactor
+  candidate; the final receipt is recorded after the candidate commit.
 - No private paths, credentials, or private source material are tracked.

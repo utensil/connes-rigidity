@@ -1,11 +1,12 @@
 # Comparator plan
 
 `ComparatorChallenges/F_ConnesZhou.lean` is a self-contained restatement of
-the vocabulary needed for Theorem A, including the concrete
-`SL₃(𝔽₂[t])` EJZK hypothesis. It imports only `Mathlib`; it never imports
-`Connes` or any solution module. The configuration lists `Connes.theoremA`,
-permits only `propext`, `Quot.sound`, and `Classical.choice`, and enables
-nanoda.
+the vocabulary needed for Theorem A. Its external hypothesis is exactly
+property (T) for the elementary subgroup `EL₃(𝔽₂[t])` cited by Zhou, with the
+same kernel-level definition as the solution statement. It imports only
+`Mathlib`; it never imports `Connes` or any solution module. The configuration
+lists `Connes.theoremA`, permits only `propext`, `Quot.sound`, and
+`Classical.choice`, and enables nanoda.
 
 The eventual verification command is:
 
