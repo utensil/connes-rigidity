@@ -1,0 +1,136 @@
+name: Comparator
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: comparator-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify Theorem A
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+
+    steps:
+      # actions/checkout v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      # This action only installs the project toolchain. Comparator must be the
+      # first process that builds either the challenge or solution module.
+      # leanprover/lean-action v1.5.0
+      - name: Set up Lean
+        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-github-cache: false
+          use-mathlib-cache: false
+
+      - name: Prepare trusted Mathlib cache
+        run: lake exe cache get
+
+      - name: Reject prebuilt candidate modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e .lake/build/lib/lean/Connes.olean
+          test ! -e .lake/build/lib/lean/ComparatorChallenges/F_ConnesZhou.olean
+
+      # actions/setup-go v5.5.0
+      - name: Set up Go
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5
+        with:
+          go-version: "1.24.0"
+
+      - name: Build pinned verifier tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          landrun_sha=62823c05e58ec22c1f91b4c8468318c1f97f2d32
+          nanoda_sha=418320295890faed83a96fd97907b12a3b6728c2
+
+          lake build comparator lean4export
+
+          go install "github.com/zouuup/landrun/cmd/landrun@$landrun_sha"
+
+          git clone --filter=blob:none https://github.com/ammkrn/nanoda_lib.git \
+            "$RUNNER_TEMP/nanoda"
+          git -C "$RUNNER_TEMP/nanoda" checkout --detach "$nanoda_sha"
+          test "$(git -C "$RUNNER_TEMP/nanoda" rev-parse HEAD)" = "$nanoda_sha"
+          cargo build --release --locked --manifest-path "$RUNNER_TEMP/nanoda/Cargo.toml"
+
+      - name: Verify sandbox and Theorem A
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(id -u)" -ne 0
+
+          kernel_version="$(uname -r | cut -d- -f1)"
+          if ! dpkg --compare-versions "$kernel_version" ge 6.7; then
+            echo "::error::Landrun network isolation requires Linux 6.7 or newer; found $kernel_version."
+            exit 1
+          fi
+
+          landrun_bin="$(go env GOPATH)/bin/landrun"
+          comparator_bin="$GITHUB_WORKSPACE/.lake/packages/Comparator/.lake/build/bin/comparator"
+          lean4export_bin="$GITHUB_WORKSPACE/.lake/packages/lean4export/.lake/build/bin/lean4export"
+          nanoda_bin="$RUNNER_TEMP/nanoda/target/release/nanoda_bin"
+          lake_bin="$(command -v lake)"
+          test -x "$landrun_bin"
+          test -x "$comparator_bin"
+          test -x "$lean4export_bin"
+          test -x "$nanoda_bin"
+          test -x "$lake_bin"
+
+          landrun_policy=(
+            --best-effort --ro / --rw /dev
+            --rwx "$GITHUB_WORKSPACE/.lake"
+            --ldd --add-exec
+          )
+          allowed_probe="$GITHUB_WORKSPACE/.lake/landrun-must-create"
+          "$landrun_bin" "${landrun_policy[@]}" /usr/bin/touch "$allowed_probe"
+          if [[ ! -f "$allowed_probe" ]]; then
+            echo '::error::Landrun positive-control write did not create its target.'
+            exit 1
+          fi
+          rm -f "$allowed_probe"
+
+          denied_probe="$RUNNER_TEMP/landrun-must-not-create"
+          if "$landrun_bin" "${landrun_policy[@]}" /usr/bin/touch "$denied_probe"; then
+            echo '::error::Landrun allowed a write outside the explicitly writable tree.'
+            exit 1
+          fi
+          if [[ -e "$denied_probe" ]]; then
+            echo '::error::Landrun write probe unexpectedly created its target.'
+            exit 1
+          fi
+
+          sudo systemd-run --quiet --wait --pipe --collect \
+            --uid="$(id -u)" --gid="$(id -g)" \
+            --property="RestrictAddressFamilies=~AF_UNIX" \
+            --property="IPAddressDeny=any" \
+            --property="NoNewPrivileges=yes" \
+            --working-directory="$GITHUB_WORKSPACE" \
+            --setenv="HOME=$HOME" \
+            --setenv="PATH=$PATH" \
+            --setenv="COMPARATOR_LANDRUN=$landrun_bin" \
+            --setenv="COMPARATOR_LEAN4EXPORT=$lean4export_bin" \
+            --setenv="COMPARATOR_NANODA=$nanoda_bin" \
+            "$lake_bin" env "$comparator_bin" \
+            ComparatorChallenges/F_ConnesZhou.json
