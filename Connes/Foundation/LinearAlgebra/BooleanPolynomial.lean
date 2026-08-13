@@ -2,11 +2,11 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-New standalone interfaces for the Boolean-polynomial part of Zhou §4. The
-organization is informed by OpenAI/ten-proofs at commit
-94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6; no code is imported from it.
-Modifications: this file exposes the reusable finite-coordinate support and
-weight theorem used by the paper's chart detector.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 18-23.
+Modifications: renamed the elementary `ZMod 2` helper and placed it in the
+local Boolean-polynomial namespace. The remaining finite-coordinate support
+and weight development is local. See docs/PORT_MAP.md.
 -/
 import Mathlib
 
@@ -16,7 +16,7 @@ namespace BooleanPolynomial
 /-- Characteristic-two scalar field. Paper: §4. -/
 abbrev F := ZMod 2
 
-/-- Nonzero characteristic-two scalars are one. Paper: §2, source: OpenAI `ConnesRigidity.lean:18-23`. -/
+/-- Nonzero characteristic-two scalars are one. Paper: §2; code source: `docs/PORT_MAP.md`. -/
 theorem eq_one_of_ne_zero (a : F) (ha : a ≠ 0) : a = 1 := by
   fin_cases a
   · exact (ha rfl).elim

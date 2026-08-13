@@ -2,10 +2,10 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Kernel translations in Zhou's Fourier model.  The character multiplier and
-its regular-operator conjugacy are ported from the public OpenAI proof pattern
-and specialized to the actual paper kernel.
-Paper: §3.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 31153-31229.
+Modifications: specialized the generic Fourier conjugacy block to Zhou's
+kernel and local Fourier unitary. Paper: §3. See docs/PORT_MAP.md.
 -/
 import Connes.Porting.CoreTransfer
 import Connes.Paper.Section3.Fourier

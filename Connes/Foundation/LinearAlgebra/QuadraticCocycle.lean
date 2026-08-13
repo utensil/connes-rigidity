@@ -2,10 +2,11 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Proof transfer from OpenAI/ten-proofs archive commit 66af838,
-ConnesRigidity/ArithmeticCocycle.lean:16-243. This file isolates the
-finite and integral quadratic-cocycle calculations for the Zhou §2 and §6
-interfaces. It does not alter the deliberately separate local cocycle API.
+Derived in part from Apache-2.0 `deancureton/ten-proofs`,
+`ConnesRigidity/ArithmeticCocycle.lean` at
+66af8383b1dbc53e21ceefc917a503b9bd88df51, lines 16-243.
+Modifications: isolated the finite and integral cocycle calculations, narrowed
+imports, and changed the namespace. See docs/PORT_MAP.md.
 -/
 import Connes.Foundation.LinearAlgebra.ArithmeticSymplectic
 import Mathlib.RepresentationTheory.Homological.GroupCohomology.LowDegree

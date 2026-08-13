@@ -2,10 +2,10 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Mechanical transfer of the finite-index induction infrastructure from
-OpenAI/ten-proofs, `ConnesRigidity.lean:295-655`. The source is public
-Apache-2.0 code. This Zhou §4 support file preserves the proof terms in a
-small namespace and imports only the local core vocabulary.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 295-655.
+Modifications: extracted finite-index induction into a small namespace and
+adapted imports and local group vocabulary. See docs/PORT_MAP.md.
 -/
 import Connes.Core
 

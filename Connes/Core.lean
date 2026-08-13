@@ -2,12 +2,11 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-This core vocabulary is a new, standalone reimplementation for
-connes-rigidity. Its public interfaces are informed by OpenAI's
-openai/ten-proofs Connes formalization at commit
-94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6. It is not imported from that
-repository. Modifications: renamed namespace and narrowed the statement set
-to arXiv:2608.02327.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 42-242.
+Modifications: extracted the minimal group, representation, regular-factor,
+and tracial-equivalence vocabulary; changed namespace and narrowed the
+interface to arXiv:2608.02327. See docs/PORT_MAP.md.
 -/
 import Mathlib
 

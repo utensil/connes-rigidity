@@ -1,6 +1,6 @@
 /-
-Copyright (c) 2026 utensil. All rights reserved.
-Released under Apache 2.0. See LICENSE.
+Copyright 2026 utensil
+SPDX-License-Identifier: Apache-2.0
 
 Concrete semisimplicity of the first quotient module in Zhou §6.
 The proof decomposes the actual action into the tensor summand and the

@@ -2,11 +2,10 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Selected proof transfer from OpenAI/ten-proofs, ConnesRigidity.lean at
-94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6. The source file is Apache-2.0.
-This file preserves the proof terms while placing them in a separate
-namespace; it is a per-file port test for the standalone core vocabulary.
-Modifications: namespace qualification and source-module imports only.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 138-157 and 252-285.
+Modifications: extracted into a separate namespace and changed source-module
+imports and namespace qualifications. See docs/PORT_MAP.md.
 -/
 import Connes.Core
 

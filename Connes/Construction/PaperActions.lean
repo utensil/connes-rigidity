@@ -3,7 +3,7 @@ Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
 SL₃ action interfaces for the Zhou tensor carrier. Paper: §2. The file keeps
-the linear action separate from the still-open quadratic Sp₄ correction.
+the linear action and quadratic Sp₄ correction as separate reusable layers.
 -/
 import Connes.Construction
 import Connes.Foundation.LinearAlgebra.QuadraticCocycle

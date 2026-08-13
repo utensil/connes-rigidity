@@ -2,9 +2,10 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-The spatial-to-tracial factor transfer for Zhou §3. This is a local port of
-the generic witness-to-factor layer in OpenAI/ten-proofs; it does not import
-that repository or claim to construct the Zhou witness.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 35621-35749.
+Modifications: renamed and generalized the spatial witness while preserving
+the spatial-to-tracial argument. Paper: §3. See docs/PORT_MAP.md.
 -/
 import Mathlib
 import Connes.Core

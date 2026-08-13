@@ -9,10 +9,10 @@ import Connes.Foundation.GroupTheory.Sp4Basic
 import Connes.Foundation.LinearAlgebra.ArithmeticSymplectic
 
 /-!
-Zhou's construction of the two groups in §2. The declarations are a standalone
-formalization informed by the public OpenAI/ten-proofs Connes formalization at
-commit 94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6. The concrete tensor kernel,
+Zhou's construction of the two groups in §2. The concrete tensor kernel,
 retraction, acting group, and semidirect-product boundary follow the paper.
+This file contains no declaration block recorded as a code transfer; its
+public code dependencies are attributed in their defining modules.
 -/
 
 namespace Connes

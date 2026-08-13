@@ -2,10 +2,11 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Spectral-measure proof spine for Zhou §4. This is a small, generic port of
-the public OpenAI/ten-proofs criterion: the actual Zhou detector and the
-representation-specific spectral construction remain inputs, while the
-measure-to-invariant-vector assembly is proved here.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 16002-16173.
+Modifications: extracted the generic measure-to-invariant-vector spine and
+made the Zhou detector and spectral construction explicit inputs. See
+docs/PORT_MAP.md.
 -/
 import Mathlib
 import Connes.Core

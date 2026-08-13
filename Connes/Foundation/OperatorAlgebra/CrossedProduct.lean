@@ -2,10 +2,11 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-The minimal crossed-product Hilbert model used by Zhou's spatial
-construction.  The definitions follow the public OpenAI/ten-proofs
-construction, while the surrounding theorem statements stay local to this
-repository.  Paper: §3.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 13496-14516.
+Modifications: extracted the generic crossed-product Hilbert model, removed
+paper-specific instances, and changed local vocabulary. Paper: §3. See
+docs/PORT_MAP.md.
 -/
 import Mathlib
 import Connes.Core

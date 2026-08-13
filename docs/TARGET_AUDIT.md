@@ -1,11 +1,15 @@
-# Zhou target-faithfulness audit
+# Zhou target correspondence
+
+> Historical mismatch review. For the normative current architecture and
+> trust boundary, see [`STATUS.md`](STATUS.md).
 
 This audit compares the active declarations with Zhou,
 [arXiv:2608.02327](https://arxiv.org/html/2608.02327). The public
-[OpenAI ten-proofs](https://github.com/openai/ten-proofs) tree is used only for
-proof patterns and provenance. It is not imported.
+[OpenAI ten-proofs](https://github.com/openai/ten-proofs) tree is a public code
+source and architectural reference. Modified source blocks are identified in
+[`PORT_MAP.md`](PORT_MAP.md); neither source repository is imported.
 
-## Result in the current refactor candidate
+## Current result
 
 The active paper-facing path uses the actual tensor kernel and the two Zhou
 actions. It constructs every certificate required by §§2--6 and concludes
@@ -56,16 +60,15 @@ These corrections are discharged at the direct section endpoints and composed
 by `PaperTheoremACompletion.theoremA`. No free data structure carrying a
 Zhou-internal conclusion reaches the final theorem.
 
-## OpenAI correspondence
+## Code-source correspondence
 
-Reusable transfers include the Boolean four-point support argument, finite
-index and quotient property-(T) wrappers, semidirect conjugacy calculations,
-finite cocycle obstruction, semisimplicity transport, and generic spatial to
-tracial factor transfer. The OpenAI monolith and generated certificate tree
-were not copied. No remaining active target has the same type as a complete
-OpenAI theorem without local carrier and analytic adaptation.
+The modified declaration blocks derived from the public `ten-proofs` sources
+are enumerated in [`PORT_MAP.md`](PORT_MAP.md). That manifest, rather than this
+mathematical target comparison, controls code-transfer claims and modified-file
+notices. The concrete Zhou endpoints are independently assembled against the
+local carrier and analytic interfaces.
 
-## Current source audit
+## Reproducible checks
 
 - Lean toolchain: `leanprover/lean4:v4.32.2`.
 - Literal `sorry` declarations: one, in the independent Comparator
@@ -73,6 +76,5 @@ OpenAI theorem without local carrier and analytic adaptation.
 - Project `axiom` and `admit` declarations: none.
 - `#print axioms Connes.theoremA`: `propext`, `Classical.choice`, and
   `Quot.sound` only.
-- Full gate: `lake build Connes ComparatorChallenges` passes on the refactor
-  candidate; the final receipt is recorded after the candidate commit.
-- No private paths, credentials, or private source material are tracked.
+- Full local gate: `lake build Connes ComparatorChallenges`.
+- Docstring gate: `scripts/check-paper-docstrings`.

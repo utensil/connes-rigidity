@@ -1,11 +1,12 @@
-# Sorry evaluation after the paper-alignment pass
+# Sorry and axiom boundary
 
-This is a declaration-level audit against Zhou,
+> Historical design review. The normative current boundary is summarized in
+> [`STATUS.md`](STATUS.md).
+
+This is the current declaration-level boundary against Zhou,
 [arXiv:2608.02327](https://arxiv.org/html/2608.02327), at
-the current refactor candidate. The OpenAI
-[ten-proofs](https://github.com/openai/ten-proofs) snapshot
-`94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6` supplies reusable proof patterns
-only.
+the repository's `main` result. Code provenance is recorded separately in
+[`PORT_MAP.md`](PORT_MAP.md).
 
 ## Inventory
 
@@ -17,7 +18,7 @@ The source scan finds one literal `sorry` in Lean:
 
 No solution module contains a `sorry`, `axiom`, or `admit` declaration.
 
-## What was corrected instead of papered over
+## Design corrections embodied in the current tree
 
 - The active Theorem A path was moved from the identity-action scaffold to
   `Construction.PaperKernel`.
@@ -47,7 +48,7 @@ No project axiom declaration is used to manufacture that input.
 
 ## Verification
 
-The full refactor-candidate gate is:
+The full local gate is:
 
 ```text
 lake build Connes ComparatorChallenges
@@ -62,5 +63,5 @@ Connes.theoremA depends on axioms:
 ```
 
 The Comparator sandbox still needs its Linux `landrun`, `lean4export`, and
-`nanoda` tools. The local build and source audit do not claim that sandbox
+`nanoda` tools. The local build and axiom audit do not claim that sandbox
 verification.

@@ -1,6 +1,6 @@
 /-
-Copyright (c) 2026 utensil. All rights reserved.
-Released under Apache 2.0. See LICENSE.
+Copyright 2026 utensil
+SPDX-License-Identifier: Apache-2.0
 
 This file exposes the concrete Section 6 module-equivalence conclusion for
 the actual Zhou carriers. The proof uses the public characteristic-kernel
