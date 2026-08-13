@@ -28,10 +28,8 @@ Current scope and architecture are summarized in the
 [formalization status](docs/STATUS.md). The
 [statement map](docs/STATEMENT_MAP.md) connects Zhou's sections to their Lean
 endpoints, and [provenance](docs/PROVENANCE.md) records the mathematical and
-code sources. The companion
-[formalization notes](https://utensil.github.io/forest/connes-0001/) give a
-reader-facing account of the proof structure, mathematical weight, and Lean
-design choices.
+code sources. See also the
+[provisional formalization notes](https://utensil.github.io/forest/connes-0001/).
 
 Build the Lean libraries with:
 
