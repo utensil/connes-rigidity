@@ -1,4 +1,7 @@
-# Formalization plan
+# Formalization status and architecture
+
+> Historical planning record. For the concise normative release state, see
+> [`STATUS.md`](STATUS.md).
 
 The active layout follows Zhou's sections and keeps reusable machinery under
 `Connes/Foundation/`. The retired identity-action and generic-witness
@@ -14,11 +17,14 @@ compatibility layers have been removed; `Connes.lean` now exposes only
 | §6 Non-isomorphism | `Connes/Paper/Section6/Nonisomorphism*.lean`, `ModuleSemisimple*.lean` | Complete: the quotient representations are fixed to the concrete paper actions; characteristic-kernel transport, quotient twists, semisimplicity split, and finite cocycle obstruction are internal, ending at `PaperModuleSemisimpleTransport.paperGroups_not_isomorphic` with no generic conclusion wrapper. |
 | §7 Completion | `Connes/Paper/Section7/TheoremACompletion.lean`, `Connes/Main.lean` | Complete under the explicit EJZK `EL₃(𝔽₂[t])` hypothesis. |
 
-The scenario-A formalization is complete: EJZK is packaged as the external
-result cited by Zhou, while every argument internal to Zhou's paper is proved.
-Scenario B, a formalization of EJZK itself, is a separate upstream project and
-is not part of this paper's proof.
+The scenario-A formalization is complete: EJZK is packaged as the sole
+substantive external mathematical result cited by Zhou, while every argument
+internal to Zhou's paper is proved. Formalizing EJZK itself is outside the
+scope of this repository.
 
-The project does not adopt the small-PR `lgta`/`lgth` policy used by other
-repositories. It still pins Lean, uses dedicated worktrees, records public
-provenance, runs the source audit, and keeps the independent Comparator gate.
+The reusable algebraic and operator-algebraic mechanisms live under
+`Connes/Foundation/`; concrete carriers and actions live under
+`Connes/Construction/`; Zhou's section endpoints live under `Connes/Paper/`;
+and `Connes/Main.lean` assembles them. The project pins Lean, records public
+provenance, and keeps the independent Comparator challenge outside the
+solution dependency graph.

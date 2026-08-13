@@ -1,9 +1,7 @@
 # Statement map
 
-The names below are the active paper-facing boundary; retired placeholder and
-compatibility declarations have been removed. See
-[`TARGET_AUDIT.md`](TARGET_AUDIT.md) and [`SORRY_EVAL.md`](SORRY_EVAL.md) for
-the faithfulness and proof-debt assessment.
+The names below are the active paper-facing boundary. See
+[`STATUS.md`](STATUS.md) for the current architecture and trust boundary.
 
 | Paper item | Lean declaration |
 | --- | --- |

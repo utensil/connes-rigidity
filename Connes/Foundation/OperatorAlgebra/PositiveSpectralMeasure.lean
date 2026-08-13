@@ -9,10 +9,12 @@ positive functionals, and the real Riesz--Markov--Kakutani theorem gives the
 scalar spectral measures needed by finite spectral detection.  Working with
 scalar measures avoids assuming a general projection-valued spectral theorem.
 
-The joint-functional-calculus and positive-functional argument is adapted from
-OpenAI's Apache-2.0 `ten-proofs/ConnesRigidity.lean`, pinned at commit
-`94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6`:
-https://github.com/openai/ten-proofs/blob/94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6/ConnesRigidity.lean
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 16860-19073.
+Modifications: adapted the positive-functional, projection, and joint
+functional-calculus spine to local interfaces and added the later Zhou-specific
+extensions in this file.
+See docs/PORT_MAP.md.
 -/
 import Connes.Foundation.OperatorAlgebra.ProjectionValuedSpectralMeasure
 

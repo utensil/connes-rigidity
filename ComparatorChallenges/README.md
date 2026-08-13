@@ -1,6 +1,6 @@
 # Connes-Zhou comparator challenge
 
-This challenge is the independent statement boundary for the eventual
+This challenge is the independent statement boundary for the scenario-A
 formalization of [arXiv:2608.02327](https://arxiv.org/abs/2608.02327).
 `F_ConnesZhou.lean` repeats the public vocabulary needed to read Theorem A
 and contains the theorem with an intentional proof hole. The solution module

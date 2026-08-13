@@ -8,7 +8,7 @@ same kernel-level definition as the solution statement. It imports only
 lists `Connes.theoremA`, permits only `propext`, `Quot.sound`, and
 `Classical.choice`, and enables nanoda.
 
-The eventual verification command is:
+The Linux verification command is:
 
 ```sh
 lake exe cache get

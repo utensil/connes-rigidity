@@ -2,9 +2,11 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Projection-valued spectral input for the relative property-(T) argument.
-This is the analytic interface used by the paper's spectral theorem; the
-generic conversion to `SpectralMeasureInterface` is proved here. Paper: §4.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 16191-16348.
+Modifications: extracted the projection-valued spectral interface and
+positive-atom argument, adapted namespace and local spectral interfaces, and
+added the later quotient-approximation bridge. Paper: §4. See docs/PORT_MAP.md.
 -/
 import Connes.Foundation.OperatorAlgebra.SpectralCriterion
 import Connes.Foundation.OperatorAlgebra.NormalFixed

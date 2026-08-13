@@ -1,10 +1,10 @@
 /-
-Copyright (c) 2026 utensil. All rights reserved.
-Released under Apache 2.0. See LICENSE.
+Copyright 2026 utensil
+SPDX-License-Identifier: Apache-2.0
 
 This file contains the concrete algebraic characteristic-subgroup input for
-the Zhou-shaped construction. The proof is an original adaptation of the
-paper's Section 6 argument; it does not copy private material.
+the Zhou-shaped construction. The proof is independently written from the
+paper's cited public mathematical argument in Section 6.
 -/
 
 import Connes.Construction.PaperActionInstances

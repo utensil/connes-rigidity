@@ -4,13 +4,16 @@ This project is an independent experimental formalization of the mathematical
 statement in Shuoxing Zhou, “ICC property(T) groups without
 W*-superrigidity,” arXiv:2608.02327.
 
-Its interfaces and proof-organization choices were informed by the public
-OpenAI `ten-proofs` repository, especially its Connes formalization. That
-reference is Apache-2.0 and is identified by the public commit recorded in
-docs/PROVENANCE.md. This project does not imply OpenAI endorsement or
-affiliation.
+This distribution includes modified portions derived from the public
+Apache-2.0 `openai/ten-proofs` snapshot
+`94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6` and its public organized
+descendant `deancureton/ten-proofs` snapshot
+`66af8383b1dbc53e21ceefc917a503b9bd88df51`.
 
-The separable file `Connes/Porting/CoreTransfer.lean` contains selected proof
-fragments ported from the public OpenAI `ten-proofs` snapshot
-`94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6`. It retains this attribution and
-identifies the file's modifications in its source header.
+The affected files, declaration blocks, source links, and modification classes
+are recorded in `docs/PORT_MAP.md`. Each affected source file also carries a
+prominent modification notice. General mathematical influence is recorded
+separately and does not by itself assert a code transfer.
+
+This project is independent and does not imply endorsement by or affiliation
+with Shuoxing Zhou, OpenAI, or the maintainers of the organized snapshot.

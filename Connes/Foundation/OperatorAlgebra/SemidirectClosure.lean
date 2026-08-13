@@ -2,10 +2,10 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Generator reductions for the regular semidirect-product factor.  The proof
-uses the same double-centralizer pattern as the public OpenAI formalization,
-but is written against this repository's core vocabulary.
-Paper: §3.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 35870-35940.
+Modifications: extracted the double-centralizer generator reduction, added a
+local conjugacy helper, and changed namespace. Paper: §3. See docs/PORT_MAP.md.
 -/
 import Mathlib
 import Connes.Core

@@ -1,6 +1,6 @@
 /-
-Copyright (c) 2026 utensil. All rights reserved.
-Released under Apache 2.0. See LICENSE.
+Copyright 2026 utensil
+SPDX-License-Identifier: Apache-2.0
 
 Transport the concrete first-module semisimplicity proof into the paper-facing
 predicate and expose the resulting Section 6 nonisomorphism theorem.

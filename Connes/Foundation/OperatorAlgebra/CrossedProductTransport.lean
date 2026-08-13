@@ -2,10 +2,10 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Transport identities for the minimal crossed-product Hilbert model.  These
-are the reusable analytic consequences of an equivariant Haar equivalence;
-the Zhou-specific equivalence remains a separate construction.  The proof
-pattern follows the public OpenAI/ten-proofs construction.  Paper: §3.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 14519-14692.
+Modifications: split generic Haar transport into its own module and changed
+imports and namespace. Paper: §3. See docs/PORT_MAP.md.
 -/
 import Connes.Foundation.OperatorAlgebra.CrossedProduct
 

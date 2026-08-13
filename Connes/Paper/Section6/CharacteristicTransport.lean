@@ -1,10 +1,10 @@
 /-
-Copyright (c) 2026 utensil. All rights reserved.
-Released under Apache 2.0. See LICENSE.
+Copyright 2026 utensil
+SPDX-License-Identifier: Apache-2.0
 
 This file proves the concrete characteristic-kernel transport needed by the
-Zhou-shaped nonisomorphism argument. It uses only public project statements
-and does not copy private material.
+Zhou-shaped nonisomorphism argument. It is independently written from the
+cited public mathematical source.
 -/
 
 import Connes.Paper.Section6.Characteristic

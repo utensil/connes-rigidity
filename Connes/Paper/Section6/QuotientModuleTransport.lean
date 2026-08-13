@@ -1,6 +1,6 @@
 /-
-Copyright (c) 2026 utensil. All rights reserved.
-Released under Apache 2.0. See LICENSE.
+Copyright 2026 utensil
+SPDX-License-Identifier: Apache-2.0
 
 This file proves the concrete quotient and module transport in Zhou's
 Section 6 argument. It uses public project statements only.

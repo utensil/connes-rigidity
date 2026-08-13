@@ -1,7 +1,9 @@
 # connes-rigidity
 
 > [!WARNING]
-> Highly experimental, early-stage research. Everything here is provisional: expect frequent changes and unfinished proofs.
+> Experimental research software. The scenario-A theorem is complete relative
+> to the explicit EJZK property-(T) premise, but the APIs and proofs remain
+> provisional. The independent Linux Comparator sandbox has not yet been run.
 
 Lean 4 formalization of Shuoxing Zhou's *ICC property(T) groups without
 W*-superrigidity*, arXiv:2608.02327.
@@ -20,8 +22,15 @@ being imported by the solution. Its EJZK hypothesis uses the same elementary
 subgroup boundary as `Connes.theoremA`.
 
 The project is standalone and mathlib-only. It does not import OpenAI's
-`ten-proofs` repository. Interfaces and proof-organization ideas that were
-informed by that public reference are attributed in [docs/PROVENANCE.md](docs/PROVENANCE.md).
+`ten-proofs` repository. Modified proof blocks derived from its public
+Apache-2.0 sources are identified in their file headers and in the
+[provenance manifest](docs/PORT_MAP.md).
+
+Current scope and architecture are summarized in the
+[formalization status](docs/STATUS.md). The
+[statement map](docs/STATEMENT_MAP.md) connects Zhou's sections to their Lean
+endpoints, and [provenance](docs/PROVENANCE.md) records the mathematical and
+code sources.
 
 Build the Lean libraries with:
 

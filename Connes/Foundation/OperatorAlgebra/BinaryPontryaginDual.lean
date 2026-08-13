@@ -2,9 +2,10 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Binary Pontryagin-dual coordinates for Zhou §§3--4. This is a local port of
-the public OpenAI/ten-proofs character-coordinate layer, with the namespace
-and source-specific carrier names narrowed for this project.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 10717-11155.
+Modifications: extracted the binary character-coordinate layer and changed
+carrier names and namespace for Zhou §§3-4. See docs/PORT_MAP.md.
 -/
 import Mathlib
 

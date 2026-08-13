@@ -24,7 +24,9 @@ sources:
 
 status:
   stage: "complete-relative-to-cited-ejzk-input"
-  sorry_count: "intentional"
+  sorry_count: 1
+  solution_sorry_count: 0
+  sorry_in_definitions: 0
   comparator_challenge: "ComparatorChallenges/F_ConnesZhou.json"
   permitted_axioms:
     - "propext"

@@ -2,10 +2,11 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-The split-extension decomposition and invariant-vector calculation are adapted
-from the public OpenAI/ten-proofs Connes formalization at commit
-94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6. They are kept generic so the Zhou
-spectral proof can later supply the actual kernel and action data.
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 15961-16108.
+Modifications: extracted the generic extension interface and invariant-vector
+calculation and split later spectral declarations into separate files. See
+docs/PORT_MAP.md.
 -/
 import Mathlib
 import Connes.Core

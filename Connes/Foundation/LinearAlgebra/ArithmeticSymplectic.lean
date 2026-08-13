@@ -2,11 +2,11 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Proof transfer from OpenAI/ten-proofs archive commit 66af838,
-ConnesRigidity/SymplecticData.lean:32-166. This is an isolated arithmetic
-symplectic layer for the Zhou §2 and §5 interfaces. The local Zhou scaffold
-keeps its own four-coordinate API; this file preserves the source-shaped
-integral and mod-two carriers for later connection work.
+Derived in part from Apache-2.0 `deancureton/ten-proofs`,
+`ConnesRigidity/SymplecticData.lean` at
+66af8383b1dbc53e21ceefc917a503b9bd88df51, lines 32-166.
+Modifications: isolated the arithmetic carriers, narrowed imports, and changed
+the namespace for the Zhou §2 and §5 interfaces. See docs/PORT_MAP.md.
 -/
 import Mathlib.Data.ZMod.Basic
 import Mathlib.LinearAlgebra.Matrix.Integer
