@@ -1,7 +1,7 @@
 # connes-rigidity
 
 > [!WARNING]
-> Highly experimental, early-stage research. Everything here is provisional: expect frequent changes and unfinished proofs.
+> Highly experimental, early-stage research. Everything here is provisional: expect frequent changes and early-stage proofs.
 
 Lean 4 formalization of Shuoxing Zhou's *ICC property(T) groups without
 W*-superrigidity*, arXiv:2608.02327.
