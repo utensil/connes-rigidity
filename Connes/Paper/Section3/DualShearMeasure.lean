@@ -226,7 +226,7 @@ theorem productShear_first (p : Additive PChar × Additive QChar) :
       (pInl x) = (Additive.toMul p) x
   change ZMod.toCircle
       (PaperDualTopology.shearedLinear (productToCharacter (p, q))
-        (pInl x)) = _
+        (Multiplicative.toAdd (pInl x))) = _
   rw [PaperDualTopology.shearedLinear_eval]
   change ZMod.toCircle (_ + quadraticMap _ (0 : Qadd)) = _
   rw [map_zero, add_zero]

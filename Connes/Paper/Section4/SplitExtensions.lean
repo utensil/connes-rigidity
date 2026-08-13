@@ -18,6 +18,14 @@ open PaperPropertyT
 
 noncomputable section
 
+private theorem semidirectConjugation
+    {N G : Type*} [Group N] [Group G]
+    (φ : G →* MulAut N) (g : G) (n : N) :
+    SemidirectProduct.inr g * SemidirectProduct.inl n *
+        (SemidirectProduct.inr g)⁻¹ =
+      (SemidirectProduct.inl (φ g n) : SemidirectProduct N G φ) :=
+  by simpa only [map_inv] using (SemidirectProduct.inl_aut g n).symm
+
 /- The first SL₃ extension as a split abelian extension. Paper: §4. -/
 noncomputable def lambdaOne :
     (actions : PaperKernel.ActionData) →
@@ -50,7 +58,7 @@ noncomputable def lambdaOne :
         SemidirectProduct (Multiplicative PaperKernel.D)
           SpecialLinear.SL3
           (actions.thetaOne.comp sl3ToActingGroup))
-    ext <;> simp }
+    exact semidirectConjugation _ _ _ }
 
 /- The second SL₃ extension as a split abelian extension. Paper: §4. -/
 noncomputable def lambdaTwo :
@@ -84,7 +92,7 @@ noncomputable def lambdaTwo :
         SemidirectProduct (Multiplicative PaperKernel.D)
           SpecialLinear.SL3
           (actions.thetaTwo.comp sl3ToActingGroup))
-    ext <;> simp }
+    exact semidirectConjugation _ _ _ }
 
 end
 

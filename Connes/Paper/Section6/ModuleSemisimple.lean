@@ -133,7 +133,7 @@ theorem qVStar_simple : IsSimpleModule Ring qVStarRepresentation.asModule := by
     change (MonoidAlgebra.of k Q q) •
         qVStarRepresentation.asModuleEquiv.symm f =
       qVStarRepresentation.asModuleEquiv.symm g
-    rw [← Representation.asModuleEquiv_symm_map_rho]
+    rw [← qVStarRepresentation.asModuleEquiv_symm_map_rho q f]
     exact congrArg qVStarRepresentation.asModuleEquiv.symm hq
 
 abbrev I := PaperKernel.OrderedBasisIndex
@@ -352,11 +352,13 @@ def cPointwiseEquiv :
   map_smul' r x := by
     induction r using MonoidAlgebra.induction_linear with
     | zero =>
-        simp only [RingHom.id_apply, zero_smul]
+        ext i
         rfl
     | add a b ha hb =>
         simp only [RingHom.id_apply, add_smul, ha, hb]
-        rfl
+        exact (@add_smul Ring (CI →₀ scalarRepresentation.asModule)
+          _ _ _ a b
+          (x : CI →₀ scalarRepresentation.asModule)).symm
     | single q a =>
         ext i
         change scalarRepresentation.asModuleEquiv.symm

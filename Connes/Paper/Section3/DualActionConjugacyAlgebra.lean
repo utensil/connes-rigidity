@@ -102,7 +102,8 @@ theorem standardQuadraticForm_qVAction (q : PaperKernel.Q) (v : PaperV) :
     OpenAIPort.standardQuadraticForm (qVAction q v) =
       OpenAIPort.quadraticDefectLinear q⁻¹ v +
         OpenAIPort.standardQuadraticForm v := by
-  simp [qVAction, OpenAIPort.quadraticDefectLinear]
+  change OpenAIPort.standardQuadraticForm (q • v) = _
+  simp [OpenAIPort.quadraticDefectLinear]
   rw [add_assoc, CharTwo.add_self_eq_zero, add_zero]
 
 /- The inverse action on the second dual summand. Paper: §3. -/

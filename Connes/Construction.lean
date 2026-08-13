@@ -128,10 +128,7 @@ theorem hadamard_smul_right (c : k) (p q : R) :
 theorem hadamard_square (p : R) : hadamard p p = p := by
   ext n
   simp only [coeff_hadamard]
-  have h : p.coeff n * p.coeff n = p.coeff n := by
-    generalize hc : p.coeff n = c
-    fin_cases c <;> decide
-  exact h
+  simpa only [pow_two] using ZMod.pow_card (p.coeff n)
 
 /-- Coordinatewise coefficientwise product on the polynomial module. Paper: §2. -/
 def coordHadamard (a b : A) : A := fun i => hadamard (a i) (b i)

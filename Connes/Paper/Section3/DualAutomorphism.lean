@@ -66,7 +66,9 @@ def dualCharacterEquiv (e : AddAut D) : CharacterSpace ≃+ CharacterSpace where
     apply Additive.toMul.injective
     apply PontryaginDual.ext
     intro x
-    simp [PontryaginDual.map, continuousMulAut]
+    change (χ + ψ) (e.symm x.toAdd) =
+      χ (e.symm x.toAdd) * ψ (e.symm x.toAdd)
+    rfl
 
 @[simp] theorem dualCharacterEquiv_apply (e : AddAut D) (χ : CharacterSpace)
     (x : D) :
