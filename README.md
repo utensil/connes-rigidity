@@ -1,9 +1,7 @@
 # connes-rigidity
 
 > [!WARNING]
-> Experimental research software. The scenario-A theorem is complete relative
-> to the explicit EJZK property-(T) premise, but the APIs and proofs remain
-> provisional. The independent Linux Comparator sandbox has not yet been run.
+> Highly experimental, early-stage research. Everything here is provisional: expect frequent changes and unfinished proofs.
 
 Lean 4 formalization of Shuoxing Zhou's *ICC property(T) groups without
 W*-superrigidity*, arXiv:2608.02327.
