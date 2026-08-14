@@ -24,6 +24,24 @@ explicitly marked **independent review**.
 An angle can have more than one state. For example, its technical interface may
 be automated while its mathematical interpretation remains open.
 
+## Supporting formalization notes
+
+The agent-authored
+[provisional formalization notes](https://utensil.github.io/forest/connes-0001/)
+currently explain the overall proof architecture, Zhou's section-by-section
+mathematics, the main formalization adaptations, the final assembly and trust
+boundary, and the estimated work needed to formalize the EJZK input. They are
+supporting exposition, not evidence that a human review has occurred.
+
+Before an internal human review uses the notes as its guide, their coverage is
+planned to expand with a theorem-by-theorem fidelity matrix, a definition and
+non-vacuity consumer trace, an external-source and applicability checklist,
+and an explicit review protocol. A human will then examine the expanded notes
+against Zhou's paper, the cited literature, and the Lean source and record the
+exact revisions, findings, limitations, and unresolved questions. That future
+internal review is distinct from the independent mathematical assessment that
+remains open below.
+
 ## Current ledger
 
 | Angle | Question | Current state | Public evidence and limitation |
@@ -36,6 +54,7 @@ be automated while its mathematical interpretation remains open.
 | Proof architecture and public contracts | Do reusable foundations, concrete constructions, section endpoints, and final assembly have clear ownership and consumers? | **Internal review**; **open** for maintenance review | [`STATUS.md`](STATUS.md) records the current dependency architecture and canonical endpoints. Future source changes must recheck affected contracts, reuse, and dependency direction. |
 | Code provenance and licensing | Can modified code be traced to public revisions and declaration blocks with the required notices? | **Internal review**; **open** as an ongoing obligation | [`PORT_MAP.md`](PORT_MAP.md) is the declaration-level transfer ledger; [`PROVENANCE.md`](PROVENANCE.md) and [`LICENSING.md`](LICENSING.md) state the source and notice policies. This does not constitute external legal advice. |
 | Proof holes and external inputs | Are `sorry`, `admit`, project axioms, and theorem parameters classified without conflating them? | **Internal review**; proof-term boundary **automated** | [`SORRY_EVAL.md`](SORRY_EVAL.md) records the source inventory. The Comparator challenge contains the sole intentional `sorry`; it is outside the solution dependency graph. The EJZK premise is a theorem parameter, not a project axiom or source-level proof hole. |
+| Human examination using the formalization notes | Has a human checked the paper, literature, Lean declarations, and consumer paths using a review-oriented version of the explanatory notes? | **Open** | The current [provisional notes](https://utensil.github.io/forest/connes-0001/) cover the proof architecture and section-level formalization design. The fidelity, non-vacuity, source-claim, and review-protocol layers described above must be added before the planned internal human examination. |
 | Independent mathematical assessment | Has a mathematically independent reviewer checked the paper correspondence, definitions, source claims, and high-risk arguments? | **Open** | No independent mathematical certification is currently claimed. The planned work is listed below. |
 
 ## Planned independent and corroborating checks
@@ -75,4 +94,5 @@ The audit ledger is an index, not a duplicate account of every result:
 | [`COMPARATOR.md`](COMPARATOR.md) | Reproducible technical verification and sandbox boundary. |
 | [`PORT_MAP.md`](PORT_MAP.md) | Declaration-level public code-transfer ledger. |
 | [`PROVENANCE.md`](PROVENANCE.md), [`LICENSING.md`](LICENSING.md) | Source, attribution, and licensing policy. |
+| [Provisional Forest notes](https://utensil.github.io/forest/connes-0001/) | Agent-authored mathematical and formalization exposition that will support, but does not replace, a later human review. |
 | [`PLAN.md`](PLAN.md) | Historical planning record retained for context. |

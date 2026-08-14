@@ -67,7 +67,11 @@ Separate post-formalization audits therefore examine paper-to-Lean
 correspondence, definition and hypothesis fidelity, concrete witness and
 downstream-consumer use, external literature dependencies, proof architecture,
 and public provenance. The [audit ledger](docs/AUDITS.md) records completed
-checks, their evidence and limitations, and planned independent review.
+checks, their evidence and limitations, and planned independent review. The
+[provisional formalization notes](https://utensil.github.io/forest/connes-0001/)
+currently explain the proof architecture and section-level design; after their
+review-oriented coverage is expanded, they will support a documented internal
+human examination of the paper, sources, and Lean development.
 
 ## Sources and licensing
 
