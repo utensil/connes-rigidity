@@ -53,10 +53,10 @@ classification:
 
 status:
   scope: >-
-    Scenario-A formalization of Zhou's Theorem A, complete relative to the
-    explicit literature premise that EL₃(𝔽₂[t]) has property (T). The project
-    proves the EL₃ = SL₃ transport and every other certificate used by the
-    final theorem.
+    Formalization of Zhou's Theorem A, complete relative to the explicit
+    literature premise that EL₃(𝔽₂[t]) has property (T). The project proves
+    the EL₃ = SL₃ transport and every other certificate used by the final
+    theorem.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms:
@@ -97,7 +97,7 @@ review:
   status: "agent-reviewed"
   reviewers: []
   notes: >-
-    Internal rubric-based review has been performed. No peer review, author
+    Internal project review has been performed. No peer review, author
     verification, or independent mathematical certification is claimed.
 
 alignment:

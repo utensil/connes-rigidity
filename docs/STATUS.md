@@ -1,7 +1,7 @@
 # Formalization status
 
-The scenario-A formalization of Zhou's Theorem A is complete relative to one
-explicit external mathematical premise: the EJZK theorem that
+The formalization of Zhou's Theorem A is complete relative to one explicit
+external mathematical premise: the EJZK theorem that
 `EL₃(𝔽₂[t])` has property (T). The project proves `EL₃ = SL₃`, transports the
 premise across that identification, and constructs every other certificate
 used by `Connes.theoremA`.
