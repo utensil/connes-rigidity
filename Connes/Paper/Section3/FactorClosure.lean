@@ -66,25 +66,6 @@ def reducedCrossedGeneratorSetTwo :
     Set.range fun h : H ↦
       (crossedGroupUnitary paperHaarActionTwo h).toContinuousLinearEquiv.toContinuousLinearMap
 
-theorem mem_vonNeumannClosure_mono
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [CompleteSpace E]
-    {S T : Set (E →L[ℂ] E)} (hST : S ⊆ T)
-    {x : E →L[ℂ] E} (hx : x ∈ vonNeumannClosure S) :
-    x ∈ vonNeumannClosure T := by
-  change x ∈ StarSubalgebra.centralizer ℂ
-      (StarSubalgebra.centralizer ℂ T : Set (E →L[ℂ] E))
-  change x ∈ StarSubalgebra.centralizer ℂ
-      (StarSubalgebra.centralizer ℂ S : Set (E →L[ℂ] E)) at hx
-  simp only [StarSubalgebra.mem_centralizer_iff] at hx ⊢
-  intro z hzT
-  apply hx z
-  intro y hyS
-  apply hzT y
-  rcases hyS with hyS | hyS
-  · exact Or.inl (hST hyS)
-  · exact Or.inr (Set.mem_star.mpr (hST (Set.mem_star.mp hyS)))
-
 theorem paperGroupFactorUnitaryOne_generatorSet_image :
     paperGroupFactorUnitaryOne.conjStarAlgEquiv ''
         SemidirectGeneratorTransport.generatorSet
@@ -245,112 +226,6 @@ theorem coordinateComplexCharacter_span_closure_eq_top :
     (ContinuousMap.starSubalgebra_topologicalClosure_eq_top_of_separatesPoints
       coordinateCharacterSubalgebra hsep)
 
-def crossedFiberwiseOperatorCLM
-    {K : Type*} {E : Type*} [Group K]
-    [NormedAddCommGroup E] [NormedSpace ℂ E] :
-    (E →L[ℂ] E) →L[ℂ]
-      (lp (fun _ : K ↦ E) 2 →L[ℂ] lp (fun _ : K ↦ E) 2) := by
-  let F : (E →L[ℂ] E) →ₗ[ℂ]
-      (lp (fun _ : K ↦ E) 2 →L[ℂ] lp (fun _ : K ↦ E) 2) :=
-    { toFun := crossedFiberwiseOperator
-      map_add' := by
-        intro S T
-        apply ContinuousLinearMap.ext
-        intro ξ
-        apply lp.ext
-        funext k
-        rfl
-      map_smul' := by
-        intro c T
-        apply ContinuousLinearMap.ext
-        intro ξ
-        apply lp.ext
-        funext k
-        rfl }
-  exact F.mkContinuous 1 (by
-    intro T
-    rw [one_mul]
-    apply ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg T)
-    intro ξ
-    calc
-      ‖crossedFiberwiseOperator T ξ‖ ≤ ‖(‖T‖ : ℂ) • ξ‖ := lp.norm_mono (by norm_num) (by
-        intro k
-        change ‖T (ξ k)‖ ≤ ‖(‖T‖ : ℂ) • ξ k‖
-        simpa only [Complex.coe_smul, norm_smul, norm_norm] using
-          T.le_opNorm (ξ k))
-      _ = ‖T‖ * ‖ξ‖ := by
-        rw [lp.norm_const_smul (by norm_num : (2 : ℝ≥0∞) ≠ 0)]
-        simp only [Complex.norm_real, norm_norm])
-
-def continuousCrossedMultiplier
-    (X : HaarProbabilityAction H PaperFactorIsomorphism.DualCoordinates) :
-    C(PaperFactorIsomorphism.DualCoordinates, ℂ) →L[ℂ]
-      (crossedHilbert X →L[ℂ] crossedHilbert X) :=
-  (crossedFiberwiseOperatorCLM (K := H)
-      (E := crossedBaseHilbert X)).comp
-    (((ContinuousLinearMap.mul ℂ ℂ).holderL X.measure ⊤ 2 2).comp
-      (ContinuousMap.toLp ⊤ X.measure ℂ))
-
-@[simp] theorem continuousCrossedMultiplier_apply
-    (X : HaarProbabilityAction H PaperFactorIsomorphism.DualCoordinates)
-    (q : C(PaperFactorIsomorphism.DualCoordinates, ℂ)) :
-    continuousCrossedMultiplier X q =
-      crossedMultiplier X (ContinuousMap.toLp ⊤ X.measure ℂ q) := by
-  rfl
-
-private theorem vonNeumannClosure_coe
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [CompleteSpace E] (S : Set (E →L[ℂ] E)) :
-    (vonNeumannClosure S : Set (E →L[ℂ] E)) =
-      (S ∪ star S).centralizer.centralizer := by
-  change (((StarSubalgebra.centralizer ℂ S : Set (E →L[ℂ] E)) ∪
-      star (StarSubalgebra.centralizer ℂ S : Set (E →L[ℂ] E))).centralizer) = _
-  rw [StarMemClass.star_coe_eq, Set.union_self]
-  rfl
-
-theorem subset_vonNeumannClosure
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [CompleteSpace E] (S : Set (E →L[ℂ] E)) :
-    S ⊆ vonNeumannClosure S := by
-  intro x hx
-  rw [vonNeumannClosure_coe]
-  exact Set.subset_centralizer_centralizer (Or.inl hx)
-
-theorem continuousLinearMap_mem_vonNeumannClosure_of_dense_span
-    {Q E : Type*} [NormedAddCommGroup Q] [NormedSpace ℂ Q]
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-    {I : Type*} (F : Q →L[ℂ] (E →L[ℂ] E))
-    (v : I → Q)
-    (hv : (Submodule.span ℂ (Set.range v)).topologicalClosure = ⊤)
-    (S : Set (E →L[ℂ] E))
-    (hgen : ∀ i, F (v i) ∈ vonNeumannClosure S)
-    (q : Q) : F q ∈ vonNeumannClosure S := by
-  let P : Submodule ℂ Q :=
-    (vonNeumannClosure S).toStarSubalgebra.toSubalgebra.toSubmodule.comap
-      F.toLinearMap
-  have hspan : Submodule.span ℂ (Set.range v) ≤ P := by
-    refine Submodule.span_le.mpr ?_
-    rintro _ ⟨i, rfl⟩
-    exact hgen i
-  have hclosed : IsClosed (P : Set Q) := by
-    change IsClosed (F ⁻¹' (vonNeumannClosure S : Set (E →L[ℂ] E)))
-    apply IsClosed.preimage F.continuous
-    rw [vonNeumannClosure_coe]
-    exact Set.isClosed_centralizer _
-  have htop : (⊤ : Submodule ℂ Q) ≤ P := by
-    rw [← hv]
-    exact (Submodule.span ℂ (Set.range v)).topologicalClosure_minimal
-      hspan hclosed
-  exact htop Submodule.mem_top
-
-theorem vonNeumannClosure_coe_self
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [CompleteSpace E] (M : VonNeumannAlgebra E) :
-    vonNeumannClosure (M : Set (E →L[ℂ] E)) = M := by
-  apply SetLike.coe_injective
-  rw [vonNeumannClosure_coe, StarMemClass.star_coe_eq, Set.union_self,
-    M.centralizer_centralizer]
-
 @[simp] theorem continuousCrossedMultiplier_coordinate_one (d : D) :
     continuousCrossedMultiplier paperHaarActionOne
         (coordinateComplexCharacter d) = crossedKernelMultiplier d := by
@@ -364,216 +239,64 @@ theorem vonNeumannClosure_coe_self
   rw [continuousCrossedMultiplier_apply]
   rfl
 
-theorem vonNeumannClosure_le_of_subset
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [CompleteSpace E] {S T : Set (E →L[ℂ] E)}
-    (hTS : T ⊆ vonNeumannClosure S) :
-    (vonNeumannClosure T : Set (E →L[ℂ] E)) ⊆
-      vonNeumannClosure S := by
-  intro x hx
-  have hx' := mem_vonNeumannClosure_mono hTS hx
-  rw [vonNeumannClosure_coe_self] at hx'
-  exact hx'
-
 def continuousCrossedGeneratorSetOne :
     Set (CrossedOne →L[ℂ] CrossedOne) :=
-  Set.range (continuousCrossedMultiplier paperHaarActionOne) ∪
-    Set.range fun h : H ↦
-      (crossedGroupUnitary paperHaarActionOne h).toContinuousLinearEquiv.toContinuousLinearMap
+  continuousCrossedGeneratorSet paperHaarActionOne
 
 def continuousCrossedGeneratorSetTwo :
     Set (CrossedTwo →L[ℂ] CrossedTwo) :=
-  Set.range (continuousCrossedMultiplier paperHaarActionTwo) ∪
-    Set.range fun h : H ↦
-      (crossedGroupUnitary paperHaarActionTwo h).toContinuousLinearEquiv.toContinuousLinearMap
+  continuousCrossedGeneratorSet paperHaarActionTwo
 
-theorem reducedCrossedGeneratorSetOne_subset_continuous :
-    reducedCrossedGeneratorSetOne ⊆ continuousCrossedGeneratorSetOne := by
-  rintro T (⟨d, rfl⟩ | ⟨h, rfl⟩)
-  · refine Or.inl ⟨coordinateComplexCharacter d, ?_⟩
-    exact continuousCrossedMultiplier_coordinate_one d
-  · exact Or.inr ⟨h, rfl⟩
+theorem reducedCrossedGeneratorSetOne_eq_continuousCoefficients :
+    reducedCrossedGeneratorSetOne =
+      crossedGeneratorSetOfContinuousCoefficients paperHaarActionOne
+        coordinateComplexCharacter := by
+  ext T
+  constructor
+  · rintro (⟨d, rfl⟩ | ⟨h, rfl⟩)
+    · exact Or.inl ⟨d, continuousCrossedMultiplier_coordinate_one d⟩
+    · exact Or.inr ⟨h, rfl⟩
+  · rintro (⟨d, rfl⟩ | ⟨h, rfl⟩)
+    · exact Or.inl ⟨d, (continuousCrossedMultiplier_coordinate_one d).symm⟩
+    · exact Or.inr ⟨h, rfl⟩
 
-theorem reducedCrossedGeneratorSetTwo_subset_continuous :
-    reducedCrossedGeneratorSetTwo ⊆ continuousCrossedGeneratorSetTwo := by
-  rintro T (⟨d, rfl⟩ | ⟨h, rfl⟩)
-  · refine Or.inl ⟨coordinateComplexCharacter d, ?_⟩
-    exact continuousCrossedMultiplier_coordinate_two d
-  · exact Or.inr ⟨h, rfl⟩
-
-theorem continuousCrossedGeneratorSetOne_subset_reducedClosure :
-    continuousCrossedGeneratorSetOne ⊆
-      vonNeumannClosure reducedCrossedGeneratorSetOne := by
-  rintro T (⟨q, rfl⟩ | ⟨h, rfl⟩)
-  · apply continuousLinearMap_mem_vonNeumannClosure_of_dense_span
-      (continuousCrossedMultiplier paperHaarActionOne)
-      coordinateComplexCharacter
-      coordinateComplexCharacter_span_closure_eq_top
-      reducedCrossedGeneratorSetOne
-    intro d
-    exact subset_vonNeumannClosure reducedCrossedGeneratorSetOne
-      (Or.inl ⟨d, by
-        exact (continuousCrossedMultiplier_coordinate_one d).symm⟩)
-  · exact subset_vonNeumannClosure reducedCrossedGeneratorSetOne
-      (Or.inr ⟨h, rfl⟩)
-
-theorem continuousCrossedGeneratorSetTwo_subset_reducedClosure :
-    continuousCrossedGeneratorSetTwo ⊆
-      vonNeumannClosure reducedCrossedGeneratorSetTwo := by
-  rintro T (⟨q, rfl⟩ | ⟨h, rfl⟩)
-  · apply continuousLinearMap_mem_vonNeumannClosure_of_dense_span
-      (continuousCrossedMultiplier paperHaarActionTwo)
-      coordinateComplexCharacter
-      coordinateComplexCharacter_span_closure_eq_top
-      reducedCrossedGeneratorSetTwo
-    intro d
-    exact subset_vonNeumannClosure reducedCrossedGeneratorSetTwo
-      (Or.inl ⟨d, by
-        exact (continuousCrossedMultiplier_coordinate_two d).symm⟩)
-  · exact subset_vonNeumannClosure reducedCrossedGeneratorSetTwo
-      (Or.inr ⟨h, rfl⟩)
+theorem reducedCrossedGeneratorSetTwo_eq_continuousCoefficients :
+    reducedCrossedGeneratorSetTwo =
+      crossedGeneratorSetOfContinuousCoefficients paperHaarActionTwo
+        coordinateComplexCharacter := by
+  ext T
+  constructor
+  · rintro (⟨d, rfl⟩ | ⟨h, rfl⟩)
+    · exact Or.inl ⟨d, continuousCrossedMultiplier_coordinate_two d⟩
+    · exact Or.inr ⟨h, rfl⟩
+  · rintro (⟨d, rfl⟩ | ⟨h, rfl⟩)
+    · exact Or.inl ⟨d, (continuousCrossedMultiplier_coordinate_two d).symm⟩
+    · exact Or.inr ⟨h, rfl⟩
 
 theorem reducedClosureOne_eq_continuousClosure :
     vonNeumannClosure reducedCrossedGeneratorSetOne =
       vonNeumannClosure continuousCrossedGeneratorSetOne := by
-  apply VonNeumannAlgebra.ext
-  intro T
-  constructor
-  · exact mem_vonNeumannClosure_mono
-      reducedCrossedGeneratorSetOne_subset_continuous
-  · intro hT
-    exact vonNeumannClosure_le_of_subset
-      continuousCrossedGeneratorSetOne_subset_reducedClosure hT
+  rw [reducedCrossedGeneratorSetOne_eq_continuousCoefficients]
+  exact vonNeumannClosure_crossedGeneratorSetOfContinuousCoefficients_eq
+    paperHaarActionOne coordinateComplexCharacter
+    coordinateComplexCharacter_span_closure_eq_top
 
 theorem reducedClosureTwo_eq_continuousClosure :
     vonNeumannClosure reducedCrossedGeneratorSetTwo =
       vonNeumannClosure continuousCrossedGeneratorSetTwo := by
-  apply VonNeumannAlgebra.ext
-  intro T
-  constructor
-  · exact mem_vonNeumannClosure_mono
-      reducedCrossedGeneratorSetTwo_subset_continuous
-  · intro hT
-    exact vonNeumannClosure_le_of_subset
-      continuousCrossedGeneratorSetTwo_subset_reducedClosure hT
-
-def fiberShearContinuousMap :
-    C(PaperFactorIsomorphism.DualCoordinates,
-      PaperFactorIsomorphism.DualCoordinates) :=
-  ⟨PaperFactorIsomorphism.fiberShear,
-    PaperDualTopology.continuous_fiberShear⟩
-
-def shearPullback
-    (q : C(PaperFactorIsomorphism.DualCoordinates, ℂ)) :
-    C(PaperFactorIsomorphism.DualCoordinates, ℂ) :=
-  q.comp fiberShearContinuousMap
-
-theorem paperHaarEquiv_continuousCoefficient_pullback
-    (q : C(PaperFactorIsomorphism.DualCoordinates, ℂ)) :
-    Lp.compMeasurePreserving
-        paperHaarEquiv.toMeasurableEquiv.symm
-        (EquivariantHaarEquiv.symm paperHaarEquiv).measure_preserving
-        (ContinuousMap.toLp ⊤ paperHaarActionOne.measure ℂ q) =
-      ContinuousMap.toLp ⊤ paperHaarActionTwo.measure ℂ
-        (shearPullback q) := by
-  apply Lp.ext
-  let he : MeasurePreserving
-      (paperHaarEquiv.toMeasurableEquiv.symm :
-        PaperFactorIsomorphism.DualCoordinates →
-          PaperFactorIsomorphism.DualCoordinates)
-      paperHaarActionTwo.measure paperHaarActionOne.measure :=
-    (EquivariantHaarEquiv.symm paperHaarEquiv).measure_preserving
-  have hcomp := Lp.coeFn_compMeasurePreserving
-    (ContinuousMap.toLp ⊤ paperHaarActionOne.measure ℂ q) he
-  have hq := ContinuousMap.coeFn_toLp (p := ⊤) (𝕜 := ℂ)
-    paperHaarActionOne.measure q
-  have hq' := he.quasiMeasurePreserving.tendsto_ae hq
-  have htarget := ContinuousMap.coeFn_toLp (p := ⊤) (𝕜 := ℂ)
-    paperHaarActionTwo.measure (shearPullback q)
-  filter_upwards [hcomp, hq', htarget] with p hcomp hq' htarget
-  rw [hcomp, htarget]
-  change (ContinuousMap.toLp ⊤ paperHaarActionOne.measure ℂ q)
-      (paperHaarEquiv.toMeasurableEquiv.symm p) =
-    (shearPullback q) p
-  rw [show (ContinuousMap.toLp ⊤ paperHaarActionOne.measure ℂ q)
-      (paperHaarEquiv.toMeasurableEquiv.symm p) =
-        q (paperHaarEquiv.toMeasurableEquiv.symm p) from hq']
-  rfl
-
-theorem paperHaarEquiv_continuousMultiplier_conj
-    (q : C(PaperFactorIsomorphism.DualCoordinates, ℂ)) :
-    (crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv
-        (continuousCrossedMultiplier paperHaarActionOne q) =
-      continuousCrossedMultiplier paperHaarActionTwo
-        (shearPullback q) := by
-  calc
-    (crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv
-          (continuousCrossedMultiplier paperHaarActionOne q) =
-        (crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv
-          (crossedMultiplier paperHaarActionOne
-            (ContinuousMap.toLp ⊤ paperHaarActionOne.measure ℂ q)) :=
-      congrArg (crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv
-        (continuousCrossedMultiplier_apply paperHaarActionOne q)
-    _ =
-        crossedMultiplier paperHaarActionTwo
-          (Lp.compMeasurePreserving paperHaarEquiv.toMeasurableEquiv.symm
-            (EquivariantHaarEquiv.symm paperHaarEquiv).measure_preserving
-            (ContinuousMap.toLp ⊤ paperHaarActionOne.measure ℂ q)) := by
-      exact crossedHaarHilbertEquiv_multiplier_conj paperHaarEquiv _
-    _ = crossedMultiplier paperHaarActionTwo
-          (ContinuousMap.toLp ⊤ paperHaarActionTwo.measure ℂ
-            (shearPullback q)) :=
-      congrArg (crossedMultiplier paperHaarActionTwo)
-        (paperHaarEquiv_continuousCoefficient_pullback q)
-    _ = continuousCrossedMultiplier paperHaarActionTwo
-          (shearPullback q) :=
-      (continuousCrossedMultiplier_apply paperHaarActionTwo _).symm
-
-@[simp] theorem shearPullback_involutive
-    (q : C(PaperFactorIsomorphism.DualCoordinates, ℂ)) :
-    shearPullback (shearPullback q) = q := by
-  ext p
-  simp only [shearPullback, ContinuousMap.comp_apply]
-  change q (PaperFactorIsomorphism.fiberShear
-      (PaperFactorIsomorphism.fiberShear p)) = q p
-  rw [PaperFactorIsomorphism.fiberShear_involutive]
-
-theorem paperHaarEquiv_continuousGeneratorSet_image :
-    (crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv ''
-        continuousCrossedGeneratorSetOne =
-      continuousCrossedGeneratorSetTwo := by
-  ext T
-  constructor
-  · rintro ⟨S, (⟨q, rfl⟩ | ⟨h, rfl⟩), rfl⟩
-    · exact Or.inl ⟨shearPullback q,
-        (paperHaarEquiv_continuousMultiplier_conj q).symm⟩
-    · exact Or.inr ⟨h,
-        (crossedHaarHilbertEquiv_group_conj paperHaarEquiv h).symm⟩
-  · rintro (⟨q, rfl⟩ | ⟨h, rfl⟩)
-    · refine ⟨continuousCrossedMultiplier paperHaarActionOne
-          (shearPullback q), Or.inl ⟨shearPullback q, rfl⟩, ?_⟩
-      calc
-        (crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv
-            (continuousCrossedMultiplier paperHaarActionOne
-              (shearPullback q)) =
-          continuousCrossedMultiplier paperHaarActionTwo
-            (shearPullback (shearPullback q)) :=
-          paperHaarEquiv_continuousMultiplier_conj (shearPullback q)
-        _ = continuousCrossedMultiplier paperHaarActionTwo q :=
-          congrArg (continuousCrossedMultiplier paperHaarActionTwo)
-            (shearPullback_involutive q)
-    · exact ⟨_, Or.inr ⟨h, rfl⟩,
-        crossedHaarHilbertEquiv_group_conj paperHaarEquiv h⟩
+  rw [reducedCrossedGeneratorSetTwo_eq_continuousCoefficients]
+  exact vonNeumannClosure_crossedGeneratorSetOfContinuousCoefficients_eq
+    paperHaarActionTwo coordinateComplexCharacter
+    coordinateComplexCharacter_span_closure_eq_top
 
 theorem paperHaarEquiv_mem_continuousClosure_iff
     (T : CrossedOne →L[ℂ] CrossedOne) :
     T ∈ vonNeumannClosure continuousCrossedGeneratorSetOne ↔
       (crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv T ∈
         vonNeumannClosure continuousCrossedGeneratorSetTwo := by
-  exact mem_vonNeumannClosure_iff_of_conj_image_eq
-    (crossedHaarHilbertEquiv paperHaarEquiv)
-    continuousCrossedGeneratorSetOne continuousCrossedGeneratorSetTwo
-    paperHaarEquiv_continuousGeneratorSet_image T
+  simpa [continuousCrossedGeneratorSetOne,
+    continuousCrossedGeneratorSetTwo, paperHaarEquiv] using
+    (continuousCrossedClosure_mem_iff paperHaarHomeomorph T)
 
 /- The two paper Fourier models and the fiber shear compose to the concrete
 spatial equivalence of regular Hilbert spaces. Paper: §3. -/
@@ -624,23 +347,7 @@ theorem paperSpatialUnitary_maps_group_factor
       let X := paperGroupFactorUnitaryTwo.symm.conjStarAlgEquiv R
       have hR : paperGroupFactorUnitaryTwo.conjStarAlgEquiv
           X = R := by
-        apply ContinuousLinearMap.ext
-        intro v
-        change paperGroupFactorUnitaryTwo
-            (paperGroupFactorUnitaryTwo.symm
-              (R (paperGroupFactorUnitaryTwo
-                (paperGroupFactorUnitaryTwo.symm v)))) = R v
-        calc
-          paperGroupFactorUnitaryTwo
-              (paperGroupFactorUnitaryTwo.symm
-                (R (paperGroupFactorUnitaryTwo
-                  (paperGroupFactorUnitaryTwo.symm v)))) =
-            paperGroupFactorUnitaryTwo
-              (paperGroupFactorUnitaryTwo.symm (R v)) :=
-            congrArg (fun z ↦ paperGroupFactorUnitaryTwo
-              (paperGroupFactorUnitaryTwo.symm (R z)))
-              (paperGroupFactorUnitaryTwo.apply_symm_apply v)
-          _ = R v := paperGroupFactorUnitaryTwo.apply_symm_apply (R v)
+        exact paperGroupFactorUnitaryTwo.conjStarAlgEquiv.apply_symm_apply R
       calc
         R ∈ vonNeumannClosure reducedCrossedGeneratorSetTwo ↔
             paperGroupFactorUnitaryTwo.conjStarAlgEquiv X ∈
