@@ -5,6 +5,22 @@ This project formalizes the mathematical statement of:
 - Shuoxing Zhou, “ICC property(T) groups without W*-superrigidity,”
   [arXiv:2608.02327](https://arxiv.org/abs/2608.02327), submitted 3 August
   2026.
+
+Its sole external mathematical premise is attributed to:
+
+- Mikhail Ershov, Andrei Jaikin-Zapirain, and Martin Kassabov, “Property (T)
+  for groups graded by root systems,” *Memoirs of the American Mathematical
+  Society* **249** (2017), no. 1186,
+  [arXiv:1102.0031](https://arxiv.org/abs/1102.0031), Theorem 1.1.
+
+Zhou invokes this result in Proposition 4.1(b). The formal boundary is the
+property-(T) premise for `Connes.PaperPropertyT.elementaryGroup`; the project
+then proves the `EL₃ = SL₃` identification and transports property (T). This
+citation identifies the dependency but does not claim independent source or
+applicability review.
+
+The public code and formalization references are:
+
 - OpenAI, “Ten Advances in Mathematics and Theoretical Computer Science,”
   [openai/ten-proofs](https://github.com/openai/ten-proofs), including the
   public Connes formalization and its Comparator challenge.

@@ -10,10 +10,11 @@ W*-superrigidity*, arXiv:2608.02327.
 
 The paper-facing path constructs Zhou's two groups and proves the factor,
 property-(T), ICC, and non-isomorphism arguments. As in the paper, the cited
-EJZK theorem that `EL₃(𝔽₂[t])` has property (T) is an explicit hypothesis of
-the final theorem. The project proves `EL₃(𝔽₂[t]) = SL₃(𝔽₂[t])` and transports
-property (T) across that identification; all other certificates used by the
-final assembly are constructed internally.
+[EJZK theorem](https://arxiv.org/abs/1102.0031) that `EL₃(𝔽₂[t])` has
+property (T) is an explicit hypothesis of the final theorem. The project proves
+`EL₃(𝔽₂[t]) = SL₃(𝔽₂[t])` and transports property (T) across that
+identification; all other certificates used by the final assembly are
+constructed internally.
 
 The project is standalone and mathlib-only. It does not import OpenAI's
 `ten-proofs` repository. Modified proof blocks derived from its public
