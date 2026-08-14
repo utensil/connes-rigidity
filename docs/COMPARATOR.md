@@ -24,9 +24,11 @@ independent Comparator theorem. The solution theorem's axiom closure is
 exactly the permitted set.
 
 The repository workflow runs a pre-merge gate on same-repository pull requests
-and the authoritative gate on pushes to `main` and manual dispatches. Fork
-pull requests are excluded because no candidate Lean module may be built
-outside Comparator's sandbox. The workflow pins Comparator and
-`lean4export` through Lake, pins landrun and nanoda by commit, self-tests
-Landlock confinement, and invokes Comparator inside an outer `systemd-run`
-network guard without repository credentials or secrets.
+and the authoritative gate on pushes to `main` whenever the change is not
+documentation-only; manual dispatches always run. Markdown, `docs/`, `LICENSE`,
+and `NOTICE` changes are excluded by path filters. Fork pull requests are
+excluded because no candidate Lean module may be built outside Comparator's
+sandbox. The workflow pins Comparator and `lean4export` through Lake, pins
+landrun and nanoda by commit, self-tests Landlock confinement, and invokes
+Comparator inside an outer `systemd-run` network guard without repository
+credentials or secrets.
