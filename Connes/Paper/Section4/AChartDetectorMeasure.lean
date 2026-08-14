@@ -131,9 +131,9 @@ theorem aChart_support_card_bound (χ : CharacterSpace)
     obtain ⟨y, hy, rfl⟩ := Finset.mem_image.mp hi
     have hy' : aChartEvaluation χ v N s y ≠ 0 := by
       exact (Finset.mem_filter.mp hy).2
-    simp only [aChartEvalSupport, Finset.mem_filter, Finset.mem_univ,
-      true_and, aChartEvalValue]
-    exact hy'
+    change (s, y) ∈ Finset.univ.filter
+      (fun i => aChartEvalValue χ v N i ≠ 0)
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hy'⟩
   have hinj : Function.Injective
       (fun y : PaperFiniteCharts.CoeffIndex N → k => (s, y)) := by
     intro y z h

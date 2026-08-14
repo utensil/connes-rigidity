@@ -6,7 +6,17 @@ defaultTargets = ["Connes", "ComparatorChallenges"]
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.32.2"
+rev = "79cba2e8b532ff92484dfd99f45987bae8b2fd7e"
+
+[[require]]
+name = "Comparator"
+git = "https://github.com/leanprover/comparator.git"
+rev = "v4.34.0-rc1"
+
+[[require]]
+name = "lean4export"
+scope = "leanprover"
+rev = "v4.34.0-rc1"
 
 [[lean_lib]]
 name = "Connes"

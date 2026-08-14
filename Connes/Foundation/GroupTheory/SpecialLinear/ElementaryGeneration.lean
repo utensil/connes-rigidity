@@ -210,7 +210,7 @@ private theorem binaryPolynomial_eq_one_of_isUnit (p : R) (hp : IsUnit p) :
   obtain ⟨a, ha, hpa⟩ := Polynomial.isUnit_iff.mp hp
   have ha' : a = 1 := by
     have hne : a ≠ 0 := ha.ne_zero
-    fin_cases a <;> simp_all
+    simpa using ZMod.pow_card_sub_one_eq_one hne
   simpa only [ha', map_one] using hpa.symm
 
 private theorem matrix_mul_apply_as_smul (g A : SL3) (i j : Index) :

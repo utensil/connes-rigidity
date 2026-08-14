@@ -29,8 +29,9 @@ separately in [`PORT_MAP.md`](PORT_MAP.md).
 - The solution path has no `sorry`, `admit`, or project `axiom` declaration.
 - The one source-level `sorry` is the independent Comparator restatement. It
   is not imported by `Connes`.
-- The Linux `landrun`/`lean4export`/`nanoda` Comparator sandbox remains an
-  outstanding verification gate; the ordinary Lean build is platform-local.
+- The Linux `landrun`/`lean4export`/`nanoda` Comparator sandbox is automated
+  by `.github/workflows/comparator.yml`; a successful workflow run is the
+  authoritative verification record.
 
 ## Reproducible local checks
 

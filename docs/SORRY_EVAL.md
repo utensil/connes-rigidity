@@ -62,6 +62,6 @@ Connes.theoremA depends on axioms:
 [propext, Classical.choice, Quot.sound]
 ```
 
-The Comparator sandbox still needs its Linux `landrun`, `lean4export`, and
-`nanoda` tools. The local build and axiom audit do not claim that sandbox
-verification.
+The Comparator sandbox is automated by `.github/workflows/comparator.yml`
+with pinned Linux `landrun`, `lean4export`, and `nanoda` tools. The local build
+and axiom audit remain separate from that sandbox verification.

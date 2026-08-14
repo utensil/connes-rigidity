@@ -189,7 +189,8 @@ theorem chartPoint_ofCoefficients_eq_sum (N : ℕ) (s : Fin 3)
     _ = r • (r • (a ⊗ₜ[k] a)) := by rw [TensorProduct.tmul_smul]
     _ = r • (a ⊗ₜ[k] a) := by
       rw [smul_smul]
-      have hrr : r * r = r := by fin_cases r <;> decide
+      have hrr : r * r = r := by
+        simpa only [pow_two] using ZMod.pow_card r
       rw [hrr]
 
 def chartEvaluation (χ : C →ₗ[k] k) (N : ℕ) (s : Fin 3)
@@ -365,9 +366,9 @@ theorem chart_support_card_bound (χ : C →ₗ[k] k) (N : ℕ)
     obtain ⟨y, hy, rfl⟩ := Finset.mem_image.mp hi
     have hy' : chartEvaluation χ N s y ≠ 0 := by
       exact (Finset.mem_filter.mp hy).2
-    simp only [chartEvalSupport, Finset.mem_filter, Finset.mem_univ,
-      true_and, chartEvalValue]
-    exact hy'
+    change (s, y) ∈ Finset.univ.filter
+      (fun i => chartEvalValue χ N i ≠ 0)
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hy'⟩
   have hinj : Function.Injective
       (fun y : PaperFiniteCharts.CoeffIndex N → F => (s, y)) := by
     intro y z h
