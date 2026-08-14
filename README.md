@@ -55,6 +55,20 @@ exported proof through both the Lean kernel and nanoda. See
 [Comparator verification](docs/COMPARATOR.md) for the trust boundary and
 reproducibility details.
 
+## Post-formalization audits
+
+Comparator checks the frozen theorem statement and proof term against the
+configured technical trust boundary. It cannot establish that the statement
+and definitions faithfully formalize Zhou's mathematics, that the hypotheses
+are appropriate and non-vacuous, or that mathematical, provenance, and
+licensing claims in the repository are accurate.
+
+Separate post-formalization audits therefore examine paper-to-Lean
+correspondence, definition and hypothesis fidelity, concrete witness and
+downstream-consumer use, external literature dependencies, proof architecture,
+and public provenance. The [audit ledger](docs/AUDITS.md) records completed
+checks, their evidence and limitations, and planned independent review.
+
 ## Sources and licensing
 
 The paper source is [arXiv:2608.02327](https://arxiv.org/abs/2608.02327).

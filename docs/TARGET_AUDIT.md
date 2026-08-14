@@ -1,7 +1,9 @@
-# Zhou target correspondence
+# Mathematical target audit
 
-> Historical mismatch review. For the normative current architecture and
-> trust boundary, see [`STATUS.md`](STATUS.md).
+> Internal mathematical correspondence review. It is not independent or peer
+> review. For the status of this and other review angles, see
+> [`AUDITS.md`](AUDITS.md); for the normative current architecture and trust
+> boundary, see [`STATUS.md`](STATUS.md).
 
 This audit compares the active declarations with Zhou,
 [arXiv:2608.02327](https://arxiv.org/html/2608.02327). The public
@@ -68,7 +70,7 @@ mathematical target comparison, controls code-transfer claims and modified-file
 notices. The concrete Zhou endpoints are independently assembled against the
 local carrier and analytic interfaces.
 
-## Reproducible checks
+## Technical evidence
 
 - Lean toolchain: `leanprover/lean4:v4.34.0-rc1`.
 - Mathlib revision: `79cba2e8b532ff92484dfd99f45987bae8b2fd7e`
@@ -80,3 +82,7 @@ local carrier and analytic interfaces.
   `Quot.sound` only.
 - Full local gate: `lake build Connes ComparatorChallenges`.
 - Docstring gate: `scripts/check-paper-docstrings`.
+
+These checks establish compilation, source inventory, and axiom closure. They
+do not independently establish the mathematical fidelity assessed above; that
+limitation and the planned follow-up are recorded in [`AUDITS.md`](AUDITS.md).
