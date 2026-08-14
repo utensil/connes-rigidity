@@ -24,6 +24,19 @@ explicitly marked **independent review**.
 An angle can have more than one state. For example, its technical interface may
 be automated while its mathematical interpretation remains open.
 
+### Internal rubric framework
+
+The internal formalization review recorded here used the ten public
+[Tau Ceti Review rubrics](https://github.com/TauCetiProject/TauCetiReview/tree/2c299e1d1950d731786005ef33209486b2fa7f9d/rubrics):
+scope, correctness and faithfulness, public API, generality, naming, placement
+and imports, proof quality, reuse and duplication, documentation, and
+attribution. Three project-level evidence checks supplemented them: prerequisite
+state, public consumer contracts, and aggregate helper/import reuse.
+
+These thirteen angles describe an agent-run internal review method. They do
+not make the review human, independent, or peer review. The planned internal
+human examination using the expanded Forest notes is a separate future step.
+
 ## Supporting formalization notes
 
 The agent-authored
