@@ -1,4 +1,4 @@
-# Comparator plan
+# Comparator verification
 
 `ComparatorChallenges/F_ConnesZhou.lean` is a self-contained restatement of
 the vocabulary needed for Theorem A. Its external hypothesis is exactly
@@ -7,6 +7,11 @@ same kernel-level definition as the solution statement. It imports only
 `Mathlib`; it never imports `Connes` or any solution module. The configuration
 lists `Connes.theoremA`, permits only `propext`, `Quot.sound`, and
 `Classical.choice`, and enables nanoda.
+
+This is technical verification of the encoded statement and proof term. It
+does not check whether the encoding faithfully states Zhou's mathematics or
+whether claims about external sources are accurate. Those distinct questions
+are tracked in [`AUDITS.md`](AUDITS.md).
 
 The ordinary local build is:
 

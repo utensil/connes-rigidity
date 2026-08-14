@@ -6,6 +6,11 @@ external mathematical premise: the EJZK theorem that
 premise across that identification, and constructs every other certificate
 used by `Connes.theoremA`.
 
+This document is the normative release-state summary. The public
+[`AUDITS.md`](AUDITS.md) ledger separates automated verification, internal
+review, independent review, and open semantic work. It also indexes the
+detailed correspondence, proof-hole, provenance, and licensing records.
+
 ## Proof architecture
 
 | Layer | Role | Canonical endpoint |

@@ -1,7 +1,8 @@
-# Sorry and axiom boundary
+# Proof-hole and axiom audit
 
-> Historical design review. The normative current boundary is summarized in
-> [`STATUS.md`](STATUS.md).
+> Internal source and trust-boundary review. For the status and limitations of
+> this check, see [`AUDITS.md`](AUDITS.md). The normative current boundary is
+> summarized in [`STATUS.md`](STATUS.md).
 
 This is the current declaration-level boundary against Zhou,
 [arXiv:2608.02327](https://arxiv.org/html/2608.02327), at
@@ -18,18 +19,9 @@ The source scan finds one literal `sorry` in Lean:
 
 No solution module contains a `sorry`, `axiom`, or `admit` declaration.
 
-## Design corrections embodied in the current tree
-
-- The active Theorem A path was moved from the identity-action scaffold to
-  `Construction.PaperKernel`.
-- The ICC target was replaced by a direct three-case theorem because the
-  quotient `SL₃(R) × Sp₄(F₂)` is not ICC.
-- The non-isomorphism target now models the quotient automorphism induced by a
-  hypothetical group isomorphism. Its semisimplicity boundary is quantified
-  over all such quotient twists.
-- The factor target was tied to the algebraic fiber shear, then completed by
-  formalizing Haar transport, dual-action conjugacy, generator closure, and
-  the spatial implementation.
+The mathematical target corrections that removed the identity-action,
+generic ICC, arbitrary non-isomorphism, and caller-supplied factor-witness
+scaffolds are consolidated in [`TARGET_AUDIT.md`](TARGET_AUDIT.md).
 
 ## Completion boundary
 
@@ -64,4 +56,6 @@ Connes.theoremA depends on axioms:
 
 The Comparator sandbox is automated by `.github/workflows/comparator.yml`
 with pinned Linux `landrun`, `lean4export`, and `nanoda` tools. The local build
-and axiom audit remain separate from that sandbox verification.
+and axiom audit remain separate from that sandbox verification. See
+[`COMPARATOR.md`](COMPARATOR.md) for the technical trust boundary and
+[`AUDITS.md`](AUDITS.md) for the semantic checks that it cannot perform.

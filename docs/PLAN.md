@@ -1,7 +1,9 @@
-# Formalization status and architecture
+# Historical formalization plan
 
 > Historical planning record. For the concise normative release state, see
-> [`STATUS.md`](STATUS.md).
+> [`STATUS.md`](STATUS.md). For current review status and remaining semantic
+> checks, see [`AUDITS.md`](AUDITS.md). This file is retained for historical
+> context and should not be used as the current audit ledger.
 
 The active layout follows Zhou's sections and keeps reusable machinery under
 `Connes/Foundation/`. The retired identity-action and generic-witness

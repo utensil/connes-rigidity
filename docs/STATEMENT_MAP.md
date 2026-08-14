@@ -1,7 +1,8 @@
 # Statement map
 
 The names below are the active paper-facing boundary. See
-[`STATUS.md`](STATUS.md) for the current architecture and trust boundary.
+[`STATUS.md`](STATUS.md) for the current architecture and trust boundary, and
+[`AUDITS.md`](AUDITS.md) for the review status of this correspondence.
 
 | Paper item | Lean declaration |
 | --- | --- |
