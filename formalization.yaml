@@ -1,8 +1,11 @@
-version: "0.1"
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
 
 project:
   name: "connes-rigidity"
   authors:
+    - "utensil"
+  responsible_maintainers:
     - "utensil"
   license: "Apache-2.0"
   toolchain: "leanprover/lean4:v4.34.0-rc1"
@@ -14,21 +17,120 @@ sources:
       - "Shuoxing Zhou"
     id: "https://arxiv.org/abs/2608.02327"
     publication_date: "2026-08-03"
-    type: "paper"
+    type: "article"
+    location: "Theorem A and §§2–7"
+    relationship: "formalizes"
+  - title: "Property (T) for groups graded by root systems"
+    authors:
+      - "Mikhail Ershov"
+      - "Andrei Jaikin-Zapirain"
+      - "Martin Kassabov"
+    id: "https://arxiv.org/abs/1102.0031"
+    type: "article"
+    location: "Theorem 1.1, as invoked in Zhou Proposition 4.1(b)"
+    relationship: "background"
   - title: "Ten Advances in Mathematics and Theoretical Computer Science"
     authors:
       - "OpenAI"
     id: "https://github.com/openai/ten-proofs"
     revision: "94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6"
+    type: "formalization"
+    location: "Connes formalization and Comparator challenge"
+    relationship: "adapts"
     license: "Apache-2.0"
 
+related_formalizations:
+  - id: "https://github.com/openai/ten-proofs"
+    revision: "94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6"
+    relationship: "adapts"
+
+classification:
+  arxiv:
+    - "math.OA"
+    - "math.DS"
+    - "math.GR"
+  msc2020: []
+
 status:
-  stage: "complete-relative-to-cited-ejzk-input"
-  sorry_count: 1
-  solution_sorry_count: 0
+  scope: >-
+    Formalization of Zhou's Theorem A, complete relative to the explicit
+    literature premise that EL₃(𝔽₂[t]) has property (T). The project proves
+    the EL₃ = SL₃ transport and every other certificate used by the final
+    theorem.
+  sorry_count: 0
   sorry_in_definitions: 0
-  comparator_challenge: "ComparatorChallenges/F_ConnesZhou.json"
-  permitted_axioms:
+  axioms:
     - "propext"
     - "Classical.choice"
     - "Quot.sound"
+  main_results:
+    - declaration: "Connes.theoremA"
+      file: "Connes/Main.lean"
+      sorry_count: 0
+      axioms:
+        - "propext"
+        - "Classical.choice"
+        - "Quot.sound"
+      comparator_config: "ComparatorChallenges/F_ConnesZhou.json"
+      literature_dependencies:
+        - statement: "EL₃(𝔽₂[t]) has Kazhdan's property (T)"
+          source: "Ershov–Jaikin-Zapirain–Kassabov, Theorem 1.1"
+
+automation:
+  methods:
+    - method: "agent"
+      tool_setup: >-
+        Lean 4 and Mathlib development with Comparator statement and axiom
+        checks, lean4export, nanoda replay, and Linux landrun confinement.
+  notes: >-
+    Maintainer-directed iterative formalization, review, and refactoring. The
+    automated trust-boundary checks do not constitute mathematical review.
+
+fidelity:
+  divergences: >-
+    The formalization follows Zhou's §§2–7 construction but leaves the cited
+    EJZK property-(T) result as the explicit premise of Connes.theoremA rather
+    than formalizing that literature theorem. Its section proofs expose
+    proposition-valued endpoints before the final assembly.
+
+review:
+  status: "agent-reviewed"
+  reviewers: []
+  notes: >-
+    Internal project review has been performed. No peer review, author
+    verification, or independent mathematical certification is claimed.
+
+alignment:
+  namespace: "Connes"
+  statements:
+    - source: "Zhou §2: the two groups and their actions"
+      lean: "Construction.PaperKernel.paperGammaOneOf; Construction.PaperKernel.paperGammaTwoOf"
+      module: "Connes/Construction/PaperActionInstances.lean"
+      status: "proved"
+    - source: "Zhou §3: isomorphic tracial group factors"
+      lean: "PaperFactorClosure.paperGroupFactors_isomorphic"
+      module: "Connes/Paper/Section3/FactorClosure.lean"
+      status: "proved"
+    - source: "Zhou Proposition 4.1(b): property (T) for EL₃(𝔽₂[t])"
+      lean: "PaperPropertyT.EJZKInput"
+      module: "Connes/Paper/Section4/PropertyT.lean"
+      status: "literature-dependency"
+    - source: "Zhou §4: property (T) completion"
+      lean: "PaperSpectralPropertyT.completion_of_spectralData"
+      module: "Connes/Paper/Section4/SpectralPropertyT.lean"
+      status: "proved-relative-to-literature-dependency"
+    - source: "Zhou §5: ICC"
+      lean: "PaperICC.paper_gammaOne_icc; PaperICC.paper_gammaTwo_icc"
+      module: "Connes/Paper/Section5/ICCOrbits.lean"
+      status: "proved"
+    - source: "Zhou §6: non-isomorphism"
+      lean: "PaperModuleSemisimpleTransport.paperGroups_not_isomorphic"
+      module: "Connes/Paper/Section6/ModuleSemisimpleTransport.lean"
+      status: "proved"
+    - source: "Zhou §7: Theorem A"
+      lean: "Connes.theoremA"
+      module: "Connes/Main.lean"
+      status: "proved-relative-to-literature-dependency"
+
+acknowledgements: >-
+  Built with Lean 4, Mathlib, Comparator, lean4export, nanoda, and landrun.

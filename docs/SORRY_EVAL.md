@@ -42,9 +42,9 @@ No solution module contains a `sorry`, `axiom`, or `admit` declaration.
 | §6 | Characteristic kernel, quotient twists, semisimplicity split, and cocycle obstruction | none |
 | §7 | Concrete composition in `Connes.theoremA` | EJZK property (T) for `PaperPropertyT.elementaryGroup`, passed as a theorem parameter |
 
-This is the project's locked scenario A: the external theorem cited by Zhou is
-supplied by the caller, and Zhou's own construction and proof are formalized.
-No project axiom declaration is used to manufacture that input.
+This is the project's locked completion boundary: the external theorem cited
+by Zhou is supplied by the caller, and Zhou's own construction and proof are
+formalized. No project axiom declaration is used to manufacture that input.
 
 ## Verification
 

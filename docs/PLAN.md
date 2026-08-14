@@ -17,10 +17,10 @@ compatibility layers have been removed; `Connes.lean` now exposes only
 | §6 Non-isomorphism | `Connes/Paper/Section6/Nonisomorphism*.lean`, `ModuleSemisimple*.lean` | Complete: the quotient representations are fixed to the concrete paper actions; characteristic-kernel transport, quotient twists, semisimplicity split, and finite cocycle obstruction are internal, ending at `PaperModuleSemisimpleTransport.paperGroups_not_isomorphic` with no generic conclusion wrapper. |
 | §7 Completion | `Connes/Paper/Section7/TheoremACompletion.lean`, `Connes/Main.lean` | Complete under the explicit EJZK `EL₃(𝔽₂[t])` hypothesis. |
 
-The scenario-A formalization is complete: EJZK is packaged as the sole
-substantive external mathematical result cited by Zhou, while every argument
-internal to Zhou's paper is proved. Formalizing EJZK itself is outside the
-scope of this repository.
+The formalization is complete relative to the cited EJZK input: EJZK is
+packaged as the sole substantive external mathematical result cited by Zhou,
+while every argument internal to Zhou's paper is proved. Formalizing EJZK
+itself is outside the scope of this repository.
 
 The reusable algebraic and operator-algebraic mechanisms live under
 `Connes/Foundation/`; concrete carriers and actions live under
