@@ -1,0 +1,135 @@
+name: API Documentation
+
+# Source changes regenerate the published reference after they reach main.
+# Pull requests run this expensive build only when the generator, dependency
+# pins, or workflow itself changes.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Connes/**"
+      - "Connes.lean"
+      - "docbuild/**"
+      - "lakefile.toml"
+      - "lake-manifest.json"
+      - "lean-toolchain"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "docbuild/**"
+      - "lakefile.toml"
+      - "lake-manifest.json"
+      - "lean-toolchain"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: api-docs-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build declaration reference
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+
+    steps:
+      # actions/checkout v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      # leanprover/lean-action v1.5.0
+      - name: Set up Lean
+        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-github-cache: true
+          use-mathlib-cache: false
+
+      - name: Prepare the documentation project
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e docbuild/lean-toolchain
+          ln -s ../lean-toolchain docbuild/lean-toolchain
+          python3 docbuild/sync_manifest.py
+
+      - name: Fetch Mathlib build cache
+        run: lake exe cache get
+
+      - name: Verify doc-gen4 compatibility
+        working-directory: docbuild
+        run: lake build doc-gen4
+
+      - name: Generate the documentation root
+        working-directory: docbuild
+        run: python3 mk_docs_root.py
+
+      - name: Build API documentation
+        working-directory: docbuild
+        env:
+          DOCGEN_LOCAL_MODULE_ROOTS: Connes
+          DOCGEN_DEPS_DOCS_URL: https://leanprover-community.github.io/mathlib4_docs
+        run: |
+          rm -rf .lake/build/doc .lake/build/doc-data
+          lake build ConnesDocs:docs
+
+      - name: Check the stable declaration resolver
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f docbuild/.lake/build/doc/find/index.html
+          test -f docbuild/.lake/build/doc/find/find.js
+          test -f docbuild/.lake/build/doc/Connes/Main.html
+          test -f docbuild/.lake/build/doc/Connes/Paper/Section7/TheoremACompletion.html
+          grep -F 'Connes.theoremA' docbuild/.lake/build/doc/Connes/Main.html >/dev/null
+          grep -F 'Connes.PaperTheoremACompletion.theoremA' \
+            docbuild/.lake/build/doc/Connes/Paper/Section7/TheoremACompletion.html >/dev/null
+          grep -F '"Connes.theoremA"' \
+            docbuild/.lake/build/doc/declarations/declaration-data.bmp >/dev/null
+          grep -F '"Connes.PaperTheoremACompletion.theoremA"' \
+            docbuild/.lake/build/doc/declarations/declaration-data.bmp >/dev/null
+          grep -F '/find/#doc/' docbuild/.lake/build/doc/find/find.js >/dev/null
+
+      - name: Stage the Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site/docs
+          cp -a docbuild/.lake/build/doc/. _site/docs/
+          test ! -e _site/docs/SOURCE_SHA
+          printf '%s\n' "$GITHUB_SHA" > _site/docs/SOURCE_SHA
+
+      # actions/upload-pages-artifact v5.0.0
+      - name: Upload the Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy declaration reference
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # actions/deploy-pages v5.0.0
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128

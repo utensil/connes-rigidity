@@ -6,6 +6,8 @@ on:
     paths-ignore:
       - "**/*.md"
       - "docs/**"
+      - "docbuild/**"
+      - ".github/workflows/docs.yml"
       - "LICENSE"
       - "NOTICE"
   pull_request:
@@ -13,6 +15,8 @@ on:
     paths-ignore:
       - "**/*.md"
       - "docs/**"
+      - "docbuild/**"
+      - ".github/workflows/docs.yml"
       - "LICENSE"
       - "NOTICE"
   workflow_dispatch:
