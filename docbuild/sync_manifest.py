@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Adapted from Tau Ceti's docbuild at commit e51dd9b19fdd; modified for Connes.
 """Synchronize the root project's locked dependencies into the docs project."""
 
 from __future__ import annotations

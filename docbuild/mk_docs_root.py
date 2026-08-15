@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+# Adapted from Tau Ceti's docbuild at commit e51dd9b19fdd; modified for Connes.
 """Generate the private doc-gen4 root importing every Connes module."""
 
 from pathlib import Path

@@ -1,9 +1,12 @@
 # API reference
 
-Generated declaration documentation for the `Connes` library is published at
-<https://utensil.github.io/connes-rigidity/docs/>. Links through the `find`
-resolver identify declarations by fully qualified name and remain valid when a
-declaration moves between source files. For example:
+Once GitHub Pages is enabled for the repository, generated declaration
+documentation for the `Connes` library will be published at
+<https://utensil.github.io/connes-rigidity/docs/>. A repository administrator
+must first select **GitHub Actions** as the Pages source; this PR deliberately
+does not change that setting. Links through the `find` resolver identify
+declarations by fully qualified name and remain valid when a declaration moves
+between source files. For example:
 
 - [`Connes.theoremA`](https://utensil.github.io/connes-rigidity/docs/find/#doc/Connes.theoremA)
 - [`Connes.PaperTheoremACompletion.theoremA`](https://utensil.github.io/connes-rigidity/docs/find/#doc/Connes.PaperTheoremACompletion.theoremA)
@@ -36,3 +39,8 @@ The documentation generator is pinned independently because it uses Lean
 internals. The docs manifest inherits the exact dependency revisions from the
 root manifest through `sync_manifest.py`; a Lean upgrade must also verify and,
 when necessary, update the doc-gen4 revision.
+
+The nested build scripts adapt Tau Ceti's Apache-2.0
+[`docbuild`](https://github.com/TauCetiProject/TauCeti/tree/e51dd9b19fdd9f4afcf38f09ea787ec83ae7d49a/docbuild)
+design. They are modified here for Connes's module syntax, dependency set, and
+Connes-only rendering with hosted Mathlib links.

@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# Adapted from Tau Ceti's Apache-2.0 Pages workflow; modified for Connes's
+# standalone doc-gen4 site and pull-request compatibility check.
+# Source: https://github.com/TauCetiProject/TauCeti/blob/e51dd9b19fdd9f4afcf38f09ea787ec83ae7d49a/.github/workflows/pages.yml
 name: API Documentation
 
 # Source changes regenerate the published reference after they reach main.
@@ -97,6 +101,8 @@ jobs:
             docbuild/.lake/build/doc/declarations/declaration-data.bmp >/dev/null
           grep -F '"Connes.PaperTheoremACompletion.theoremA"' \
             docbuild/.lake/build/doc/declarations/declaration-data.bmp >/dev/null
+          grep -F 'https://leanprover-community.github.io/mathlib4_docs/' \
+            docbuild/.lake/build/doc/Connes/Main.html >/dev/null
           grep -F '/find/#doc/' docbuild/.lake/build/doc/find/find.js >/dev/null
 
       - name: Stage the Pages artifact
