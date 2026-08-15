@@ -10,9 +10,11 @@ scalar spectral measures needed by finite spectral detection.  Working with
 scalar measures avoids assuming a general projection-valued spectral theorem.
 
 Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
-94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 16860-19073.
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 16868-16878,
+16894-18024, and 18037-19073.
 Modifications: adapted the positive-functional, projection, and joint
-functional-calculus spine to local interfaces and added the later Zhou-specific
+functional-calculus spine to local interfaces, moved the dual-action and
+energy guards to their first consumer, and added the later Zhou-specific
 extensions in this file.
 See docs/PORT_MAP.md.
 -/
@@ -32,17 +34,6 @@ variable {G H : CountableDiscreteGroup.{u}}
 variable [MeasurableSpace (DiscreteCharacterSpace A)]
   [BorelSpace (DiscreteCharacterSpace A)]
 
-omit [DiscreteTopology A] [MeasurableSpace (DiscreteCharacterSpace A)]
-  [BorelSpace (DiscreteCharacterSpace A)] in
-
-theorem continuous_character_evaluation (a : A) :
-    Continuous (fun χ : DiscreteCharacterSpace A ↦
-      ((χ (Multiplicative.ofAdd a) : Circle) : ℂ)) := by
-  change Continuous (fun χ : Multiplicative A →ₜ* Circle ↦
-    ((χ (Multiplicative.ofAdd a) : Circle) : ℂ))
-  exact continuous_subtype_val.comp
-    (continuous_eval_const (Multiplicative.ofAdd a))
-
 def spectralUnitTest (A : Type u)
     [AddCommGroup A] [TopologicalSpace A] [DiscreteTopology A] :
     C_c(DiscreteCharacterSpace A, ℝ) where
@@ -54,20 +45,6 @@ omit [MeasurableSpace (DiscreteCharacterSpace A)]
   [BorelSpace (DiscreteCharacterSpace A)] in
 @[simp] theorem spectralUnitTest_apply (χ : DiscreteCharacterSpace A) :
     spectralUnitTest A χ = 1 := rfl
-
-def spectralEnergyTest (a : A) :
-    C_c(DiscreteCharacterSpace A, ℝ) where
-  toFun χ := ‖((χ (Multiplicative.ofAdd a) : Circle) : ℂ) - 1‖ ^ 2
-  continuous_toFun :=
-    ((continuous_character_evaluation a).sub continuous_const).norm.pow 2
-  hasCompactSupport' := HasCompactSupport.of_compactSpace _
-
-omit [MeasurableSpace (DiscreteCharacterSpace A)]
-  [BorelSpace (DiscreteCharacterSpace A)] in
-@[simp] theorem spectralEnergyTest_apply
-    (a : A) (χ : DiscreteCharacterSpace A) :
-    spectralEnergyTest a χ =
-      ‖((χ (Multiplicative.ofAdd a) : Circle) : ℂ) - 1‖ ^ 2 := rfl
 
 structure PositiveSpectralFunctional
     (E : SplitAbelianExtension A G H)
@@ -1206,19 +1183,6 @@ universe u
 variable {A : Type u} [AddCommGroup A] [TopologicalSpace A] [DiscreteTopology A]
 variable {H : CountableDiscreteGroup.{u}}
 
-def dualActionBaseContinuous
-    (action : H →* Multiplicative (AddAut A)) (h : H) :
-    Multiplicative A →ₜ* Multiplicative A where
-  toMonoidHom := ((MulAutMultiplicative A).symm (action h)).toMonoidHom
-  continuous_toFun := continuous_of_discreteTopology
-
-theorem dualCharacterAction_continuous
-    (action : H →* Multiplicative (AddAut A)) (h : H) :
-    Continuous (dualCharacterAction action h) := by
-  change Continuous (fun χ : DiscreteCharacterSpace A ↦
-    PontryaginDual.map (dualActionBaseContinuous action h⁻¹) χ)
-  exact (PontryaginDual.map (dualActionBaseContinuous action h⁻¹)).continuous_toFun
-
 theorem dualCharacterAction_mul
     (action : H →* Multiplicative (AddAut A)) (g h : H)
     (χ : DiscreteCharacterSpace A) :
@@ -1256,8 +1220,8 @@ def dualCharacterHomeomorph
     rw [← dualCharacterAction_mul, inv_mul_cancel, dualCharacterAction_one]
   right_inv χ := by
     rw [← dualCharacterAction_mul, mul_inv_cancel, dualCharacterAction_one]
-  continuous_toFun := dualCharacterAction_continuous action h
-  continuous_invFun := dualCharacterAction_continuous action h⁻¹
+  continuous_toFun := continuous_dualCharacterAction action h
+  continuous_invFun := continuous_dualCharacterAction action h⁻¹
 
 @[simp] theorem dualCharacterHomeomorph_apply
     (action : H →* Multiplicative (AddAut A)) (h : H)
@@ -1514,7 +1478,7 @@ theorem spectralCharacter_quotientConjugation
 def dualCharacterActionContinuousMap
     (action : H →* Multiplicative (AddAut A)) (h : H) :
     C(DiscreteCharacterSpace A, DiscreteCharacterSpace A) :=
-  ⟨dualCharacterAction action h, dualCharacterAction_continuous action h⟩
+  ⟨dualCharacterAction action h, continuous_dualCharacterAction action h⟩
 
 @[simp] theorem dualCharacterActionContinuousMap_apply
     (action : H →* Multiplicative (AddAut A)) (h : H)

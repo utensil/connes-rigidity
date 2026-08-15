@@ -72,29 +72,6 @@ theorem raw_action_to_paper
   congr 2
   simp
 
-/- The raw dual action is measurable by transport from the compact model. Paper: §4. -/
-theorem raw_action_measurable
-    {H : CountableDiscreteGroup}
-    (action : H →* Multiplicative (AddAut PaperKernel.D))
-    (h : H) :
-    Measurable (dualCharacterAction action h : Raw → Raw) := by
-  have hpaper : Measurable
-      (paperDualCharacterAction action h : Paper → Paper) :=
-    (PaperDualAutomorphism.dualCharacterEquiv_continuous
-      (Multiplicative.toAdd (action h))).measurable
-  have hcomp : Measurable
-      (fun χ : Raw => rawToPaper.symm
-        (paperDualCharacterAction action h (rawToPaper χ))) := by
-    exact paperToRaw_measurable.comp (hpaper.comp rawToPaper_measurable)
-  have heq : (dualCharacterAction action h : Raw → Raw) =
-      fun χ => rawToPaper.symm
-        (paperDualCharacterAction action h (rawToPaper χ)) := by
-    funext χ
-    apply rawToPaper.injective
-    simpa using raw_action_to_paper action h χ
-  rw [heq]
-  exact hcomp
-
 /- Raw invariance transports to paper invariance. Paper: §4. -/
 theorem paper_measure_invariant_of_raw
     {H : CountableDiscreteGroup}
@@ -114,7 +91,7 @@ theorem paper_measure_invariant_of_raw
   have hmap := congrArg
       (fun ν : Measure Raw => ν.map rawToPaper) (hinv h)
   rw [Measure.map_map rawToPaper_measurable
-    (raw_action_measurable action h)] at hmap
+    (measurable_dualCharacterAction action h)] at hmap
   have hcomp :
       (fun χ : Raw => rawToPaper (dualCharacterAction action h χ)) =
         (fun χ : Raw => PaperDualAutomorphism.dualCharacterEquiv

@@ -32,7 +32,8 @@ abbrev CharacterSpace := PaperDualHaar.PaperCharacterSpace
 def detectorValue (χ : CharacterSpace) (d : D) : k :=
   BinaryPontryaginDual.characterLinear (M := D) (Additive.toMul χ) d
 
-/- The squared displacement of a character at one kernel element. Paper: §4. -/
+/- The squared displacement of a character at one kernel element. Its exact
+detector-mass value is proved immediately below. Paper: §4. -/
 def spectralEnergy (μ : ProbabilityMeasure CharacterSpace) (d : D) : ℝ :=
   ∫ χ : CharacterSpace,
     ‖((ZMod.toCircle (detectorValue χ d) : Circle) : ℂ) - 1‖ ^ 2
