@@ -7,6 +7,7 @@ crossed-product model. Paper: §3.
 -/
 import Connes.Paper.Section3.CrossedAction
 import Connes.Paper.Section3.DualActionConjugacy
+import Connes.Foundation.OperatorAlgebra.CrossedProductFactorTransport
 
 set_option maxHeartbeats 5000000
 set_option synthInstance.maxHeartbeats 100000
@@ -104,27 +105,40 @@ def paperHaarActionTwo : HaarProbabilityAction H Coordinates where
     exact (paperCoordinateActionTwo h).map_add z z'
   action_preserves_measure := paperCoordinateActionTwo_measurePreserving
 
-/- The quadratic fiber shear as a measurable involutive equivalence. Paper: §3. -/
-def paperFiberShearMeasurableEquiv : Coordinates ≃ᵐ Coordinates where
+/- The quadratic fiber shear as a homeomorphism. Its inverse is the same
+quadratic shear, but it need not preserve the compact-group law. Paper: §3. -/
+def paperFiberShearHomeomorph : Coordinates ≃ₜ Coordinates where
   toEquiv :=
     { toFun := fiberShear
       invFun := fiberShear
       left_inv := fiberShear_involutive
       right_inv := fiberShear_involutive }
-  measurable_toFun := measurable_fiberShear
-  measurable_invFun := measurable_fiberShear
+  continuous_toFun := continuous_fiberShear
+  continuous_invFun := continuous_fiberShear
+
+/- The measurable equivalence underlying the quadratic fiber shear.
+Paper: §3. -/
+def paperFiberShearMeasurableEquiv : Coordinates ≃ᵐ Coordinates :=
+  paperFiberShearHomeomorph.toMeasurableEquiv
+
+/- Zhou's fiber shear as an equivariant measure-preserving homeomorphism of
+the two crossed-product bases. Paper: §3. -/
+def paperHaarHomeomorph :
+    EquivariantHaarHomeomorph paperHaarActionOne paperHaarActionTwo where
+  toHomeomorph := paperFiberShearHomeomorph
+  measure_preserving := fiberShear_measurePreserving
+  equivariant := by
+    intro h p
+    -- Expose the actions and the underlying map through their bundled coercions.
+    change fiberShear (paperCoordinateActionOne h p) =
+      paperCoordinateActionTwo h (fiberShear p)
+    exact PaperDualActionConjugacy.paperFiberShear_conjugates_paperActions h p
 
 /- Zhou's fiber shear is an equivariant Haar equivalence between the two
 crossed-product bases. Paper: §3. -/
 def paperHaarEquiv :
-    EquivariantHaarEquiv paperHaarActionOne paperHaarActionTwo where
-  toMeasurableEquiv := paperFiberShearMeasurableEquiv
-  measure_preserving := fiberShear_measurePreserving
-  equivariant := by
-    intro h p
-    change fiberShear (paperCoordinateActionOne h p) =
-      paperCoordinateActionTwo h (fiberShear p)
-    exact PaperDualActionConjugacy.paperFiberShear_conjugates_paperActions h p
+    EquivariantHaarEquiv paperHaarActionOne paperHaarActionTwo :=
+  paperHaarHomeomorph.toEquivariantHaarEquiv
 
 end
 end PaperCrossedHaar
