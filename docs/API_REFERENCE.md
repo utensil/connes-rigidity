@@ -1,12 +1,11 @@
 # API reference
 
-Once GitHub Pages is enabled for the repository, generated declaration
-documentation for the `Connes` library will be published at
-<https://utensil.github.io/connes-rigidity/docs/>. A repository administrator
-must first select **GitHub Actions** as the Pages source; this PR deliberately
-does not change that setting. Links through the `find` resolver identify
-declarations by fully qualified name and remain valid when a declaration moves
-between source files. For example:
+The Pages workflow deploys generated declaration documentation for the
+`Connes` library at <https://utensil.github.io/connes-rigidity/docs/>. The
+repository's Pages source must be set to **GitHub Actions** once before the
+workflow can publish its first artifact. Links through the `find` resolver
+identify declarations by fully qualified name and remain valid when a
+declaration moves between source files. For example:
 
 - [`Connes.theoremA`](https://utensil.github.io/connes-rigidity/docs/find/#doc/Connes.theoremA)
 - [`Connes.PaperTheoremACompletion.theoremA`](https://utensil.github.io/connes-rigidity/docs/find/#doc/Connes.PaperTheoremACompletion.theoremA)
