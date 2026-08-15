@@ -27,7 +27,8 @@ Current scope and architecture are summarized in the
 [formalization status](docs/STATUS.md). The
 [statement map](docs/STATEMENT_MAP.md) connects Zhou's sections to their Lean
 endpoints, and [provenance](docs/PROVENANCE.md) records the mathematical and
-code sources. See also the
+code sources. The generated [API reference](docs/API_REFERENCE.md) provides
+stable links to declarations by name. See also the
 [provisional formalization notes](https://utensil.github.io/forest/connes-0001/).
 
 ## Build
