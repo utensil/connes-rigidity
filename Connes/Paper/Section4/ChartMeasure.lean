@@ -44,7 +44,21 @@ def paperDualCharacterAction {H : CountableDiscreteGroup}
     (action : H →* Multiplicative (AddAut D)) (h : H) :
     CharacterSpace → CharacterSpace := dualCharacterEquivOfAction action h
 
-/- Invariant probability measure for the additive character action. Paper: §4. -/
+/-- The additive character action is continuous. Paper: §4. -/
+theorem continuous_paperDualCharacterAction {H : CountableDiscreteGroup}
+    (action : H →* Multiplicative (AddAut D)) (h : H) :
+    Continuous (paperDualCharacterAction action h) :=
+  PaperDualAutomorphism.dualCharacterEquiv_continuous
+    (Multiplicative.toAdd (action h))
+
+/-- The additive character action is measurable. Paper: §4. -/
+theorem measurable_paperDualCharacterAction {H : CountableDiscreteGroup}
+    (action : H →* Multiplicative (AddAut D)) (h : H) :
+    Measurable (paperDualCharacterAction action h) :=
+  (continuous_paperDualCharacterAction action h).measurable
+
+/- Invariant probability measure for the additive character action, whose
+measurability is recorded above. Paper: §4. -/
 def IsInvariantPaperSpectralMeasure {H : CountableDiscreteGroup}
     (action : H →* Multiplicative (AddAut D))
     (μ : ProbabilityMeasure CharacterSpace) : Prop :=
@@ -99,16 +113,13 @@ theorem detector_measure_eq_of_invariant
     (he : Multiplicative.toAdd (action h⁻¹) e = d) :
     (μ : Measure CharacterSpace) (linearDetector e) =
       (μ : Measure CharacterSpace) (linearDetector d) := by
-  have hmeas : Measurable (paperDualCharacterAction action h) := by
-    exact (PaperDualAutomorphism.dualCharacterEquiv_continuous
-      (Multiplicative.toAdd (action h))).measurable
   calc
     (μ : Measure CharacterSpace) (linearDetector e) =
         (Measure.map (paperDualCharacterAction action h) μ)
           (linearDetector e) := by rw [hinv h]
     _ = (μ : Measure CharacterSpace)
         (paperDualCharacterAction action h ⁻¹' linearDetector e) := by
-      rw [Measure.map_apply hmeas
+      rw [Measure.map_apply (measurable_paperDualCharacterAction action h)
         (measurableSet_linearDetector e)]
     _ = (μ : Measure CharacterSpace) (linearDetector d) := by
       rw [paperDualCharacterAction_preimage_linearDetector action h d e he]

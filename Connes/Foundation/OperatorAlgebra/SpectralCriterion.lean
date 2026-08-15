@@ -3,10 +3,11 @@ Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
 Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
-94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 16002-16173.
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 16002-16173,
+16860-16867, 16880-16893, and 18025-18036.
 Modifications: extracted the generic measure-to-invariant-vector spine and
-made the Zhou detector and spectral construction explicit inputs. See
-docs/PORT_MAP.md.
+made the Zhou detector and spectral construction explicit inputs; moved the
+dual-action and energy guards to their first consumers. See docs/PORT_MAP.md.
 -/
 import Mathlib
 import Connes.Core
@@ -19,7 +20,7 @@ noncomputable section
 universe u
 
 open MeasureTheory
-open scoped ENNReal NNReal
+open scoped ENNReal NNReal CompactlySupported
 
 variable {A : Type u} [AddCommGroup A] [TopologicalSpace A] [DiscreteTopology A]
 variable {G H : CountableDiscreteGroup.{u}}
@@ -54,7 +55,34 @@ omit [MeasurableSpace (PontryaginDual (Multiplicative A))]
   ext a
   rfl
 
-/-- Invariant probability measure for the dual action. Paper: §4. -/
+omit [MeasurableSpace (DiscreteCharacterSpace A)]
+  [BorelSpace (DiscreteCharacterSpace A)] in
+/-- The continuous monoid homomorphism underlying the dual action. -/
+private def dualActionBaseContinuous
+    (action : H →* Multiplicative (AddAut A)) (h : H) :
+    Multiplicative A →ₜ* Multiplicative A where
+  toMonoidHom := ((MulAutMultiplicative A).symm (action h)).toMonoidHom
+  continuous_toFun := continuous_of_discreteTopology
+
+omit [MeasurableSpace (DiscreteCharacterSpace A)]
+  [BorelSpace (DiscreteCharacterSpace A)] in
+/-- The inverse-dual action is continuous. Paper: §4. -/
+theorem continuous_dualCharacterAction
+    (action : H →* Multiplicative (AddAut A)) (h : H) :
+    Continuous (dualCharacterAction action h) := by
+  -- `PontryaginDual.map` is the continuous-map model underlying the pointwise action.
+  change Continuous (fun χ : DiscreteCharacterSpace A ↦
+    PontryaginDual.map (dualActionBaseContinuous action h⁻¹) χ)
+  exact (PontryaginDual.map (dualActionBaseContinuous action h⁻¹)).continuous_toFun
+
+/-- The inverse-dual action is measurable. Paper: §4. -/
+theorem measurable_dualCharacterAction
+    (action : H →* Multiplicative (AddAut A)) (h : H) :
+    Measurable (dualCharacterAction action h) :=
+  (continuous_dualCharacterAction action h).measurable
+
+/-- Invariant probability measure for the dual action, whose measurability is
+recorded by `measurable_dualCharacterAction`. Paper: §4. -/
 def IsInvariantSpectralMeasure
     (action : H →* Multiplicative (AddAut A))
     (μ : ProbabilityMeasure (DiscreteCharacterSpace A)) : Prop :=
@@ -67,7 +95,55 @@ def spectralTrivialAtom
     (μ : ProbabilityMeasure (DiscreteCharacterSpace A)) : ℝ :=
   (μ : Measure (DiscreteCharacterSpace A)).real {1}
 
-/-- Spectral displacement energy of a kernel element. Paper: §4. -/
+omit [DiscreteTopology A] [MeasurableSpace (DiscreteCharacterSpace A)]
+  [BorelSpace (DiscreteCharacterSpace A)] in
+/-- Character evaluation is continuous on the compact dual. Paper: §4. -/
+theorem continuous_character_evaluation (a : A) :
+    Continuous (fun χ : DiscreteCharacterSpace A ↦
+      ((χ (Multiplicative.ofAdd a) : Circle) : ℂ)) := by
+  -- Expose the continuous homomorphism carrier used by `continuous_eval_const`.
+  change Continuous (fun χ : Multiplicative A →ₜ* Circle ↦
+    ((χ (Multiplicative.ofAdd a) : Circle) : ℂ))
+  exact continuous_subtype_val.comp
+    (continuous_eval_const (Multiplicative.ofAdd a))
+
+omit [MeasurableSpace (DiscreteCharacterSpace A)]
+  [BorelSpace (DiscreteCharacterSpace A)] in
+/-- Compactly supported continuous test for spectral displacement. Paper: §4. -/
+def spectralEnergyTest (a : A) :
+    C_c(DiscreteCharacterSpace A, ℝ) where
+  toFun χ := ‖((χ (Multiplicative.ofAdd a) : Circle) : ℂ) - 1‖ ^ 2
+  continuous_toFun :=
+    ((continuous_character_evaluation a).sub continuous_const).norm.pow 2
+  hasCompactSupport' := HasCompactSupport.of_compactSpace _
+
+omit [MeasurableSpace (DiscreteCharacterSpace A)]
+  [BorelSpace (DiscreteCharacterSpace A)] in
+@[simp] theorem spectralEnergyTest_apply
+    (a : A) (χ : DiscreteCharacterSpace A) :
+    spectralEnergyTest a χ =
+      ‖((χ (Multiplicative.ofAdd a) : Circle) : ℂ) - 1‖ ^ 2 := rfl
+
+omit [DiscreteTopology A] in
+/-- The spectral displacement integrand is integrable against every probability measure. -/
+theorem integrable_spectralEnergyTest
+    (μ : ProbabilityMeasure (DiscreteCharacterSpace A)) (a : A) :
+    Integrable (fun χ : DiscreteCharacterSpace A ↦
+      ‖((χ (Multiplicative.ofAdd a) : Circle) : ℂ) - 1‖ ^ 2)
+      (μ : Measure (DiscreteCharacterSpace A)) := by
+  refine Integrable.of_bound ?_ 4 ?_
+  · exact (((continuous_character_evaluation a).sub continuous_const).norm.pow 2).aestronglyMeasurable
+  · filter_upwards with χ
+    have hnorm : ‖((χ (Multiplicative.ofAdd a) : Circle) : ℂ) - 1‖ ≤ 2 := by
+      calc
+        _ ≤ ‖((χ (Multiplicative.ofAdd a) : Circle) : ℂ)‖ + ‖(1 : ℂ)‖ := norm_sub_le _ _
+        _ = 2 := by rw [Circle.norm_coe]; norm_num
+    rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _)]
+    have hsquare := mul_self_le_mul_self (norm_nonneg _) hnorm
+    nlinarith
+
+/-- Spectral displacement energy of a kernel element. Its integrand is
+integrable by `integrable_spectralEnergyTest`. Paper: §4. -/
 def spectralDetectionEnergy
     (μ : ProbabilityMeasure (DiscreteCharacterSpace A)) (a : A) : ℝ :=
   ∫ χ : DiscreteCharacterSpace A,
