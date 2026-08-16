@@ -1,6 +1,13 @@
 /-
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
+
+Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
+94bc0feb6a9ff12c7d31d6de640a725c9d43d2b6, lines 35621-35749.
+Modifications: extracted projection-supremum transport from the spatial
+witness, replaced the local multiplication relation by inherited operator
+order, and separated the abstract specification from its concrete proof.
+Paper: §3. See docs/PORT_MAP.md.
 -/
 import Connes.Core
 

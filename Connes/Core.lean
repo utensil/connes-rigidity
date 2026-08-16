@@ -189,7 +189,8 @@ def canonicalTrace (G : CountableDiscreteGroup.{u}) :
     GroupVonNeumannAlgebra G → ℂ :=
   fun x ↦ inner ℂ (delta G 1) ((x : GroupL2 G →L[ℂ] GroupL2 G) (delta G 1))
 
-/-- Projection-supremum predicate boundary. Paper: §3. -/
+/-- Projection-supremum predicate boundary. Leastness is among projection upper bounds,
+not all ambient upper bounds as in `IsLUB`. Paper: §3. -/
 def IsProjectionSupremum {A : Type u} [Mul A] [Star A] [PartialOrder A]
     (S : Set A) (p : A) : Prop :=
   IsStarProjection p ∧
