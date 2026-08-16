@@ -201,7 +201,8 @@ theorem StarSubalgebra.projection_le_iff_mul_eq_left
   exact ⟨fun h ↦ Subtype.ext h, fun h ↦ congrArg Subtype.val h⟩
 
 /-- A star-algebra equivalence preserves operator order between subalgebra projections. -/
-theorem StarSubalgebra.starAlgEquiv_map_le_map_iff
+@[simp]
+theorem StarSubalgebra.starAlgEquiv_map_le_map_iff_of_isStarProjection
     {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     {A : StarSubalgebra ℂ (E →L[ℂ] E)} {B : StarSubalgebra ℂ (F →L[ℂ] F)}
@@ -268,7 +269,7 @@ theorem map_starAlgEquiv
   refine IsProjectionSupremum.intro (hp.isProjection.map e) ?_ ?_
   · rintro _ ⟨q, hq, rfl⟩
     exact ⟨(hp.upper hq).1.map e,
-      (StarSubalgebra.starAlgEquiv_map_le_map_iff
+      (StarSubalgebra.starAlgEquiv_map_le_map_iff_of_isStarProjection
         e (hp.upper hq).1 hp.isProjection).2 (hp.upper hq).2⟩
   · intro r hr hupper
     have hr' : IsStarProjection (e.symm r) := hr.map e.symm
@@ -276,12 +277,12 @@ theorem map_starAlgEquiv
       intro q hq
       have h := hupper (e q) ⟨q, hq, rfl⟩
       simpa only [StarAlgEquiv.symm_apply_apply] using
-        (StarSubalgebra.starAlgEquiv_map_le_map_iff
+        (StarSubalgebra.starAlgEquiv_map_le_map_iff_of_isStarProjection
           e.symm ((hp.upper hq).1.map e) hr).2 h
     have h := hp.least hr' hbound
     have h' : e.symm (e p) ≤ e.symm r := by
       simpa only [StarAlgEquiv.symm_apply_apply] using h
-    exact (StarSubalgebra.starAlgEquiv_map_le_map_iff
+    exact (StarSubalgebra.starAlgEquiv_map_le_map_iff_of_isStarProjection
       e.symm (hp.isProjection.map e) hr).1 h'
 
 end IsProjectionSupremum
@@ -300,7 +301,7 @@ def IsNormalStarAlgEquiv
     IsProjectionSupremum (e.symm '' S) (e.symm p)
 
 /-- Every star-algebra equivalence between operator subalgebras preserves projection suprema. -/
-theorem StarSubalgebra.starAlgEquiv_isNormal
+theorem StarSubalgebra.isNormalStarAlgEquiv
     {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     {A : StarSubalgebra ℂ (E →L[ℂ] E)} {B : StarSubalgebra ℂ (F →L[ℂ] F)}

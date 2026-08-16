@@ -93,7 +93,7 @@ theorem trace_preserving (w : SpatialWitness G H)
 def toTracialGroupFactorEquiv
     (w : SpatialWitness G H) : TracialGroupFactorEquiv G H where
   toStarAlgEquiv := w.toStarAlgEquiv
-  normal := StarSubalgebra.starAlgEquiv_isNormal w.toStarAlgEquiv
+  normal := StarSubalgebra.isNormalStarAlgEquiv w.toStarAlgEquiv
   trace_preserving := w.trace_preserving
 
 end SpatialWitness
