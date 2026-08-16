@@ -20,7 +20,7 @@ theorem theoremA
       HasKazhdanPropertyT Γ₁ ∧ HasKazhdanPropertyT Γ₂ ∧
       IsICC Γ₁ ∧ IsICC Γ₂ ∧
       TracialGroupFactorsIsomorphic Γ₁ Γ₂ ∧
-      ¬ GroupsIsomorphic Γ₁ Γ₂ := by
+      ¬ Nonempty (Γ₁ ≃* Γ₂) := by
   exact PaperTheoremACompletion.theoremA
     ⟨hEJZK⟩
 

@@ -41,9 +41,9 @@ theorem paperCharacteristicModuleEquiv
 /- The concrete Zhou groups are nonisomorphic from the first-module input (Zhou §6). -/
 theorem paperNotIsomorphic
     (hOne : moduleOneSemisimple) :
-    ¬ GroupsIsomorphic
-      (PaperKernel.paperGammaOneOf PaperKernel.paperActionData)
-      (PaperKernel.paperGammaTwoOf PaperKernel.paperActionData) := by
+    ¬ Nonempty
+      (PaperKernel.paperGammaOneOf PaperKernel.paperActionData ≃*
+        PaperKernel.paperGammaTwoOf PaperKernel.paperActionData) := by
   rintro ⟨f⟩
   obtain ⟨σ, ⟨e⟩⟩ := paperCharacteristicModuleEquiv f
   apply paper_moduleTwoAlong_not_semisimple σ

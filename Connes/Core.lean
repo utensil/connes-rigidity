@@ -34,10 +34,6 @@ end CountableDiscreteGroup
 def IsICC (G : CountableDiscreteGroup) : Prop :=
   Infinite G ∧ ∀ g : G, g ≠ 1 → Set.Infinite (conjugatesOf g)
 
-/-- Group-isomorphism predicate boundary. Paper: §6. -/
-def GroupsIsomorphic (G H : CountableDiscreteGroup) : Prop :=
-  Nonempty (G ≃* H)
-
 /-- Unitary-representation carrier. Paper: §4. -/
 abbrev UnitaryRepresentation
     (G : Type u) [Group G]
@@ -193,22 +189,20 @@ def canonicalTrace (G : CountableDiscreteGroup.{u}) :
     GroupVonNeumannAlgebra G → ℂ :=
   fun x ↦ inner ℂ (delta G 1) ((x : GroupL2 G →L[ℂ] GroupL2 G) (delta G 1))
 
-/-- Projection-order relation boundary. Paper: §3. -/
-def ProjectionLE {A : Type u} [Mul A] (p q : A) : Prop :=
-  p * q = p
-
 /-- Projection-supremum predicate boundary. Paper: §3. -/
-def IsProjectionSupremum {A : Type u} [Mul A] [Star A]
+def IsProjectionSupremum {A : Type u} [Mul A] [Star A] [PartialOrder A]
     (S : Set A) (p : A) : Prop :=
   IsStarProjection p ∧
-    (∀ q ∈ S, IsStarProjection q ∧ ProjectionLE q p) ∧
-    ∀ r, IsStarProjection r → (∀ q ∈ S, ProjectionLE q r) → ProjectionLE p r
+    (∀ q ∈ S, IsStarProjection q ∧ q ≤ p) ∧
+    ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r
 
 /-- Normal star-algebra equivalence boundary. Paper: §3. -/
 def IsNormalStarAlgEquiv
     {A : Type u} {B : Type v}
     [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
+    [PartialOrder A]
     [Semiring B] [StarRing B] [Algebra ℂ B] [StarModule ℂ B]
+    [PartialOrder B]
     (e : A ≃⋆ₐ[ℂ] B) : Prop :=
   (∀ (S : Set A) (p : A), IsProjectionSupremum S p →
     IsProjectionSupremum (e '' S) (e p)) ∧
