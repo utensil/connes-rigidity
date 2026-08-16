@@ -240,7 +240,8 @@ theorem unique
 
 end IsProjectionSupremum
 
-/-- Normal star-algebra equivalence boundary. Paper: §3. -/
+/-- Preservation of projection suprema by a star-algebra equivalence and its inverse,
+relative to the supplied order relations. Paper: §3. -/
 def IsNormalStarAlgEquiv
     {A : Type u} {B : Type v}
     [Add A] [Mul A] [SMul ℂ A] [Star A] [LE A]

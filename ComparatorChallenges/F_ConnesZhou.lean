@@ -183,7 +183,8 @@ def IsProjectionSupremum {A : Type u} [Mul A] [Star A] [LE A]
     (∀ q ∈ S, IsStarProjection q ∧ q ≤ p) ∧
     ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r
 
-/-- Challenge normal star-algebra boundary. Paper: §3. -/
+/-- Challenge predicate asserting preservation of projection suprema by a star-algebra
+equivalence and its inverse, relative to the supplied order relations. Paper: §3. -/
 def IsNormalStarAlgEquiv
     {A : Type u} {B : Type v}
     [Add A] [Mul A] [SMul ℂ A] [Star A] [LE A]
