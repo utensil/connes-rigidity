@@ -189,24 +189,23 @@ def canonicalTrace (G : CountableDiscreteGroup.{u}) :
     GroupVonNeumannAlgebra G → ℂ :=
   fun x ↦ inner ℂ (delta G 1) ((x : GroupL2 G →L[ℂ] GroupL2 G) (delta G 1))
 
-/-- The inherited operator order agrees with the algebraic order on group-factor projections. -/
-theorem GroupVonNeumannAlgebra.projection_le_iff_mul_eq_left
-    {G : CountableDiscreteGroup.{u}}
-    {p q : GroupVonNeumannAlgebra G}
+/-- The inherited operator order agrees with the algebraic order on star-subalgebra projections. -/
+theorem StarSubalgebra.projection_le_iff_mul_eq_left
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {p q : A}
     (hp : IsStarProjection p) (hq : IsStarProjection q) :
     p ≤ q ↔ p * q = p := by
-  have hp' : IsStarProjection (p : GroupL2 G →L[ℂ] GroupL2 G) :=
-    hp.map (groupVonNeumannAlgebra G).toStarSubalgebra.subtype
-  have hq' : IsStarProjection (q : GroupL2 G →L[ℂ] GroupL2 G) :=
-    hq.map (groupVonNeumannAlgebra G).toStarSubalgebra.subtype
+  have hp' : IsStarProjection (p : E →L[ℂ] E) := hp.map A.subtype
+  have hq' : IsStarProjection (q : E →L[ℂ] E) := hq.map A.subtype
   rw [← Subtype.coe_le_coe, hp'.le_iff_mul_eq_left hq']
   exact ⟨fun h ↦ Subtype.ext h, fun h ↦ congrArg Subtype.val h⟩
 
-/-- A star-algebra equivalence preserves operator order between group-factor projections. -/
-theorem GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
-    {G : CountableDiscreteGroup.{u}} {H : CountableDiscreteGroup.{v}}
-    (e : GroupVonNeumannAlgebra G ≃⋆ₐ[ℂ] GroupVonNeumannAlgebra H)
-    {p q : GroupVonNeumannAlgebra G}
+/-- A star-algebra equivalence preserves operator order between subalgebra projections. -/
+theorem StarSubalgebra.starAlgEquiv_map_le_map_iff
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {B : StarSubalgebra ℂ (F →L[ℂ] F)}
+    (e : A ≃⋆ₐ[ℂ] B) {p q : A}
     (hp : IsStarProjection p) (hq : IsStarProjection q) :
     e p ≤ e q ↔ p ≤ q := by
   rw [projection_le_iff_mul_eq_left (hp.map e) (hq.map e),
@@ -215,55 +214,97 @@ theorem GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
       simpa only [map_mul, StarAlgEquiv.symm_apply_apply] using congrArg e.symm h,
     fun h ↦ by simpa only [map_mul] using congrArg e h⟩
 
-/-- Projection-supremum predicate in the group-factor operator order. Paper: §3. -/
-def IsProjectionSupremum {G : CountableDiscreteGroup.{u}}
-    (S : Set (GroupVonNeumannAlgebra G))
-    (p : GroupVonNeumannAlgebra G) : Prop :=
+/-- Projection-supremum predicate in a concrete operator-subalgebra order. Paper: §3. -/
+def IsProjectionSupremum
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} (S : Set A) (p : A) : Prop :=
   IsStarProjection p ∧
     (∀ q ∈ S, IsStarProjection q ∧ q ≤ p) ∧
     ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r
 
+namespace IsProjectionSupremum
+
+/-- Construct a projection supremum from its projection, upper-bound, and leastness clauses. -/
+theorem intro
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {S : Set A} {p : A}
+    (hp : IsStarProjection p)
+    (hupper : ∀ q ∈ S, IsStarProjection q ∧ q ≤ p)
+    (hleast : ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r) :
+    IsProjectionSupremum S p :=
+  ⟨hp, hupper, hleast⟩
+
+/-- The supremum candidate is a projection. -/
+theorem isProjection
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {S : Set A} {p : A}
+    (h : IsProjectionSupremum S p) : IsStarProjection p :=
+  h.1
+
+/-- Every member is a projection below the supremum candidate. -/
+theorem upper
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {S : Set A} {p q : A}
+    (h : IsProjectionSupremum S p) (hq : q ∈ S) :
+    IsStarProjection q ∧ q ≤ p :=
+  h.2.1 q hq
+
+/-- The supremum candidate lies below every projection upper bound. -/
+theorem least
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {S : Set A} {p r : A}
+    (h : IsProjectionSupremum S p) (hr : IsStarProjection r)
+    (hupper : ∀ q ∈ S, q ≤ r) : p ≤ r :=
+  h.2.2 r hr hupper
+
 /-- A star-algebra equivalence carries a projection supremum to its image. -/
-theorem IsProjectionSupremum.map_starAlgEquiv
-    {G : CountableDiscreteGroup.{u}} {H : CountableDiscreteGroup.{v}}
-    (e : GroupVonNeumannAlgebra G ≃⋆ₐ[ℂ] GroupVonNeumannAlgebra H)
-    {S : Set (GroupVonNeumannAlgebra G)} {p : GroupVonNeumannAlgebra G}
+theorem map_starAlgEquiv
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {B : StarSubalgebra ℂ (F →L[ℂ] F)}
+    (e : A ≃⋆ₐ[ℂ] B) {S : Set A} {p : A}
     (hp : IsProjectionSupremum S p) :
     IsProjectionSupremum (e '' S) (e p) := by
-  refine ⟨hp.1.map e, ?_, ?_⟩
+  refine IsProjectionSupremum.intro (hp.isProjection.map e) ?_ ?_
   · rintro _ ⟨q, hq, rfl⟩
-    exact ⟨(hp.2.1 q hq).1.map e,
-      (GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
-        e (hp.2.1 q hq).1 hp.1).2 (hp.2.1 q hq).2⟩
+    exact ⟨(hp.upper hq).1.map e,
+      (StarSubalgebra.starAlgEquiv_map_le_map_iff
+        e (hp.upper hq).1 hp.isProjection).2 (hp.upper hq).2⟩
   · intro r hr hupper
     have hr' : IsStarProjection (e.symm r) := hr.map e.symm
     have hbound : ∀ q ∈ S, q ≤ e.symm r := by
       intro q hq
       have h := hupper (e q) ⟨q, hq, rfl⟩
       simpa only [StarAlgEquiv.symm_apply_apply] using
-        (GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
-          e.symm ((hp.2.1 q hq).1.map e) hr).2 h
-    have h := hp.2.2 (e.symm r) hr' hbound
+        (StarSubalgebra.starAlgEquiv_map_le_map_iff
+          e.symm ((hp.upper hq).1.map e) hr).2 h
+    have h := hp.least hr' hbound
     have h' : e.symm (e p) ≤ e.symm r := by
       simpa only [StarAlgEquiv.symm_apply_apply] using h
-    exact (GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
-      e.symm (hp.1.map e) hr).1 h'
+    exact (StarSubalgebra.starAlgEquiv_map_le_map_iff
+      e.symm (hp.isProjection.map e) hr).1 h'
+
+end IsProjectionSupremum
 
 /-- Normal star-algebra equivalence boundary. Paper: §3. -/
 def IsNormalStarAlgEquiv
-    {G : CountableDiscreteGroup.{u}} {H : CountableDiscreteGroup.{v}}
-    (e : GroupVonNeumannAlgebra G ≃⋆ₐ[ℂ] GroupVonNeumannAlgebra H) : Prop :=
-  (∀ (S : Set (GroupVonNeumannAlgebra G)) (p : GroupVonNeumannAlgebra G),
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {B : StarSubalgebra ℂ (F →L[ℂ] F)}
+    (e : A ≃⋆ₐ[ℂ] B) : Prop :=
+  (∀ (S : Set A) (p : A),
     IsProjectionSupremum S p →
     IsProjectionSupremum (e '' S) (e p)) ∧
-  ∀ (S : Set (GroupVonNeumannAlgebra H)) (p : GroupVonNeumannAlgebra H),
+  ∀ (S : Set B) (p : B),
     IsProjectionSupremum S p →
     IsProjectionSupremum (e.symm '' S) (e.symm p)
 
-/-- Every star-algebra equivalence between group factors preserves projection suprema. -/
-theorem GroupVonNeumannAlgebra.starAlgEquiv_isNormal
-    {G : CountableDiscreteGroup.{u}} {H : CountableDiscreteGroup.{v}}
-    (e : GroupVonNeumannAlgebra G ≃⋆ₐ[ℂ] GroupVonNeumannAlgebra H) :
+/-- Every star-algebra equivalence between operator subalgebras preserves projection suprema. -/
+theorem StarSubalgebra.starAlgEquiv_isNormal
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+    {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+    {A : StarSubalgebra ℂ (E →L[ℂ] E)} {B : StarSubalgebra ℂ (F →L[ℂ] F)}
+    (e : A ≃⋆ₐ[ℂ] B) :
     IsNormalStarAlgEquiv e :=
   ⟨fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e,
     fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e.symm⟩
