@@ -189,20 +189,39 @@ def canonicalTrace (G : CountableDiscreteGroup.{u}) :
     GroupVonNeumannAlgebra G → ℂ :=
   fun x ↦ inner ℂ (delta G 1) ((x : GroupL2 G →L[ℂ] GroupL2 G) (delta G 1))
 
-/-- Projection-supremum predicate boundary. Paper: §3. -/
-def IsProjectionSupremum {A : Type u} [Mul A] [Star A] [PartialOrder A]
+/-- Projection-supremum predicate boundary, using the algebraic order on projections. Paper: §3. -/
+def IsProjectionSupremum {A : Type u} [Mul A] [Star A]
     (S : Set A) (p : A) : Prop :=
   IsStarProjection p ∧
-    (∀ q ∈ S, IsStarProjection q ∧ q ≤ p) ∧
-    ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r
+    (∀ q ∈ S, IsStarProjection q ∧ q * p = q) ∧
+    ∀ r, IsStarProjection r → (∀ q ∈ S, q * r = q) → p * r = p
+
+/-- A star-algebra equivalence carries a projection supremum to its image. -/
+theorem IsProjectionSupremum.map_starAlgEquiv
+    {A : Type u} {B : Type v}
+    [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
+    [Semiring B] [StarRing B] [Algebra ℂ B] [StarModule ℂ B]
+    (e : A ≃⋆ₐ[ℂ] B) {S : Set A} {p : A}
+    (hp : IsProjectionSupremum S p) :
+    IsProjectionSupremum (e '' S) (e p) := by
+  refine ⟨hp.1.map e, ?_, ?_⟩
+  · rintro _ ⟨q, hq, rfl⟩
+    exact ⟨(hp.2.1 q hq).1.map e, by
+      simpa only [map_mul] using congrArg e (hp.2.1 q hq).2⟩
+  · intro r hr hupper
+    have hr' : IsStarProjection (e.symm r) := hr.map e.symm
+    have hbound : ∀ q ∈ S, q * e.symm r = q := by
+      intro q hq
+      have h := hupper (e q) ⟨q, hq, rfl⟩
+      simpa only [map_mul, StarAlgEquiv.symm_apply_apply] using congrArg e.symm h
+    simpa only [map_mul, StarAlgEquiv.apply_symm_apply] using
+      congrArg e (hp.2.2 (e.symm r) hr' hbound)
 
 /-- Normal star-algebra equivalence boundary. Paper: §3. -/
 def IsNormalStarAlgEquiv
     {A : Type u} {B : Type v}
     [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
-    [PartialOrder A]
     [Semiring B] [StarRing B] [Algebra ℂ B] [StarModule ℂ B]
-    [PartialOrder B]
     (e : A ≃⋆ₐ[ℂ] B) : Prop :=
   (∀ (S : Set A) (p : A), IsProjectionSupremum S p →
     IsProjectionSupremum (e '' S) (e p)) ∧

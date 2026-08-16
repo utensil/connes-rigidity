@@ -176,20 +176,18 @@ def canonicalTrace (G : CountableDiscreteGroup.{u}) :
     GroupVonNeumannAlgebra G → ℂ :=
   fun x ↦ inner ℂ (delta G 1) ((x : GroupL2 G →L[ℂ] GroupL2 G) (delta G 1))
 
-/-- Challenge projection-supremum boundary. Paper: §3. -/
-def IsProjectionSupremum {A : Type u} [Mul A] [Star A] [PartialOrder A]
+/-- Challenge projection-supremum boundary, using the algebraic order on projections. Paper: §3. -/
+def IsProjectionSupremum {A : Type u} [Mul A] [Star A]
     (S : Set A) (p : A) : Prop :=
   IsStarProjection p ∧
-    (∀ q ∈ S, IsStarProjection q ∧ q ≤ p) ∧
-    ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r
+    (∀ q ∈ S, IsStarProjection q ∧ q * p = q) ∧
+    ∀ r, IsStarProjection r → (∀ q ∈ S, q * r = q) → p * r = p
 
 /-- Challenge normal star-algebra boundary. Paper: §3. -/
 def IsNormalStarAlgEquiv
     {A : Type u} {B : Type v}
     [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
-    [PartialOrder A]
     [Semiring B] [StarRing B] [Algebra ℂ B] [StarModule ℂ B]
-    [PartialOrder B]
     (e : A ≃⋆ₐ[ℂ] B) : Prop :=
   (∀ (S : Set A) (p : A), IsProjectionSupremum S p →
     IsProjectionSupremum (e '' S) (e p)) ∧
