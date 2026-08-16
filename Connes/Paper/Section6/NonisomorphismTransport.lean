@@ -38,7 +38,7 @@ theorem paperCharacteristicModuleEquiv
   refine ⟨σ, ⟨LinearEquiv.ofBijective (paperModuleLinearMap f hchar)
     (paperModuleLinearMap_bijective f hchar)⟩⟩
 
-/- The concrete Zhou groups are nonisomorphic from the first-module input (Zhou §6). -/
+/-- The concrete Zhou groups are nonisomorphic from the first-module input (Zhou §6). -/
 theorem paperNotIsomorphic
     (hOne : moduleOneSemisimple) :
     ¬ Nonempty

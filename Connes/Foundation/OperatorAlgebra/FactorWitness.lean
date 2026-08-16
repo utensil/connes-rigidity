@@ -76,13 +76,6 @@ def toStarAlgEquiv (w : SpatialWitness G H) :
     exact map_smul w.unitary.conjStarAlgEquiv c
       (x : GroupL2 G →L[ℂ] GroupL2 G)
 
-/-- The conjugation equivalence preserves the projection-supremum relation. Paper: §3. -/
-private theorem starAlgEquiv_isNormal
-    (e : GroupVonNeumannAlgebra G ≃⋆ₐ[ℂ] GroupVonNeumannAlgebra H) :
-    IsNormalStarAlgEquiv e :=
-  ⟨fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e,
-    fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e.symm⟩
-
 /-- The spatial witness preserves the canonical vacuum trace. Paper: §3. -/
 theorem trace_preserving (w : SpatialWitness G H)
     (x : GroupVonNeumannAlgebra G) :
@@ -100,7 +93,7 @@ theorem trace_preserving (w : SpatialWitness G H)
 def toTracialGroupFactorEquiv
     (w : SpatialWitness G H) : TracialGroupFactorEquiv G H where
   toStarAlgEquiv := w.toStarAlgEquiv
-  normal := starAlgEquiv_isNormal w.toStarAlgEquiv
+  normal := GroupVonNeumannAlgebra.starAlgEquiv_isNormal w.toStarAlgEquiv
   trace_preserving := w.trace_preserving
 
 end SpatialWitness

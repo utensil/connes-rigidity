@@ -203,7 +203,7 @@ theorem GroupVonNeumannAlgebra.projection_le_iff_mul_eq_left
   exact ⟨fun h ↦ Subtype.ext h, fun h ↦ congrArg Subtype.val h⟩
 
 /-- A star-algebra equivalence preserves operator order between group-factor projections. -/
-theorem GroupVonNeumannAlgebra.starAlgEquiv_le_iff
+theorem GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
     {G : CountableDiscreteGroup.{u}} {H : CountableDiscreteGroup.{v}}
     (e : GroupVonNeumannAlgebra G ≃⋆ₐ[ℂ] GroupVonNeumannAlgebra H)
     {p q : GroupVonNeumannAlgebra G}
@@ -233,7 +233,7 @@ theorem IsProjectionSupremum.map_starAlgEquiv
   refine ⟨hp.1.map e, ?_, ?_⟩
   · rintro _ ⟨q, hq, rfl⟩
     exact ⟨(hp.2.1 q hq).1.map e,
-      (GroupVonNeumannAlgebra.starAlgEquiv_le_iff
+      (GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
         e (hp.2.1 q hq).1 hp.1).2 (hp.2.1 q hq).2⟩
   · intro r hr hupper
     have hr' : IsStarProjection (e.symm r) := hr.map e.symm
@@ -241,12 +241,12 @@ theorem IsProjectionSupremum.map_starAlgEquiv
       intro q hq
       have h := hupper (e q) ⟨q, hq, rfl⟩
       simpa only [StarAlgEquiv.symm_apply_apply] using
-        (GroupVonNeumannAlgebra.starAlgEquiv_le_iff
+        (GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
           e.symm ((hp.2.1 q hq).1.map e) hr).2 h
     have h := hp.2.2 (e.symm r) hr' hbound
     have h' : e.symm (e p) ≤ e.symm r := by
       simpa only [StarAlgEquiv.symm_apply_apply] using h
-    exact (GroupVonNeumannAlgebra.starAlgEquiv_le_iff
+    exact (GroupVonNeumannAlgebra.starAlgEquiv_map_le_map_iff
       e.symm (hp.1.map e) hr).1 h'
 
 /-- Normal star-algebra equivalence boundary. Paper: §3. -/
@@ -259,6 +259,14 @@ def IsNormalStarAlgEquiv
   ∀ (S : Set (GroupVonNeumannAlgebra H)) (p : GroupVonNeumannAlgebra H),
     IsProjectionSupremum S p →
     IsProjectionSupremum (e.symm '' S) (e.symm p)
+
+/-- Every star-algebra equivalence between group factors preserves projection suprema. -/
+theorem GroupVonNeumannAlgebra.starAlgEquiv_isNormal
+    {G : CountableDiscreteGroup.{u}} {H : CountableDiscreteGroup.{v}}
+    (e : GroupVonNeumannAlgebra G ≃⋆ₐ[ℂ] GroupVonNeumannAlgebra H) :
+    IsNormalStarAlgEquiv e :=
+  ⟨fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e,
+    fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e.symm⟩
 
 /-- Trace-preserving factor-equivalence witness. Paper: §3. -/
 structure TracialGroupFactorEquiv
