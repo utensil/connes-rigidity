@@ -30,13 +30,9 @@ attribute [instance] group countable
 
 end CountableDiscreteGroup
 
-/-- Conjugacy-class carrier. Paper: §5. -/
-def conjugacyClass (G : CountableDiscreteGroup) (g : G) : Set G :=
-  {h | ∃ x : G, h = x * g * x⁻¹}
-
 /-- ICC predicate boundary. Paper: §5. -/
 def IsICC (G : CountableDiscreteGroup) : Prop :=
-  Infinite G ∧ ∀ g : G, g ≠ 1 → Set.Infinite (conjugacyClass G g)
+  Infinite G ∧ ∀ g : G, g ≠ 1 → Set.Infinite (conjugatesOf g)
 
 /-- Group-isomorphism predicate boundary. Paper: §6. -/
 def GroupsIsomorphic (G H : CountableDiscreteGroup) : Prop :=

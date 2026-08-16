@@ -70,9 +70,10 @@ theorem finiteNormalSubgroup_sl3_bot
     apply hne
     simpa using h
   have hICC := (SpecialLinear.sl3_isICC).2 (x : S) hxne
-  have hsubset : conjugacyClass SpecialLinear.sl3Group (x : SpecialLinear.sl3Group) ⊆
+  have hsubset : conjugatesOf (x : SpecialLinear.sl3Group) ⊆
       (L : Set S) := by
-    rintro y ⟨g, rfl⟩
+    rintro y hy
+    obtain ⟨g, rfl⟩ := isConj_iff.mp hy
     exact hnormal.conj_mem x hx g
   exact (hfinite.subset hsubset).not_infinite hICC
 

@@ -150,7 +150,7 @@ theorem isICC_of_product_quotient
     IsICC (groupOf action) := by
   change Infinite (Carrier action) ∧
     ∀ x : Carrier action, x ≠ 1 →
-      Set.Infinite (conjugacyClass (groupOf action) x)
+      Set.Infinite (conjugatesOf x)
   refine ⟨?_, ?_⟩
   · letI : Infinite S := SpecialLinear.sl3_isICC.1
     exact Infinite.of_injective
@@ -167,10 +167,12 @@ theorem isICC_of_product_quotient
             (s, (1 : Q)) : Carrier action)⁻¹
       apply Set.Infinite.of_image (projectionS action)
       apply (SpecialLinear.sl3_isICC.2 x.right.1 hs).mono
-      rintro y ⟨s, rfl⟩
+      rintro y hy
+      obtain ⟨s, rfl⟩ := isConj_iff.mp hy
       refine ⟨conjugates s,
-        ⟨(SemidirectProduct.inr (N := N) (G := H) (φ := action)
-          (s, (1 : Q)) : Carrier action), rfl⟩, ?_⟩
+        isConj_iff.mpr ⟨
+          (SemidirectProduct.inr (N := N) (G := H) (φ := action)
+            (s, (1 : Q)) : Carrier action), rfl⟩, ?_⟩
       simp only [conjugates, projectionS]
       rfl
     · have hs' : x.right.1 = 1 := by exact not_ne_iff.mp hs
@@ -185,6 +187,7 @@ theorem isICC_of_product_quotient
           (SemidirectProduct.inl_injective (φ := action)).injOn
         apply hinfinite.mono
         rintro y ⟨a, ⟨s, rfl⟩, rfl⟩
+        apply isConj_iff.mpr
         refine ⟨(SemidirectProduct.inr (N := N) (G := H) (φ := action)
           (s, (1 : Q)) : Carrier action), ?_⟩
         have hxkernel : x = SemidirectProduct.inl x.left := by
@@ -192,6 +195,7 @@ theorem isICC_of_product_quotient
           · rfl
           · exact hright
         rw [hxkernel]
+        symm
         change
           (SemidirectProduct.inl (action (s, (1 : Q)) x.left) :
             Carrier action) =
@@ -236,8 +240,10 @@ theorem isICC_of_product_quotient
           hinj.injOn
         apply hinfinite.mono
         rintro y ⟨b, ⟨s, rfl⟩, rfl⟩
+        apply isConj_iff.mpr
         exact ⟨SemidirectProduct.inl (action (s, (1 : Q)) a),
           by
+            symm
             change
               (⟨x.left * action (s, (1 : Q)) displacement, x.right⟩ :
                 Carrier action) =
