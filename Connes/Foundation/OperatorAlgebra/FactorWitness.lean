@@ -8,7 +8,7 @@ Modifications: renamed and generalized the spatial witness while preserving
 the spatial-to-tracial argument. Paper: §3. See docs/PORT_MAP.md.
 -/
 import Mathlib
-import Connes.Core
+import Connes.Foundation.OperatorAlgebra.ProjectionSupremum
 
 set_option maxHeartbeats 800000
 
