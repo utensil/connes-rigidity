@@ -289,16 +289,19 @@ theorem symm_map
 theorem refl : IsNormalStarAlgEquiv (StarAlgEquiv.refl ℂ A) := by
   refine intro ?_ ?_
   · intro S p hp
-    simpa using hp
+    rw [StarAlgEquiv.coe_refl, Set.image_id]
+    exact hp
   · intro S p hp
-    simpa using hp
+    rw [StarAlgEquiv.refl_symm, StarAlgEquiv.coe_refl, Set.image_id]
+    exact hp
 
 /-- The inverse of a normal star-algebra equivalence is normal. -/
 theorem symm {e : A ≃⋆ₐ[ℂ] B} (h : IsNormalStarAlgEquiv e) :
     IsNormalStarAlgEquiv e.symm := by
   refine intro (fun _ _ ↦ h.symm_map) ?_
   intro S p hp
-  simpa using h.map hp
+  rw [StarAlgEquiv.symm_symm]
+  exact h.map hp
 
 /-- A composite of normal star-algebra equivalences is normal. -/
 theorem trans
