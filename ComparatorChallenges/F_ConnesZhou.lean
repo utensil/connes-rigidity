@@ -176,22 +176,23 @@ def canonicalTrace (G : CountableDiscreteGroup.{u}) :
     GroupVonNeumannAlgebra G → ℂ :=
   fun x ↦ inner ℂ (delta G 1) ((x : GroupL2 G →L[ℂ] GroupL2 G) (delta G 1))
 
-/-- Challenge projection-supremum boundary, using the algebraic order on projections. Paper: §3. -/
-def IsProjectionSupremum {A : Type u} [Mul A] [Star A]
-    (S : Set A) (p : A) : Prop :=
+/-- Challenge projection-supremum boundary in the group-factor operator order. Paper: §3. -/
+def IsProjectionSupremum {G : CountableDiscreteGroup.{u}}
+    (S : Set (GroupVonNeumannAlgebra G))
+    (p : GroupVonNeumannAlgebra G) : Prop :=
   IsStarProjection p ∧
-    (∀ q ∈ S, IsStarProjection q ∧ q * p = q) ∧
-    ∀ r, IsStarProjection r → (∀ q ∈ S, q * r = q) → p * r = p
+    (∀ q ∈ S, IsStarProjection q ∧ q ≤ p) ∧
+    ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r
 
 /-- Challenge normal star-algebra boundary. Paper: §3. -/
 def IsNormalStarAlgEquiv
-    {A : Type u} {B : Type v}
-    [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
-    [Semiring B] [StarRing B] [Algebra ℂ B] [StarModule ℂ B]
-    (e : A ≃⋆ₐ[ℂ] B) : Prop :=
-  (∀ (S : Set A) (p : A), IsProjectionSupremum S p →
+    {G : CountableDiscreteGroup.{u}} {H : CountableDiscreteGroup.{v}}
+    (e : GroupVonNeumannAlgebra G ≃⋆ₐ[ℂ] GroupVonNeumannAlgebra H) : Prop :=
+  (∀ (S : Set (GroupVonNeumannAlgebra G)) (p : GroupVonNeumannAlgebra G),
+    IsProjectionSupremum S p →
     IsProjectionSupremum (e '' S) (e p)) ∧
-  ∀ (S : Set B) (p : B), IsProjectionSupremum S p →
+  ∀ (S : Set (GroupVonNeumannAlgebra H)) (p : GroupVonNeumannAlgebra H),
+    IsProjectionSupremum S p →
     IsProjectionSupremum (e.symm '' S) (e.symm p)
 
 /-- Challenge trace-preserving factor witness. Paper: §3. -/
