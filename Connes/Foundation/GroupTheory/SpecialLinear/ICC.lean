@@ -137,7 +137,7 @@ theorem sl3_isICC : IsICC sl3Group := by
   have htrans_inj : Function.Injective transvection :=
     specialLinear_transvection_injective (i := 0) (j := 1) (by decide)
   change Infinite SL3 ∧ ∀ g : SL3, g ≠ 1 →
-    Set.Infinite {h : SL3 | ∃ x : SL3, h = x * g * x⁻¹}
+    Set.Infinite (conjugatesOf g)
   constructor
   · exact Infinite.of_injective transvection htrans_inj
   · intro g hg
@@ -165,7 +165,7 @@ theorem sl3_isICC : IsICC sl3Group := by
       simpa [lift] using hab
     apply (Set.infinite_range_of_injective hinj).mono
     rintro _ ⟨a, rfl⟩
-    exact ⟨lift a, rfl⟩
+    exact isConj_iff.mpr ⟨lift a, rfl⟩
 
 end SpecialLinear
 end Connes

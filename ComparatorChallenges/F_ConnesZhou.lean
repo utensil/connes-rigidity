@@ -29,13 +29,9 @@ attribute [instance] group countable
 
 end CountableDiscreteGroup
 
-/-- Challenge conjugacy-class carrier. Paper: §5. -/
-def conjugacyClass (G : CountableDiscreteGroup) (g : G) : Set G :=
-  {h | ∃ x : G, h = x * g * x⁻¹}
-
 /-- Challenge ICC predicate. Paper: §5. -/
 def IsICC (G : CountableDiscreteGroup) : Prop :=
-  Infinite G ∧ ∀ g : G, g ≠ 1 → Set.Infinite (conjugacyClass G g)
+  Infinite G ∧ ∀ g : G, g ≠ 1 → Set.Infinite (conjugatesOf g)
 
 /-- Challenge group-isomorphism predicate. Paper: §6. -/
 def GroupsIsomorphic (G H : CountableDiscreteGroup) : Prop :=
