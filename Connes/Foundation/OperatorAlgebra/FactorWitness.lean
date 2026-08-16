@@ -7,8 +7,7 @@ Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
 Modifications: renamed and generalized the spatial witness while preserving
 the spatial-to-tracial argument. Paper: §3. See docs/PORT_MAP.md.
 -/
-import Mathlib
-import Connes.Foundation.OperatorAlgebra.ProjectionSupremum
+import Connes.Foundation.OperatorAlgebra.Projection.Supremum
 
 set_option maxHeartbeats 800000
 
@@ -93,7 +92,7 @@ theorem trace_preserving (w : SpatialWitness G H)
 def toTracialGroupFactorEquiv
     (w : SpatialWitness G H) : TracialGroupFactorEquiv G H where
   toStarAlgEquiv := w.toStarAlgEquiv
-  normal := StarSubalgebra.isNormalStarAlgEquiv w.toStarAlgEquiv
+  normal := StarAlgEquiv.isNormal w.toStarAlgEquiv
   trace_preserving := w.trace_preserving
 
 end SpatialWitness

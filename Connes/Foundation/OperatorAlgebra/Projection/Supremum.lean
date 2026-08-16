@@ -11,6 +11,15 @@ Paper: §3. See docs/PORT_MAP.md.
 -/
 import Connes.Core
 
+/-!
+# Projection-supremum transport
+
+This module relates the inherited operator order on projections in concrete
+star subalgebras to multiplication, then transports projection suprema across
+star-algebra equivalences. It supplies the normality witness consumed by the
+spatial factor equivalence in Zhou §3.
+-/
+
 namespace Connes
 
 noncomputable section
@@ -53,11 +62,11 @@ theorem map_starAlgEquiv
     (e : A ≃⋆ₐ[ℂ] B) {S : Set A} {p : A}
     (hp : IsProjectionSupremum S p) :
     IsProjectionSupremum (e '' S) (e p) := by
-  refine IsProjectionSupremum.intro (hp.isProjection.map e) ?_ ?_
+  refine IsProjectionSupremum.intro (hp.isStarProjection.map e) ?_ ?_
   · rintro _ ⟨q, hq, rfl⟩
     exact ⟨(hp.upper hq).1.map e,
       (StarAlgEquiv.map_le_map_iff_of_isStarProjection
-        e (hp.upper hq).1 hp.isProjection).2
+        e (hp.upper hq).1 hp.isStarProjection).2
         (hp.upper hq).2⟩
   · intro r hr hupper
     have hr' : IsStarProjection (e.symm r) := hr.map e.symm
@@ -71,19 +80,20 @@ theorem map_starAlgEquiv
     have h' : e.symm (e p) ≤ e.symm r := by
       simpa only [StarAlgEquiv.symm_apply_apply] using h
     exact (StarAlgEquiv.map_le_map_iff_of_isStarProjection
-      e.symm (hp.isProjection.map e) hr).1 h'
+      e.symm (hp.isStarProjection.map e) hr).1 h'
 
 end IsProjectionSupremum
 
 /-- Every star-algebra equivalence between operator subalgebras preserves projection suprema. -/
-theorem StarSubalgebra.isNormalStarAlgEquiv
+theorem StarAlgEquiv.isNormal
     {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     {A : StarSubalgebra ℂ (E →L[ℂ] E)} {B : StarSubalgebra ℂ (F →L[ℂ] F)}
     (e : A ≃⋆ₐ[ℂ] B) :
     IsNormalStarAlgEquiv e :=
-  ⟨fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e,
-    fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e.symm⟩
+  IsNormalStarAlgEquiv.intro
+    (fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e)
+    (fun _ _ ↦ IsProjectionSupremum.map_starAlgEquiv e.symm)
 
 end
 end Connes
