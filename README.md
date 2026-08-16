@@ -3,6 +3,10 @@
 > [!WARNING]
 > Highly experimental research. Everything here is provisional: expect frequent changes and early-stage proofs.
 
+[![Comparator verification](https://github.com/utensil/connes-rigidity/actions/workflows/comparator.yml/badge.svg?branch=main&event=push)](https://github.com/utensil/connes-rigidity/actions/workflows/comparator.yml?query=branch%3Amain+event%3Apush)
+[![API documentation](https://github.com/utensil/connes-rigidity/actions/workflows/docs.yml/badge.svg?branch=main&event=push)](https://utensil.github.io/connes-rigidity/docs/)
+[![Companion Forest notes](https://img.shields.io/badge/companion-Forest_notes-blue)](https://utensil.github.io/forest/connes-0001/)
+
 Lean 4 formalization of Shuoxing Zhou's *ICC property(T) groups without
 W*-superrigidity*, arXiv:2608.02327.
 
