@@ -7,8 +7,7 @@ Derived in part from Apache-2.0 `openai/ten-proofs`, `ConnesRigidity.lean` at
 Modifications: renamed and generalized the spatial witness while preserving
 the spatial-to-tracial argument. Paper: §3. See docs/PORT_MAP.md.
 -/
-import Mathlib
-import Connes.Core
+import Connes.Foundation.OperatorAlgebra.Projection.Supremum
 
 set_option maxHeartbeats 800000
 
@@ -76,49 +75,6 @@ def toStarAlgEquiv (w : SpatialWitness G H) :
     exact map_smul w.unitary.conjStarAlgEquiv c
       (x : GroupL2 G →L[ℂ] GroupL2 G)
 
-/-- The conjugation equivalence preserves the projection-supremum relation. Paper: §3. -/
-private theorem starAlgEquiv_isNormal
-    {A : Type u} {B : Type v}
-    [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
-    [Semiring B] [StarRing B] [Algebra ℂ B] [StarModule ℂ B]
-    (e : A ≃⋆ₐ[ℂ] B) : IsNormalStarAlgEquiv e := by
-  have hforward : ∀ (S : Set A) (p : A),
-      IsProjectionSupremum S p →
-        IsProjectionSupremum (e '' S) (e p) := by
-    intro S p hp
-    refine ⟨hp.1.map e, ?_, ?_⟩
-    · rintro q ⟨r, hr, rfl⟩
-      refine ⟨(hp.2.1 r hr).1.map e, ?_⟩
-      simpa only [ProjectionLE, map_mul] using congrArg e (hp.2.1 r hr).2
-    · intro r hr hupper
-      have hr' : IsStarProjection (e.symm r) := hr.map e.symm
-      have hbound : ∀ q ∈ S, ProjectionLE q (e.symm r) := by
-        intro q hq
-        have h := hupper (e q) ⟨q, hq, rfl⟩
-        simpa only [ProjectionLE, map_mul, StarAlgEquiv.symm_apply_apply] using congrArg e.symm h
-      simpa only [ProjectionLE, map_mul, StarAlgEquiv.apply_symm_apply] using
-        congrArg e (hp.2.2 (e.symm r) hr' hbound)
-  refine ⟨hforward, ?_⟩
-  intro S p hp
-  have h :=
-    (show ∀ (T : Set B) (q : B),
-        IsProjectionSupremum T q →
-          IsProjectionSupremum (e.symm '' T) (e.symm q) by
-      intro T q hq
-      refine ⟨hq.1.map e.symm, ?_, ?_⟩
-      · rintro r ⟨s, hs, rfl⟩
-        refine ⟨(hq.2.1 s hs).1.map e.symm, ?_⟩
-        simpa only [ProjectionLE, map_mul] using congrArg e.symm (hq.2.1 s hs).2
-      · intro r hr hupper
-        have hr' : IsStarProjection (e r) := hr.map e
-        have hbound : ∀ s ∈ T, ProjectionLE s (e r) := by
-          intro s hs
-          have hs' := hupper (e.symm s) ⟨s, hs, rfl⟩
-          simpa only [ProjectionLE, map_mul, StarAlgEquiv.apply_symm_apply] using congrArg e hs'
-        simpa only [ProjectionLE, map_mul, StarAlgEquiv.symm_apply_apply] using
-          congrArg e.symm (hq.2.2 (e r) hr' hbound)) S p hp
-  exact h
-
 /-- The spatial witness preserves the canonical vacuum trace. Paper: §3. -/
 theorem trace_preserving (w : SpatialWitness G H)
     (x : GroupVonNeumannAlgebra G) :
@@ -136,7 +92,7 @@ theorem trace_preserving (w : SpatialWitness G H)
 def toTracialGroupFactorEquiv
     (w : SpatialWitness G H) : TracialGroupFactorEquiv G H where
   toStarAlgEquiv := w.toStarAlgEquiv
-  normal := starAlgEquiv_isNormal w.toStarAlgEquiv
+  normal := StarAlgEquiv.isNormal w.toStarAlgEquiv
   trace_preserving := w.trace_preserving
 
 end SpatialWitness

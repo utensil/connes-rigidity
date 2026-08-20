@@ -18,7 +18,7 @@ energy guards to their first consumer, and added the later Zhou-specific
 extensions in this file.
 See docs/PORT_MAP.md.
 -/
-import Connes.Foundation.OperatorAlgebra.ProjectionValuedSpectralMeasure
+import Connes.Foundation.OperatorAlgebra.Projection.ValuedSpectralMeasure
 
 namespace Connes
 

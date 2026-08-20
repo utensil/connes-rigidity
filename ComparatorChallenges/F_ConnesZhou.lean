@@ -33,10 +33,6 @@ end CountableDiscreteGroup
 def IsICC (G : CountableDiscreteGroup) : Prop :=
   Infinite G ∧ ∀ g : G, g ≠ 1 → Set.Infinite (conjugatesOf g)
 
-/-- Challenge group-isomorphism predicate. Paper: §6. -/
-def GroupsIsomorphic (G H : CountableDiscreteGroup) : Prop :=
-  Nonempty (G ≃* H)
-
 /-- Challenge unitary-representation carrier. Paper: §4. -/
 abbrev UnitaryRepresentation
     (G : Type u) [Group G]
@@ -180,26 +176,25 @@ def canonicalTrace (G : CountableDiscreteGroup.{u}) :
     GroupVonNeumannAlgebra G → ℂ :=
   fun x ↦ inner ℂ (delta G 1) ((x : GroupL2 G →L[ℂ] GroupL2 G) (delta G 1))
 
-/-- Challenge projection-order boundary. Paper: §3. -/
-def ProjectionLE {A : Type u} [Mul A] (p q : A) : Prop :=
-  p * q = p
-
 /-- Challenge projection-supremum boundary. Paper: §3. -/
-def IsProjectionSupremum {A : Type u} [Mul A] [Star A]
+def IsProjectionSupremum {A : Type u} [Mul A] [Star A] [LE A]
     (S : Set A) (p : A) : Prop :=
   IsStarProjection p ∧
-    (∀ q ∈ S, IsStarProjection q ∧ ProjectionLE q p) ∧
-    ∀ r, IsStarProjection r → (∀ q ∈ S, ProjectionLE q r) → ProjectionLE p r
+    (∀ q ∈ S, IsStarProjection q ∧ q ≤ p) ∧
+    ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r
 
-/-- Challenge normal star-algebra boundary. Paper: §3. -/
+/-- Challenge predicate asserting preservation of projection suprema by a star-algebra
+equivalence and its inverse, relative to the supplied order relations. Paper: §3. -/
 def IsNormalStarAlgEquiv
     {A : Type u} {B : Type v}
-    [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
-    [Semiring B] [StarRing B] [Algebra ℂ B] [StarModule ℂ B]
+    [Add A] [Mul A] [SMul ℂ A] [Star A] [LE A]
+    [Add B] [Mul B] [SMul ℂ B] [Star B] [LE B]
     (e : A ≃⋆ₐ[ℂ] B) : Prop :=
-  (∀ (S : Set A) (p : A), IsProjectionSupremum S p →
+  (∀ (S : Set A) (p : A),
+    IsProjectionSupremum S p →
     IsProjectionSupremum (e '' S) (e p)) ∧
-  ∀ (S : Set B) (p : B), IsProjectionSupremum S p →
+  ∀ (S : Set B) (p : B),
+    IsProjectionSupremum S p →
     IsProjectionSupremum (e.symm '' S) (e.symm p)
 
 /-- Challenge trace-preserving factor witness. Paper: §3. -/
@@ -267,7 +262,7 @@ theorem theoremA
       HasKazhdanPropertyT Γ₁ ∧ HasKazhdanPropertyT Γ₂ ∧
       IsICC Γ₁ ∧ IsICC Γ₂ ∧
       TracialGroupFactorsIsomorphic Γ₁ Γ₂ ∧
-      ¬ GroupsIsomorphic Γ₁ Γ₂ := by
+      ¬ Nonempty (Γ₁ ≃* Γ₂) := by
   sorry
 
 end Connes

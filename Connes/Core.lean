@@ -34,10 +34,6 @@ end CountableDiscreteGroup
 def IsICC (G : CountableDiscreteGroup) : Prop :=
   Infinite G ∧ ∀ g : G, g ≠ 1 → Set.Infinite (conjugatesOf g)
 
-/-- Group-isomorphism predicate boundary. Paper: §6. -/
-def GroupsIsomorphic (G H : CountableDiscreteGroup) : Prop :=
-  Nonempty (G ≃* H)
-
 /-- Unitary-representation carrier. Paper: §4. -/
 abbrev UnitaryRepresentation
     (G : Type u) [Group G]
@@ -193,27 +189,139 @@ def canonicalTrace (G : CountableDiscreteGroup.{u}) :
     GroupVonNeumannAlgebra G → ℂ :=
   fun x ↦ inner ℂ (delta G 1) ((x : GroupL2 G →L[ℂ] GroupL2 G) (delta G 1))
 
-/-- Projection-order relation boundary. Paper: §3. -/
-def ProjectionLE {A : Type u} [Mul A] (p q : A) : Prop :=
-  p * q = p
-
-/-- Projection-supremum predicate boundary. Paper: §3. -/
-def IsProjectionSupremum {A : Type u} [Mul A] [Star A]
+/-- Projection-supremum predicate boundary. Leastness is among projection upper bounds,
+not all ambient upper bounds as in `IsLUB`. Paper: §3. -/
+def IsProjectionSupremum {A : Type u} [Mul A] [Star A] [LE A]
     (S : Set A) (p : A) : Prop :=
   IsStarProjection p ∧
-    (∀ q ∈ S, IsStarProjection q ∧ ProjectionLE q p) ∧
-    ∀ r, IsStarProjection r → (∀ q ∈ S, ProjectionLE q r) → ProjectionLE p r
+    (∀ q ∈ S, IsStarProjection q ∧ q ≤ p) ∧
+    ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r
 
-/-- Normal star-algebra equivalence boundary. Paper: §3. -/
+namespace IsProjectionSupremum
+
+/-- Construct a projection supremum from its projection, upper-bound, and leastness clauses. -/
+theorem intro
+    {A : Type u} [Mul A] [Star A] [LE A] {S : Set A} {p : A}
+    (hp : IsStarProjection p)
+    (hupper : ∀ q ∈ S, IsStarProjection q ∧ q ≤ p)
+    (hleast : ∀ r, IsStarProjection r → (∀ q ∈ S, q ≤ r) → p ≤ r) :
+    IsProjectionSupremum S p :=
+  ⟨hp, hupper, hleast⟩
+
+/-- The supremum candidate is a projection. -/
+theorem isStarProjection
+    {A : Type u} [Mul A] [Star A] [LE A] {S : Set A} {p : A}
+    (h : IsProjectionSupremum S p) : IsStarProjection p :=
+  h.1
+
+/-- Every member is a projection below the supremum candidate. -/
+theorem upper
+    {A : Type u} [Mul A] [Star A] [LE A] {S : Set A} {p q : A}
+    (h : IsProjectionSupremum S p) (hq : q ∈ S) :
+    IsStarProjection q ∧ q ≤ p :=
+  h.2.1 q hq
+
+/-- The supremum candidate lies below every projection upper bound. -/
+theorem least
+    {A : Type u} [Mul A] [Star A] [LE A] {S : Set A} {p r : A}
+    (h : IsProjectionSupremum S p) (hr : IsStarProjection r)
+    (hupper : ∀ q ∈ S, q ≤ r) : p ≤ r :=
+  h.2.2 r hr hupper
+
+/-- Projection suprema are unique. -/
+theorem unique
+    {A : Type u} [Mul A] [Star A] [LE A]
+    [Std.Antisymm (fun a b : A ↦ a ≤ b)]
+    {S : Set A} {p q : A}
+    (hp : IsProjectionSupremum S p) (hq : IsProjectionSupremum S q) : p = q := by
+  exact antisymm (r := fun a b : A ↦ a ≤ b)
+    (hp.least hq.isStarProjection fun r hr ↦ (hq.upper hr).2)
+    (hq.least hp.isStarProjection fun r hr ↦ (hp.upper hr).2)
+
+end IsProjectionSupremum
+
+/-- Preservation of projection suprema by a star-algebra equivalence and its inverse,
+relative to the supplied order relations. Paper: §3. -/
 def IsNormalStarAlgEquiv
     {A : Type u} {B : Type v}
-    [Semiring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
-    [Semiring B] [StarRing B] [Algebra ℂ B] [StarModule ℂ B]
+    [Add A] [Mul A] [SMul ℂ A] [Star A] [LE A]
+    [Add B] [Mul B] [SMul ℂ B] [Star B] [LE B]
     (e : A ≃⋆ₐ[ℂ] B) : Prop :=
-  (∀ (S : Set A) (p : A), IsProjectionSupremum S p →
+  (∀ (S : Set A) (p : A),
+    IsProjectionSupremum S p →
     IsProjectionSupremum (e '' S) (e p)) ∧
-  ∀ (S : Set B) (p : B), IsProjectionSupremum S p →
+  ∀ (S : Set B) (p : B),
+    IsProjectionSupremum S p →
     IsProjectionSupremum (e.symm '' S) (e.symm p)
+
+namespace IsNormalStarAlgEquiv
+
+variable {A : Type u} {B : Type v}
+  [Add A] [Mul A] [SMul ℂ A] [Star A] [LE A]
+  [Add B] [Mul B] [SMul ℂ B] [Star B] [LE B]
+
+/-- Construct normality from projection-supremum transport in both directions. -/
+theorem intro
+    {e : A ≃⋆ₐ[ℂ] B}
+    (hmap : ∀ (S : Set A) (p : A),
+      IsProjectionSupremum S p → IsProjectionSupremum (e '' S) (e p))
+    (hsymm_map : ∀ (S : Set B) (p : B),
+      IsProjectionSupremum S p →
+        IsProjectionSupremum (e.symm '' S) (e.symm p)) :
+    IsNormalStarAlgEquiv e :=
+  ⟨hmap, hsymm_map⟩
+
+/-- A normal star-algebra equivalence preserves projection suprema. -/
+theorem map
+    {e : A ≃⋆ₐ[ℂ] B} (h : IsNormalStarAlgEquiv e)
+    {S : Set A} {p : A} (hp : IsProjectionSupremum S p) :
+    IsProjectionSupremum (e '' S) (e p) :=
+  h.1 S p hp
+
+/-- The inverse of a normal star-algebra equivalence preserves projection suprema. -/
+theorem symm_map
+    {e : A ≃⋆ₐ[ℂ] B} (h : IsNormalStarAlgEquiv e)
+    {S : Set B} {p : B} (hp : IsProjectionSupremum S p) :
+    IsProjectionSupremum (e.symm '' S) (e.symm p) :=
+  h.2 S p hp
+
+/-- The identity star-algebra equivalence is normal. -/
+theorem refl : IsNormalStarAlgEquiv (StarAlgEquiv.refl ℂ A) := by
+  refine intro ?_ ?_
+  · intro S p hp
+    rw [StarAlgEquiv.coe_refl, Set.image_id]
+    exact hp
+  · intro S p hp
+    rw [StarAlgEquiv.refl_symm, StarAlgEquiv.coe_refl, Set.image_id]
+    exact hp
+
+/-- The inverse of a normal star-algebra equivalence is normal. -/
+theorem symm {e : A ≃⋆ₐ[ℂ] B} (h : IsNormalStarAlgEquiv e) :
+    IsNormalStarAlgEquiv e.symm := by
+  refine intro (fun _ _ ↦ h.symm_map) ?_
+  intro S p hp
+  rw [StarAlgEquiv.symm_symm]
+  exact h.map hp
+
+/-- A composite of normal star-algebra equivalences is normal. -/
+theorem trans
+    {C : Type*}
+    [Add C] [Mul C] [SMul ℂ C] [Star C] [LE C]
+    {e : A ≃⋆ₐ[ℂ] B} {f : B ≃⋆ₐ[ℂ] C}
+    (he : IsNormalStarAlgEquiv e) (hf : IsNormalStarAlgEquiv f) :
+    IsNormalStarAlgEquiv (e.trans f) := by
+  refine intro ?_ ?_
+  · intro S p hp
+    -- `StarAlgEquiv.trans` exposes the composite function after reducing its coercion.
+    change IsProjectionSupremum ((fun x ↦ f (e x)) '' S) (f (e p))
+    simpa only [Set.image_image] using hf.map (he.map hp)
+  · intro S p hp
+    -- The inverse composite similarly reduces to the reversed pointwise composite.
+    change IsProjectionSupremum ((fun x ↦ e.symm (f.symm x)) '' S)
+      (e.symm (f.symm p))
+    simpa only [Set.image_image] using he.symm_map (hf.symm_map hp)
+
+end IsNormalStarAlgEquiv
 
 /-- Trace-preserving factor-equivalence witness. Paper: §3. -/
 structure TracialGroupFactorEquiv

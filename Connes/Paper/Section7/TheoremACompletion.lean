@@ -28,7 +28,7 @@ theorem theoremA (propertyTInput : PaperPropertyT.EJZKInput) :
       HasKazhdanPropertyT Γ₁ ∧ HasKazhdanPropertyT Γ₂ ∧
       IsICC Γ₁ ∧ IsICC Γ₂ ∧
       TracialGroupFactorsIsomorphic Γ₁ Γ₂ ∧
-      ¬ GroupsIsomorphic Γ₁ Γ₂ := by
+      ¬ Nonempty (Γ₁ ≃* Γ₂) := by
   have hT := PaperSpectralPropertyT.completion_of_spectralData
     propertyTInput PaperSpectralFiniteDetection.lambdaOneSpectralData
       PaperSpectralFiniteDetection.lambdaTwoSpectralData
