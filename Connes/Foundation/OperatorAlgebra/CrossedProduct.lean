@@ -11,8 +11,6 @@ docs/PORT_MAP.md.
 import Mathlib
 import Connes.Core
 
-set_option maxHeartbeats 800000
-
 namespace Connes
 namespace CrossedProduct
 

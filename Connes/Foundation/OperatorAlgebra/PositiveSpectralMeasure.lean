@@ -1486,7 +1486,6 @@ def dualCharacterActionContinuousMap
     dualCharacterActionContinuousMap action h χ =
       dualCharacterAction action h χ := rfl
 
-set_option maxHeartbeats 800000 in
 
 theorem jointFunctionalCalculus_quotient_covariance
     (E : SplitAbelianExtension A G H)

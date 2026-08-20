@@ -10,8 +10,6 @@ kernel and local Fourier unitary. Paper: §3. See docs/PORT_MAP.md.
 import Connes.Porting.CoreTransfer
 import Connes.Paper.Section3.Fourier
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperFourierAction
 

@@ -9,8 +9,6 @@ the spatial-to-tracial argument. Paper: §3. See docs/PORT_MAP.md.
 -/
 import Connes.Foundation.OperatorAlgebra.Projection.Supremum
 
-set_option maxHeartbeats 800000
-
 namespace Connes
 namespace FactorWitness
 

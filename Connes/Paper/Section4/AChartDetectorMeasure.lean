@@ -7,8 +7,6 @@ Zhou's dual kernel. Paper: §4.
 -/
 import Connes.Paper.Section4.ChartDetectorMeasure
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperAChartDetectorMeasure
 
@@ -230,11 +228,19 @@ theorem paperThetaOne_A_inverse_transport
         (a ⊗ₜ[k] LinearMap.proj v, 0) =
       (PaperFiniteCharts.basisVector 0 ⊗ₜ[k]
         LinearMap.proj v, 0) := by
+  rw [paperThetaOneAddAction_apply]
+  have hinvPair :
+      ((g, (1 : PaperKernel.Q))⁻¹ : (PaperChartDetectorMeasure.H : Type)) =
+        (g⁻¹, 1) := by
+    -- Expose the componentwise inverse hidden by the group-carrier abbreviation.
+    change (g⁻¹, (1 : PaperKernel.Q)⁻¹) = (g⁻¹, 1)
+    rw [inv_one]
+  rw [hinvPair, PaperKernel.paperThetaOneLinear_apply]
   apply Prod.ext
   · change PaperKernel.avStarAction g⁻¹ (1 : PaperKernel.Q)
-        (a ⊗ₜ[k] LinearMap.proj v) =
-      PaperFiniteCharts.basisVector 0 ⊗ₜ[k]
-        LinearMap.proj v
+      (a ⊗ₜ[k] LinearMap.proj v) =
+        PaperFiniteCharts.basisVector 0 ⊗ₜ[k]
+          LinearMap.proj v
     have hinv : PaperKernel.sl3AAction g⁻¹ a =
         PaperFiniteCharts.basisVector 0 := by
       rw [← he]

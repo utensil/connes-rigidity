@@ -14,9 +14,6 @@ import Connes.Paper.Section3.GroupVacuum
 import Connes.Foundation.OperatorAlgebra.SemidirectGeneratorTransport
 import Connes.Foundation.OperatorAlgebra.FactorWitness
 
-set_option maxHeartbeats 2000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace PaperFactorClosure
 
@@ -334,11 +331,13 @@ theorem paperSpatialUnitary_maps_group_factor
   calc
     S ∈ vonNeumannClosure reducedCrossedGeneratorSetOne ↔
         S ∈ vonNeumannClosure continuousCrossedGeneratorSetOne := by
-      rw [reducedClosureOne_eq_continuousClosure]
+      exact Iff.of_eq (congrArg (fun U ↦ S ∈ U)
+        reducedClosureOne_eq_continuousClosure)
     _ ↔ R ∈ vonNeumannClosure continuousCrossedGeneratorSetTwo :=
       paperHaarEquiv_mem_continuousClosure_iff S
     _ ↔ R ∈ vonNeumannClosure reducedCrossedGeneratorSetTwo := by
-      rw [reducedClosureTwo_eq_continuousClosure]
+      exact Iff.of_eq (congrArg (fun U ↦ R ∈ U)
+        reducedClosureTwo_eq_continuousClosure.symm)
     _ ↔ paperGroupFactorUnitaryTwo.symm.conjStarAlgEquiv R ∈
         vonNeumannClosure
           (Set.range fun x : PaperGroupTwo ↦
@@ -366,10 +365,22 @@ theorem paperSpatialUnitary_maps_vacuum :
   change paperGroupFactorUnitaryTwo.symm
       (crossedHaarHilbertEquiv paperHaarEquiv
         (paperGroupFactorUnitaryOne paperIdentityOne)) = paperIdentityTwo
-  rw [paperGroupFactorUnitaryOne_vacuum,
-    crossedHaarHilbertEquiv_vacuum,
-    ← paperGroupFactorUnitaryTwo_vacuum,
-    paperGroupFactorUnitaryTwo.symm_apply_apply]
+  calc
+    _ = paperGroupFactorUnitaryTwo.symm
+        (crossedHaarHilbertEquiv paperHaarEquiv
+          (crossedVacuum paperHaarActionOne)) := congrArg
+            (fun ξ ↦ paperGroupFactorUnitaryTwo.symm
+              (crossedHaarHilbertEquiv paperHaarEquiv ξ))
+            paperGroupFactorUnitaryOne_vacuum
+    _ = paperGroupFactorUnitaryTwo.symm
+        (crossedVacuum paperHaarActionTwo) := congrArg
+          paperGroupFactorUnitaryTwo.symm
+          (crossedHaarHilbertEquiv_vacuum paperHaarEquiv)
+    _ = paperGroupFactorUnitaryTwo.symm
+        (paperGroupFactorUnitaryTwo paperIdentityTwo) := congrArg
+          paperGroupFactorUnitaryTwo.symm
+          paperGroupFactorUnitaryTwo_vacuum.symm
+    _ = paperIdentityTwo := paperGroupFactorUnitaryTwo.symm_apply_apply _
 
 /- The concrete spatial witness for Zhou's pair of group factors. Paper: §3. -/
 def paperSpatialWitness : FactorWitness.SpatialWitness

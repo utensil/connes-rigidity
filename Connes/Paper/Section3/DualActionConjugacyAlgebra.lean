@@ -6,8 +6,6 @@ Algebraic covariance lemmas for Zhou's dual fiber shear. Paper: §3.
 -/
 import Connes.Paper.Section3.DualTopology
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperDualActionConjugacyAlgebra
 

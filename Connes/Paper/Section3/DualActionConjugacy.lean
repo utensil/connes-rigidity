@@ -7,8 +7,6 @@ The Zhou fiber shear conjugates the two dual actions. Paper: §3.
 import Connes.Paper.Section3.DualActionConjugacyCoordinates
 import Connes.Paper.Section3.DualActionConjugacyQuadratic
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperDualActionConjugacy
 

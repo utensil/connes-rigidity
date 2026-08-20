@@ -8,8 +8,6 @@ import Connes.Paper.Section4.ChartOrbits
 import Connes.Paper.Section4.ChartDetector
 import Connes.Construction.SquareSpan
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperChartSpan
 

@@ -6,8 +6,6 @@ Quadratic covariance on Zhou's symmetric tensor carrier. Paper: §3.
 -/
 import Connes.Paper.Section3.DualActionConjugacyAlgebra
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperDualActionConjugacyQuadratic
 

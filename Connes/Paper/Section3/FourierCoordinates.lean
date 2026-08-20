@@ -8,9 +8,6 @@ model. This is the kernel part of the §3 crossed-product bridge. Paper: §3.
 import Connes.Paper.Section3.FourierAction
 import Connes.Paper.Section3.DualShearMeasure
 
-set_option maxHeartbeats 5000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace PaperFourierCoordinates
 

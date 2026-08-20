@@ -8,9 +8,6 @@ Paper: §3.
 -/
 import Connes.Paper.Section3.GroupQuotient
 
-set_option maxHeartbeats 8000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace PaperGroupVacuum
 

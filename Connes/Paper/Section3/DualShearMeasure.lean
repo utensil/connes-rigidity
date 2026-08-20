@@ -9,8 +9,6 @@ result back to Zhou's coordinates. Paper: §3.
 -/
 import Connes.Paper.Section3.DualTopology
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperDualShearMeasure
 

@@ -10,8 +10,6 @@ cited public mathematical source.
 import Connes.Paper.Section6.Characteristic
 import Connes.Foundation.GroupTheory.Sp4KernelCertificate
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperCharacteristicTransport
 

@@ -9,9 +9,6 @@ imports and namespace. Paper: §3. See docs/PORT_MAP.md.
 -/
 import Connes.Porting.CoreTransfer
 
-set_option maxHeartbeats 800000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace SemidirectFubini
 

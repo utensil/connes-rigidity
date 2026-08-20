@@ -10,9 +10,6 @@ local conjugacy helper, and changed namespace. Paper: §3. See docs/PORT_MAP.md.
 import Mathlib
 import Connes.Core
 
-set_option maxHeartbeats 5000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 
 noncomputable section

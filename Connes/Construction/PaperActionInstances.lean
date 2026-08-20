@@ -6,8 +6,6 @@ Concrete Zhou action instances on the paper kernel. Paper: §§2--4.
 -/
 import Connes.Construction.SquareSpan
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace Construction
 namespace PaperKernel
@@ -169,6 +167,11 @@ def sl3CActionHom : SpecialLinear.SL3 →* (C ≃ₗ[k] C) where
 /-- The first Zhou action as a linear equivalence of the kernel. Paper: §2. -/
 def paperThetaOneLinear (h : H) : D ≃ₗ[k] D :=
   (avStarAction h.1 h.2).prodCongr (sl3CActionEquiv h.1)
+
+/-- Pointwise form of the first Zhou action on the kernel splitting. -/
+@[simp] theorem paperThetaOneLinear_apply (h : H) (d : D) :
+    paperThetaOneLinear h d =
+      (avStarAction h.1 h.2 d.1, sl3CAction h.1 d.2) := rfl
 
 /-- Reinterpret a linear kernel equivalence as a multiplicative automorphism. Paper: §2. -/
 def additiveEquivToMulAut (e : D ≃ₗ[k] D) : MulAut (Multiplicative D) :=

@@ -7,8 +7,6 @@ Paper: §4.
 -/
 import Connes.Paper.Section4.FullDetectorMeasure
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperSpectralDetector
 

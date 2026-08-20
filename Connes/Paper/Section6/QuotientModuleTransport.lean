@@ -10,8 +10,6 @@ import Connes.Paper.Section6.CharacteristicTransport
 import Connes.Paper.Section6.Nonisomorphism
 import Connes.Foundation.GroupTheory.SpecialLinear.ICC
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperCharacteristicTransport
 

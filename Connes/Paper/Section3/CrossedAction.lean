@@ -10,9 +10,6 @@ import Connes.Foundation.OperatorAlgebra.CrossedProductFactorTransport
 import Connes.Paper.Section3.DualAutomorphism
 import Connes.Paper.Section3.DualShearMeasure
 
-set_option maxHeartbeats 800000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace PaperCrossedAction
 

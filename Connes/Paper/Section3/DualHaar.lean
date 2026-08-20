@@ -10,8 +10,6 @@ import Connes.Foundation.OperatorAlgebra.BinaryPontryaginDual
 import Connes.Foundation.OperatorAlgebra.NormalizedHaar
 import Connes.Paper.Section3.DualCoordinates
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperDualHaar
 
