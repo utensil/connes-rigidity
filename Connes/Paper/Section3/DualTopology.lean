@@ -9,8 +9,6 @@ Paper: §§3--4.
 -/
 import Connes.Paper.Section3.DualActions
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperDualTopology
 

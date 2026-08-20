@@ -12,8 +12,6 @@ import Connes.Paper.Section3.DualShearMeasure
 import Connes.Foundation.OperatorAlgebra.SpectralCriterion
 import Connes.Paper.Section3.DualAutomorphism
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperChartMeasure
 

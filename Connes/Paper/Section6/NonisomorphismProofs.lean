@@ -10,8 +10,6 @@ file. The construction follows the paper's E_ell argument.
 import Connes.Paper.Section6.Nonisomorphism
 import Mathlib.Algebra.Exact.Basic
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperNonisomorphism
 
@@ -27,8 +25,9 @@ def paperEllMap (q : PaperKernel.Q) : PaperEll →ₗ[k] PaperEll where
     (qVStarActionHom q p.1 + p.2 • OpenAIPort.quadraticDefectLinear q, p.2)
   map_add' p r := by
     apply Prod.ext
-    · simp [add_smul, add_assoc, add_left_comm, add_comm]
-    · simp
+    · simp only [Prod.fst_add, Prod.snd_add, map_add, add_smul]
+      abel
+    · rfl
   map_smul' a p := by
     apply Prod.ext
     · simp [smul_add, smul_smul]
@@ -56,7 +55,8 @@ def paperEllRepresentation : Representation k PaperKernel.Q PaperEll where
             (qVStarActionHom q f + s • OpenAIPort.quadraticDefectLinear q) +
           s • OpenAIPort.quadraticDefectLinear p
       rw [map_mul, PaperKernel.quadraticDefectLinear_cocycle]
-      simp [smul_add, add_left_comm, add_comm]
+      simp only [LinearEquiv.mul_apply, map_add, map_smul, smul_add]
+      abel
     · rfl
 
 def paperEllVStarRepresentation : Representation k PaperKernel.Q PaperKernel.VStar :=

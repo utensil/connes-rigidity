@@ -16,7 +16,6 @@ noncomputable section
 open MeasureTheory Filter Set
 open scoped ENNReal Topology BigOperators
 
-set_option maxHeartbeats 800000
 
 /- Uniform primitive detection counts bound the active spectral mass. Paper: §4. -/
 theorem measure_detection_gap_of_uniform_primitive_counts

@@ -7,9 +7,6 @@ Paper: §3.
 -/
 import Connes.Paper.Section3.GroupFactor
 
-set_option maxHeartbeats 8000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace PaperGroupQuotient
 
@@ -30,6 +27,9 @@ abbrev H := Construction.H
 
 /- The first acting-group generator becomes the crossed action unitary.
 Paper: §3. -/
+-- The nested L² transport normalization exceeds Lean's default
+-- elaboration budget.
+set_option maxHeartbeats 1600000 in
 theorem paperGroupFactorUnitaryOne_conj_inr (h : H) :
     paperGroupFactorUnitaryOne.conjStarAlgEquiv
       (leftRegularUnitary
@@ -38,9 +38,17 @@ theorem paperGroupFactorUnitaryOne_conj_inr (h : H) :
       (crossedGroupUnitary paperHaarActionOne h).toContinuousLinearEquiv.toContinuousLinearMap := by
   apply ContinuousLinearMap.ext
   intro η
-  obtain ⟨ξ, rfl⟩ := paperGroupFactorUnitaryOne.surjective η
-  rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply,
-    paperGroupFactorUnitaryOne.symm_apply_apply]
+  let ξ := paperGroupFactorUnitaryOne.symm η
+  have hη : paperGroupFactorUnitaryOne ξ = η :=
+    paperGroupFactorUnitaryOne.apply_symm_apply η
+  let T : GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne :=
+    leftRegularUnitary (SemidirectProduct.inr h : PaperGroupOne)
+  have hconj :=
+    (LinearIsometryEquiv.conjStarAlgEquiv_apply_apply
+      paperGroupFactorUnitaryOne T (paperGroupFactorUnitaryOne ξ)).trans
+      (congrArg (fun x => paperGroupFactorUnitaryOne (T x))
+        (paperGroupFactorUnitaryOne.symm_apply_apply ξ))
+  rw [← hη, hconj]
   apply lp.ext
   funext h'
   change paperFourierCoordinateUnitary
@@ -69,6 +77,9 @@ theorem paperGroupFactorUnitaryOne_conj_inr (h : H) :
 
 /- The second acting-group generator becomes the crossed action unitary.
 Paper: §3. -/
+-- The nested L² transport normalization exceeds Lean's default
+-- elaboration budget.
+set_option maxHeartbeats 1600000 in
 theorem paperGroupFactorUnitaryTwo_conj_inr (h : H) :
     paperGroupFactorUnitaryTwo.conjStarAlgEquiv
       (leftRegularUnitary
@@ -77,9 +88,17 @@ theorem paperGroupFactorUnitaryTwo_conj_inr (h : H) :
       (crossedGroupUnitary paperHaarActionTwo h).toContinuousLinearEquiv.toContinuousLinearMap := by
   apply ContinuousLinearMap.ext
   intro η
-  obtain ⟨ξ, rfl⟩ := paperGroupFactorUnitaryTwo.surjective η
-  rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply,
-    paperGroupFactorUnitaryTwo.symm_apply_apply]
+  let ξ := paperGroupFactorUnitaryTwo.symm η
+  have hη : paperGroupFactorUnitaryTwo ξ = η :=
+    paperGroupFactorUnitaryTwo.apply_symm_apply η
+  let T : GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo :=
+    leftRegularUnitary (SemidirectProduct.inr h : PaperGroupTwo)
+  have hconj :=
+    (LinearIsometryEquiv.conjStarAlgEquiv_apply_apply
+      paperGroupFactorUnitaryTwo T (paperGroupFactorUnitaryTwo ξ)).trans
+      (congrArg (fun x => paperGroupFactorUnitaryTwo (T x))
+        (paperGroupFactorUnitaryTwo.symm_apply_apply ξ))
+  rw [← hη, hconj]
   apply lp.ext
   funext h'
   change paperFourierCoordinateUnitary

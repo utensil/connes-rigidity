@@ -41,6 +41,11 @@ def paperThetaOneAddAction : H →* Multiplicative (AddAut D) :=
   (MulAutMultiplicative D).toMonoidHom.comp
     PaperKernel.paperThetaOneHom
 
+/-- Pointwise form of the first Zhou action in the additive model. -/
+@[simp] theorem paperThetaOneAddAction_apply (h : H) (d : D) :
+    Multiplicative.toAdd (paperThetaOneAddAction h) d =
+      PaperKernel.paperThetaOneLinear h d := rfl
+
 /- The second paper kernel action reserved for the companion detector. Paper: §4. -/
 def paperThetaTwoAddAction : H →* Multiplicative (AddAut D) :=
   (MulAutMultiplicative D).toMonoidHom.comp

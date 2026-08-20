@@ -81,7 +81,6 @@ private def detectorCheck (x : BVMatrix) : Bool :=
 
 section KernelDetectorChunks
 
-set_option maxHeartbeats 100000000
 set_option maxRecDepth 1000000
 
 private theorem detectorChunk0 : ∀ lo : Fin 256,

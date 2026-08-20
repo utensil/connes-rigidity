@@ -22,9 +22,6 @@ measure-preserving homeomorphism transports that closure. The homeomorphism is
 not required to preserve the addition on either compact group.
 -/
 
-set_option maxHeartbeats 2000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace CrossedProduct
 

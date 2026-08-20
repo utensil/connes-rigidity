@@ -9,8 +9,6 @@ automorphism. Paper: §6.
 import Connes.Paper.Section6.NonisomorphismProofs
 import Connes.Construction.PaperActionInstances
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperNonisomorphism
 

@@ -8,9 +8,6 @@ Fourier transform is lifted fiberwise over the acting group. Paper: §3.
 import Connes.Paper.Section3.FourierCoordinates
 import Connes.Paper.Section3.CrossedHaar
 
-set_option maxHeartbeats 8000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace PaperCrossedKernel
 
@@ -137,7 +134,10 @@ theorem paperCrossedKernelFourier_conjugates_regular (d : D) :
       crossedKernelMultiplier d := by
   apply ContinuousLinearMap.ext
   intro η
-  obtain ⟨ξ, rfl⟩ := paperCrossedKernelFourierUnitary.surjective η
+  let ξ := paperCrossedKernelFourierUnitary.symm η
+  have hη : paperCrossedKernelFourierUnitary ξ = η :=
+    paperCrossedKernelFourierUnitary.apply_symm_apply η
+  rw [← hη]
   apply lp.ext
   funext h
   change paperFourierCoordinateUnitary

@@ -7,8 +7,6 @@ Concrete SL₃ orbit witnesses for the finite polynomial charts. Paper: §4.
 import Connes.Construction.PaperActionInstances
 import Connes.Paper.Section4.FiniteCharts
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperChartOrbits
 

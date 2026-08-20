@@ -9,8 +9,6 @@ finite quotient detector is checked by native computation over the public
 finite carrier. Paper: §5.
 -/
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperICC
 

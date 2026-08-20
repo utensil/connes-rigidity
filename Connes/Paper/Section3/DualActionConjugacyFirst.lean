@@ -6,8 +6,6 @@ The first-coordinate formula for Zhou's contragredient action. Paper: §3.
 -/
 import Connes.Paper.Section3.DualActionConjugacyAlgebra
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperDualActionConjugacyFirst
 

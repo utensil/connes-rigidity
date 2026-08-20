@@ -10,8 +10,6 @@ and quotient transport files in this project.
 import Connes.Paper.Section6.QuotientModuleTransport
 import Connes.Paper.Section6.NonisomorphismEmbedding
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperNonisomorphism
 

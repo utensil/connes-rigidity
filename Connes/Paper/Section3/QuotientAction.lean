@@ -9,9 +9,6 @@ Haar model. Paper: §§3--4.
 import Connes.Paper.Section3.CrossedKernel
 import Connes.Paper.Section3.FourierCoordinates
 
-set_option maxHeartbeats 8000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace PaperQuotientAction
 

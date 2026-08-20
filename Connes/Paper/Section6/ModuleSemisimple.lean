@@ -9,8 +9,6 @@ trivial `C` summand, rather than treating the paper input as an opaque field.
 import Connes.Paper.Section6.Nonisomorphism
 import Connes.Foundation.GroupTheory.Sp4Basic
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperModuleSemisimple
 

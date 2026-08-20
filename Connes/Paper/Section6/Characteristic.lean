@@ -9,8 +9,6 @@ paper's cited public mathematical argument in Section 6.
 
 import Connes.Construction.PaperActionInstances
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperCharacteristic
 

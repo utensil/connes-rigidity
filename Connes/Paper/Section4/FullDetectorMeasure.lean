@@ -6,8 +6,6 @@ Full §4 detector union for Zhou's compact dual. Paper: §4.
 -/
 import Connes.Paper.Section4.AChartDetectorMeasure
 
-set_option maxHeartbeats 1600000
-
 namespace Connes
 namespace PaperFullDetectorMeasure
 

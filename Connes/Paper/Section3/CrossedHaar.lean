@@ -9,9 +9,6 @@ import Connes.Paper.Section3.CrossedAction
 import Connes.Paper.Section3.DualActionConjugacy
 import Connes.Foundation.OperatorAlgebra.CrossedProductFactorTransport
 
-set_option maxHeartbeats 5000000
-set_option synthInstance.maxHeartbeats 100000
-
 namespace Connes
 namespace PaperCrossedHaar
 

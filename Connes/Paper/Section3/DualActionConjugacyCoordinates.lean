@@ -6,8 +6,6 @@ Coordinate formulas used by the Zhou fiber-shear conjugacy. Paper: §3.
 -/
 import Connes.Paper.Section3.DualActionConjugacyFirst
 
-set_option maxHeartbeats 5000000
-
 namespace Connes
 namespace PaperDualActionConjugacyCoordinates
 
