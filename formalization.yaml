@@ -90,7 +90,9 @@ fidelity:
   divergences: >-
     The formalization follows Zhou's §§2–7 construction but leaves the cited
     EJZK property-(T) result as the explicit premise of Connes.theoremA rather
-    than formalizing that literature theorem. Its section proofs expose
+    than formalizing that literature theorem. HasKazhdanPropertyT uses
+    same-universe representation carriers; its standard countable-group
+    equivalence is not separately formalized. The section proofs expose
     proposition-valued endpoints before the final assembly.
 
 review:

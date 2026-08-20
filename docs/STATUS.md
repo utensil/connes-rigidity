@@ -11,6 +11,14 @@ This document is the normative release-state summary. The public
 review, independent review, and open semantic work. It also indexes the
 detailed correspondence, proof-hole, provenance, and licensing records.
 
+## Formal interface note
+
+`HasKazhdanPropertyT G` currently quantifies over Hilbert-space carriers in the
+same universe as the carrier of `G`. Standard property (T) implies this local
+predicate. For countable groups, the usual separable-subrepresentation
+reduction gives the converse, but that equivalence bridge is not formalized in
+this project.
+
 ## Proof architecture
 
 | Layer | Role | Canonical endpoint |
