@@ -56,7 +56,7 @@ def HasAlmostInvariantUnitVectors (π : UnitaryRepresentation G H) : Prop :=
 
 end UnitaryRepresentation
 
-/-- Property-(T) predicate boundary. Paper: §4. -/
+/-- Project-local same-universe property-(T) predicate. Paper: §4. -/
 def HasKazhdanPropertyT (G : CountableDiscreteGroup.{u}) : Prop :=
   ∀ (H : Type u)
     (_ : NormedAddCommGroup H)
