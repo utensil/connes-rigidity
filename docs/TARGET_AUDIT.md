@@ -72,9 +72,11 @@ local carrier and analytic interfaces.
 
 ## Technical evidence
 
-- Lean toolchain: `leanprover/lean4:v4.34.0-rc1`.
-- Mathlib revision: `062f1e3da80734a1b911a5c541d78612faf41b99`
-  (`master` as observed on 2026-08-16).
+- Lean toolchain: `leanprover/lean4:v4.34.0-rc2`.
+- Mathlib revision: `c2d7843e04aa6cc44fa7e2b39422f24f7b725f00`
+  (`master` as observed on 2026-08-23).
+- Comparator tag: `v4.34.0-rc2`.
+- lean4export tag: `v4.34.0-rc2`.
 - Literal `sorry` declarations: one, in the independent Comparator
   `theoremA` challenge in `ComparatorChallenges/F_ConnesZhou.lean`.
 - Project `axiom` and `admit` declarations: none.
