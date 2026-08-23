@@ -23,7 +23,6 @@ abbrev SymplecticIndex := OpenAIPort.SymplecticIndex
 abbrev C := Construction.PaperKernel.C
 abbrev TensorAA := Construction.PaperKernel.TensorAA
 abbrev H := Construction.H
-abbrev ActionData := Construction.PaperKernel.ActionData
 
 /-- The algebraic dual coordinates used by Zhou's fiber model. Paper: §3. -/
 abbrev DualCoordinates :=

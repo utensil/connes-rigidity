@@ -178,14 +178,16 @@ theorem lambda_two_hasFiniteSpectralDetection :
   simpa [cDetector] using h
 
 /- Package the proved detector set for the first split extension. Paper: §4. -/
-def lambdaOneSpectralData : LambdaOneSpectralData where
+def lambdaOneSpectralData :
+    PaperSpectralPropertyT.SpectralData paperThetaOneHom where
   J := detectorFinset
   c := 1 / 3
   c_pos := by norm_num
   detection := lambda_one_hasFiniteSpectralDetection
 
 /- Package the proved detector set for the second split extension. Paper: §4. -/
-def lambdaTwoSpectralData : LambdaTwoSpectralData where
+def lambdaTwoSpectralData :
+    PaperSpectralPropertyT.SpectralData paperThetaTwoHom where
   J := detectorFinset
   c := 1 / 3
   c_pos := by norm_num

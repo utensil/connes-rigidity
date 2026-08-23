@@ -492,10 +492,13 @@ theorem thetaTwoLinearMap_sl3 (s : SpecialLinear.SL3) (d : D) :
     simp
   · rfl
 
-/-- The concrete pair of Zhou actions. Paper: §2. -/
-noncomputable def paperActionData : ActionData where
-  thetaOne := paperThetaOneHom
-  thetaTwo := paperThetaTwoHom
+/-- Zhou's first concrete semidirect-product group. Paper: §2. -/
+noncomputable abbrev paperGammaOne : CountableDiscreteGroup :=
+  paperGammaOf paperThetaOneHom
+
+/-- Zhou's second concrete semidirect-product group. Paper: §2. -/
+noncomputable abbrev paperGammaTwo : CountableDiscreteGroup :=
+  paperGammaOf paperThetaTwoHom
 
 end
 end PaperKernel

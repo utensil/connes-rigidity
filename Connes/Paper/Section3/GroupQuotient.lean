@@ -24,6 +24,8 @@ noncomputable section
 
 abbrev D := PaperKernel.D
 abbrev H := Construction.H
+local notation "Γ₁" => PaperKernel.paperGammaCarrier paperThetaOneHom
+local notation "Γ₂" => PaperKernel.paperGammaCarrier paperThetaTwoHom
 
 /- The first acting-group generator becomes the crossed action unitary.
 Paper: §3. -/
@@ -33,16 +35,16 @@ set_option maxHeartbeats 1600000 in
 theorem paperGroupFactorUnitaryOne_conj_inr (h : H) :
     paperGroupFactorUnitaryOne.conjStarAlgEquiv
       (leftRegularUnitary
-        (SemidirectProduct.inr h : PaperGroupOne) :
-          GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne) =
+        (SemidirectProduct.inr h : Γ₁) :
+          GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁) =
       (crossedGroupUnitary paperHaarActionOne h).toContinuousLinearEquiv.toContinuousLinearMap := by
   apply ContinuousLinearMap.ext
   intro η
   let ξ := paperGroupFactorUnitaryOne.symm η
   have hη : paperGroupFactorUnitaryOne ξ = η :=
     paperGroupFactorUnitaryOne.apply_symm_apply η
-  let T : GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne :=
-    leftRegularUnitary (SemidirectProduct.inr h : PaperGroupOne)
+  let T : GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁ :=
+    leftRegularUnitary (SemidirectProduct.inr h : Γ₁)
   have hconj :=
     (LinearIsometryEquiv.conjStarAlgEquiv_apply_apply
       paperGroupFactorUnitaryOne T (paperGroupFactorUnitaryOne ξ)).trans
@@ -54,16 +56,16 @@ theorem paperGroupFactorUnitaryOne_conj_inr (h : H) :
   change paperFourierCoordinateUnitary
       (semidirectFubini paperThetaOneHom
         ((leftRegularUnitary
-          (SemidirectProduct.inr h : PaperGroupOne) :
-            GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne) ξ) h') =
+          (SemidirectProduct.inr h : Γ₁) :
+            GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁) ξ) h') =
     crossedActionL2Equiv paperHaarActionOne h
       (paperFourierCoordinateUnitary
         (semidirectFubini paperThetaOneHom ξ (h⁻¹ * h')))
   have hnormal :
       semidirectFubini paperThetaOneHom
         ((leftRegularUnitary
-          (SemidirectProduct.inr h : PaperGroupOne) :
-            GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne) ξ) h' =
+          (SemidirectProduct.inr h : Γ₁) :
+            GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁) ξ) h' =
       l2Reindex (paperThetaOneMulEquiv h)
         (semidirectFubini paperThetaOneHom ξ (h⁻¹ * h')) := by
     ext a
@@ -83,16 +85,16 @@ set_option maxHeartbeats 1600000 in
 theorem paperGroupFactorUnitaryTwo_conj_inr (h : H) :
     paperGroupFactorUnitaryTwo.conjStarAlgEquiv
       (leftRegularUnitary
-        (SemidirectProduct.inr h : PaperGroupTwo) :
-          GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo) =
+        (SemidirectProduct.inr h : Γ₂) :
+          GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂) =
       (crossedGroupUnitary paperHaarActionTwo h).toContinuousLinearEquiv.toContinuousLinearMap := by
   apply ContinuousLinearMap.ext
   intro η
   let ξ := paperGroupFactorUnitaryTwo.symm η
   have hη : paperGroupFactorUnitaryTwo ξ = η :=
     paperGroupFactorUnitaryTwo.apply_symm_apply η
-  let T : GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo :=
-    leftRegularUnitary (SemidirectProduct.inr h : PaperGroupTwo)
+  let T : GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂ :=
+    leftRegularUnitary (SemidirectProduct.inr h : Γ₂)
   have hconj :=
     (LinearIsometryEquiv.conjStarAlgEquiv_apply_apply
       paperGroupFactorUnitaryTwo T (paperGroupFactorUnitaryTwo ξ)).trans
@@ -104,16 +106,16 @@ theorem paperGroupFactorUnitaryTwo_conj_inr (h : H) :
   change paperFourierCoordinateUnitary
       (semidirectFubini paperThetaTwoHom
         ((leftRegularUnitary
-          (SemidirectProduct.inr h : PaperGroupTwo) :
-            GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo) ξ) h') =
+          (SemidirectProduct.inr h : Γ₂) :
+            GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂) ξ) h') =
     crossedActionL2Equiv paperHaarActionTwo h
       (paperFourierCoordinateUnitary
         (semidirectFubini paperThetaTwoHom ξ (h⁻¹ * h')))
   have hnormal :
       semidirectFubini paperThetaTwoHom
         ((leftRegularUnitary
-          (SemidirectProduct.inr h : PaperGroupTwo) :
-            GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo) ξ) h' =
+          (SemidirectProduct.inr h : Γ₂) :
+            GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂) ξ) h' =
       l2Reindex (paperThetaTwoMulEquiv h)
         (semidirectFubini paperThetaTwoHom ξ (h⁻¹ * h')) := by
     ext a

@@ -21,8 +21,7 @@ noncomputable section
 
 /- A group isomorphism induces the module equivalence required in Section 6 (Zhou §6). -/
 theorem paperCharacteristicModuleEquiv
-    (f : PaperKernel.paperGammaOneOf PaperKernel.paperActionData ≃*
-      PaperKernel.paperGammaTwoOf PaperKernel.paperActionData) :
+    (f : PaperKernel.paperGammaOne ≃* PaperKernel.paperGammaTwo) :
     ∃ σ : PaperKernel.Q ≃* PaperKernel.Q, Nonempty
       ((qRepresentationOne).asModule ≃ₗ[Ring]
         (qRepresentationTwoAlong σ).asModule) := by
@@ -40,8 +39,7 @@ theorem paperCharacteristicModuleEquiv
 theorem paperNotIsomorphic
     (hOne : moduleOneSemisimple) :
     ¬ Nonempty
-      (PaperKernel.paperGammaOneOf PaperKernel.paperActionData ≃*
-        PaperKernel.paperGammaTwoOf PaperKernel.paperActionData) := by
+      (PaperKernel.paperGammaOne ≃* PaperKernel.paperGammaTwo) := by
   rintro ⟨f⟩
   obtain ⟨σ, ⟨e⟩⟩ := paperCharacteristicModuleEquiv f
   apply paper_moduleTwoAlong_not_semisimple σ

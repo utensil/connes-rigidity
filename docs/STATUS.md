@@ -16,12 +16,19 @@ detailed correspondence, proof-hole, provenance, and licensing records.
 | Layer | Role | Canonical endpoint |
 | --- | --- | --- |
 | `Connes/Foundation` | Reusable algebra, group theory, harmonic analysis, and operator algebra | Imported by the section proofs, not assembled directly by users. |
-| `Connes/Construction` | Zhou's concrete tensor kernel, retraction, acting group, and two actions | `PaperKernel.paperGammaOneOf`, `paperGammaTwoOf` |
+| `Connes/Construction` | Zhou's concrete tensor kernel, retraction, acting group, and two actions | `PaperKernel.paperGammaOne`, `paperGammaTwo` |
 | `Connes/Paper/Section3` | Compact dual, Haar/Fourier transport, fiber shear, and group-factor equivalence | `PaperFactorClosure.paperGroupFactors_isomorphic` |
 | `Connes/Paper/Section4` | Elementary generation, spectral measures and detectors, and property-(T) transfer | `PaperSpectralPropertyT.completion_of_spectralData` |
 | `Connes/Paper/Section5` | Concrete orbit calculations and the three-case ICC argument | `PaperICC.paper_gammaOne_icc`, `paper_gammaTwo_icc` |
 | `Connes/Paper/Section6` | Characteristic-kernel transport, quotient twists, semisimplicity, and the cocycle obstruction | `PaperModuleSemisimpleTransport.paperGroups_not_isomorphic` |
 | `Connes/Paper/Section7`, `Connes/Main.lean` | Proposition-valued assembly of §§3-6 | `Connes.theoremA` |
+
+The shared semidirect-product spine is indexed by a single kernel action:
+`PaperKernel.paperGammaOf`, `PaperPropertyT.lambdaOf`,
+`PaperSplitExtensions.lambdaExtension`, `PaperFiniteExtensions.finiteExtension`, and
+`PaperSpectralPropertyT.SpectralData`. The paper-facing layers specialize this
+API through the canonical concrete names `paperGammaOne`, `paperGammaTwo`,
+`lambdaOne`, and `lambdaTwo`.
 
 The paper-to-declaration correspondence is detailed in
 [`STATEMENT_MAP.md`](STATEMENT_MAP.md). Public code-source attribution is kept

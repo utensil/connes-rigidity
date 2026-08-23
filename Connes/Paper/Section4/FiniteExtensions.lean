@@ -2,7 +2,7 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Concrete finite-index extension data for the Zhou semidirect products.
+Action-indexed finite-extension data for the Zhou semidirect products.
 Paper: §4.
 -/
 import Connes.Paper.Section4.SplitExtensions
@@ -19,13 +19,10 @@ noncomputable section
 abbrev N := Multiplicative PaperKernel.D
 abbrev S := SpecialLinear.SL3
 abbrev Q := PaperKernel.Q
-abbrev FullCarrier (action : H →* MulAut N) :=
-  SemidirectProduct N H action
-abbrev LambdaCarrier (action : H →* MulAut N) :=
-  SemidirectProduct N S (action.comp sl3ToActingGroup)
 
 /-- The finite quotient map records the Sp₄(F₂) coordinate. Paper: §4. -/
-def quotientQ (action : H →* MulAut N) : FullCarrier action →* Q :=
+def quotientQ (action : H →* MulAut N) :
+    PaperKernel.paperGammaCarrier action →* Q :=
   (MonoidHom.snd S Q).comp
     (SemidirectProduct.rightHom (N := N) (G := H) (φ := action))
 
@@ -37,14 +34,14 @@ theorem quotientQ_surjective (action : H →* MulAut N) :
 
 /-- The intermediate semidirect product embeds as the kernel of the finite quotient. Paper: §4. -/
 def liftLambda (action : H →* MulAut N) :
-    LambdaCarrier action →* FullCarrier action :=
+    lambdaCarrier action →* PaperKernel.paperGammaCarrier action :=
   SemidirectProduct.map (MonoidHom.id N) sl3ToActingGroup (by
     intro s
     rfl)
 
 /-- The intermediate group is identified with the finite-index kernel. Paper: §4. -/
 def lambdaToSubgroup (action : H →* MulAut N) :
-    LambdaCarrier action ≃* (quotientQ action).ker where
+    lambdaCarrier action ≃* (quotientQ action).ker where
   toFun x := ⟨liftLambda action x, by
     apply MonoidHom.mem_ker.mpr
     rfl⟩
@@ -53,7 +50,9 @@ def lambdaToSubgroup (action : H →* MulAut N) :
     apply SemidirectProduct.ext <;> rfl
   right_inv x := by
     apply Subtype.ext
-    change (⟨x.1.left, (x.1.right.1, 1)⟩ : FullCarrier action) = x.1
+    change
+      (⟨x.1.left, (x.1.right.1, 1)⟩ :
+        PaperKernel.paperGammaCarrier action) = x.1
     apply SemidirectProduct.ext
     · rfl
     · apply Prod.ext
@@ -66,65 +65,35 @@ def lambdaToSubgroup (action : H →* MulAut N) :
     exact (liftLambda action).map_mul x y
 
 private theorem quotient_finite (action : H →* MulAut N) :
-    Finite ((FullCarrier action) ⧸ (quotientQ action).ker) := by
+    Finite ((PaperKernel.paperGammaCarrier action) ⧸
+      (quotientQ action).ker) := by
   let e := QuotientGroup.quotientKerEquivOfSurjective
     (quotientQ action) (quotientQ_surjective action)
   exact Finite.of_injective (fun x => e x) e.injective
 
-/-- The first finite extension in Zhou Proposition 4.8 is concrete. Paper: §4. -/
-def finiteExtensionOne :
+/-- The finite extension associated to a kernel action. Paper: §4. -/
+def finiteExtension
+    (action : H →* MulAut N) :
     PropertyTTransfer.FiniteExtensionData
-      (lambdaOneOf PaperKernel.paperActionData)
-      (PaperKernel.paperGammaOneOf PaperKernel.paperActionData)
+      (lambdaOf action) (PaperKernel.paperGammaOf action)
       finiteSymplecticGroup := by
-  let Nq := (quotientQ PaperKernel.paperThetaOneHom).ker
-  let hN : Nq.Normal := (quotientQ PaperKernel.paperThetaOneHom).normal_ker
-  letI : Finite ((PaperKernel.paperGammaOneOf PaperKernel.paperActionData : Type) ⧸ Nq) := by
-    exact quotient_finite PaperKernel.paperThetaOneHom
+  let Nq := (quotientQ action).ker
+  let hN : Nq.Normal := (quotientQ action).normal_ker
+  let _ : Finite ((PaperKernel.paperGammaOf action : Type) ⧸ Nq) := by
+    exact quotient_finite action
   have hindex : Nq.FiniteIndex :=
     Subgroup.finiteIndex_of_finite_quotient
   have hquotient :
       CountableDiscreteGroup.quotient
-          (PaperKernel.paperGammaOneOf PaperKernel.paperActionData) Nq hN ≃*
+          (PaperKernel.paperGammaOf action) Nq hN ≃*
         finiteSymplecticGroup := by
-    change ((PaperKernel.paperGammaOneOf PaperKernel.paperActionData : Type) ⧸ Nq) ≃*
-      (Q : Type)
     exact QuotientGroup.quotientKerEquivOfSurjective
-      (quotientQ PaperKernel.paperThetaOneHom)
-      (quotientQ_surjective PaperKernel.paperThetaOneHom)
+      (quotientQ action) (quotientQ_surjective action)
   exact {
     subgroup := Nq
     normal := hN
     finiteIndex := hindex
-    subgroupEquiv := lambdaToSubgroup PaperKernel.paperThetaOneHom
-    quotientEquiv := hquotient }
-
-/-- The second finite extension in Zhou Proposition 4.8 is concrete. Paper: §4. -/
-def finiteExtensionTwo :
-    PropertyTTransfer.FiniteExtensionData
-      (lambdaTwoOf PaperKernel.paperActionData)
-      (PaperKernel.paperGammaTwoOf PaperKernel.paperActionData)
-      finiteSymplecticGroup := by
-  let Nq := (quotientQ PaperKernel.paperThetaTwoHom).ker
-  let hN : Nq.Normal := (quotientQ PaperKernel.paperThetaTwoHom).normal_ker
-  letI : Finite ((PaperKernel.paperGammaTwoOf PaperKernel.paperActionData : Type) ⧸ Nq) := by
-    exact quotient_finite PaperKernel.paperThetaTwoHom
-  have hindex : Nq.FiniteIndex :=
-    Subgroup.finiteIndex_of_finite_quotient
-  have hquotient :
-      CountableDiscreteGroup.quotient
-          (PaperKernel.paperGammaTwoOf PaperKernel.paperActionData) Nq hN ≃*
-        finiteSymplecticGroup := by
-    change ((PaperKernel.paperGammaTwoOf PaperKernel.paperActionData : Type) ⧸ Nq) ≃*
-      (Q : Type)
-    exact QuotientGroup.quotientKerEquivOfSurjective
-      (quotientQ PaperKernel.paperThetaTwoHom)
-      (quotientQ_surjective PaperKernel.paperThetaTwoHom)
-  exact {
-    subgroup := Nq
-    normal := hN
-    finiteIndex := hindex
-    subgroupEquiv := lambdaToSubgroup PaperKernel.paperThetaTwoHom
+    subgroupEquiv := lambdaToSubgroup action
     quotientEquiv := hquotient }
 
 end

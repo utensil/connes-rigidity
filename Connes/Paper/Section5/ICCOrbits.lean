@@ -579,17 +579,14 @@ theorem paper_actionData_two : PaperICC.ActionData paperThetaTwoHom where
   kernel_orbit := paper_kernel_orbit_two
   q_displacement := paper_q_mul_displacement_two
 
-/-- ICC data for both concrete Zhou actions. Paper: §5. -/
-theorem paper_dataPair : PaperICC.DataPair PaperKernel.paperActionData where
-  thetaOne := paper_actionData_one
-  thetaTwo := paper_actionData_two
-
 /-- The first concrete Zhou group is ICC. This is the public §5 endpoint. -/
 theorem paper_gammaOne_icc :
-    IsICC (PaperKernel.paperGammaOneOf PaperKernel.paperActionData) := by
-  exact PaperICC.gammaOne_icc PaperKernel.paperActionData paper_dataPair
+    IsICC PaperKernel.paperGammaOne := by
+  exact PaperICC.isICC_of_product_quotient
+    PaperKernel.paperThetaOneHom paper_actionData_one
 
 /-- The second concrete Zhou group is ICC. This is the public §5 endpoint. -/
 theorem paper_gammaTwo_icc :
-    IsICC (PaperKernel.paperGammaTwoOf PaperKernel.paperActionData) := by
-  exact PaperICC.gammaTwo_icc PaperKernel.paperActionData paper_dataPair
+    IsICC PaperKernel.paperGammaTwo := by
+  exact PaperICC.isICC_of_product_quotient
+    PaperKernel.paperThetaTwoHom paper_actionData_two

@@ -22,10 +22,9 @@ abbrev N := Multiplicative PaperKernel.D
 abbrev S := SpecialLinear.SL3
 abbrev Q := PaperKernel.Q
 abbrev H := S × Q
-abbrev Carrier (action : H →* MulAut N) := SemidirectProduct N H action
 
 /- The kernel subgroup in a paper semidirect product (Zhou §6). -/
-def kernelSubgroup (action : H →* MulAut N) : Subgroup (Carrier action) :=
+def kernelSubgroup (action : H →* MulAut N) : Subgroup (PaperKernel.paperGammaCarrier action) :=
   (SemidirectProduct.inl (N := N) (G := H) (φ := action)).range
 
 /- Commutativity descends through a surjective homomorphism (Zhou §6). -/
@@ -45,7 +44,7 @@ theorem mapCommutes
 
 /- The quotient image preserves normality and commutativity (Zhou §6). -/
 theorem quotientImage_is_normal_commuting
-    (action : H →* MulAut N) (E : Subgroup (Carrier action))
+    (action : H →* MulAut N) (E : Subgroup (PaperKernel.paperGammaCarrier action))
     (hnormal : E.Normal) (hcomm : ∀ x y : E, x * y = y * x) :
     let R := Subgroup.map SemidirectProduct.rightHom E
     R.Normal ∧ (∀ x y : R, x * y = y * x) := by
@@ -74,7 +73,7 @@ theorem qImage_is_bot
 
 /- Every abelian normal subgroup is contained in the paper kernel (Zhou §6). -/
 theorem paperSemidirectNormalAbelian_le_kernel
-    (action : H →* MulAut N) (E : Subgroup (Carrier action))
+    (action : H →* MulAut N) (E : Subgroup (PaperKernel.paperGammaCarrier action))
     (hnormal : E.Normal) (hcomm : ∀ x y : E, x * y = y * x) :
     E ≤ kernelSubgroup action := by
   let R : Subgroup H := Subgroup.map SemidirectProduct.rightHom E
@@ -87,16 +86,16 @@ theorem paperSemidirectNormalAbelian_le_kernel
   intro x hx
   rw [kernelSubgroup, SemidirectProduct.range_inl_eq_ker_rightHom]
   apply MonoidHom.mem_ker.mpr
-  have hRx : (SemidirectProduct.rightHom : Carrier action →* H) x ∈ R := by
+  have hRx : (SemidirectProduct.rightHom : PaperKernel.paperGammaCarrier action →* H) x ∈ R := by
     exact Subgroup.mem_map.mpr ⟨x, hx, rfl⟩
-  have hs : ((SemidirectProduct.rightHom : Carrier action →* H) x).1 = 1 := by
-    have hm : ((SemidirectProduct.rightHom : Carrier action →* H) x).1 ∈
+  have hs : ((SemidirectProduct.rightHom : PaperKernel.paperGammaCarrier action →* H) x).1 = 1 := by
+    have hm : ((SemidirectProduct.rightHom : PaperKernel.paperGammaCarrier action →* H) x).1 ∈
         Subgroup.map (MonoidHom.fst S Q) R := by
       exact Subgroup.mem_map.mpr ⟨_, hRx, rfl⟩
     rw [hS] at hm
     exact Subgroup.mem_bot.mp hm
-  have hq : ((SemidirectProduct.rightHom : Carrier action →* H) x).2 = 1 := by
-    have hm : ((SemidirectProduct.rightHom : Carrier action →* H) x).2 ∈
+  have hq : ((SemidirectProduct.rightHom : PaperKernel.paperGammaCarrier action →* H) x).2 = 1 := by
+    have hm : ((SemidirectProduct.rightHom : PaperKernel.paperGammaCarrier action →* H) x).2 ∈
         Subgroup.map (MonoidHom.snd S Q) R := by
       exact Subgroup.mem_map.mpr ⟨_, hRx, rfl⟩
     rw [hQ] at hm
@@ -122,14 +121,14 @@ theorem kernelSubgroup_commuting (action : H →* MulAut N) :
   rcases MonoidHom.mem_range.mp x.property with ⟨a, hax⟩
   rcases MonoidHom.mem_range.mp y.property with ⟨b, hby⟩
   apply Subtype.ext
-  change (x : Carrier action) * (y : Carrier action) =
-    (y : Carrier action) * (x : Carrier action)
+  change (x : PaperKernel.paperGammaCarrier action) * (y : PaperKernel.paperGammaCarrier action) =
+    (y : PaperKernel.paperGammaCarrier action) * (x : PaperKernel.paperGammaCarrier action)
   rw [← hax, ← hby, ← map_mul, ← map_mul, mul_comm]
 
 /- Group isomorphisms carry the paper kernel onto the paper kernel (Zhou §6). -/
 theorem kernelSubgroup_characteristic
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂) :
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂) :
     Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂ := by
   have hle : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) ≤

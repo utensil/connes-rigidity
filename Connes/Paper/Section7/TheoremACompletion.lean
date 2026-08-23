@@ -34,8 +34,7 @@ theorem theoremA (propertyTInput : PaperPropertyT.EJZKInput) :
       PaperSpectralFiniteDetection.lambdaTwoSpectralData
   have hFactor := PaperFactorClosure.paperGroupFactors_isomorphic
   have hNoniso := PaperModuleSemisimpleTransport.paperGroups_not_isomorphic
-  exact ⟨PaperKernel.paperGammaOneOf PaperKernel.paperActionData,
-    PaperKernel.paperGammaTwoOf PaperKernel.paperActionData,
+  exact ⟨PaperKernel.paperGammaOne, PaperKernel.paperGammaTwo,
     hT.1, hT.2, PaperICC.paper_gammaOne_icc,
     PaperICC.paper_gammaTwo_icc, hFactor, hNoniso⟩
 

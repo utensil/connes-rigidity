@@ -25,6 +25,16 @@ noncomputable section
 abbrev Raw := DiscreteCharacterSpace PaperKernel.D
 abbrev Paper := PaperSpectralDetector.CharacterSpace
 
+private theorem paperDualCharacterAction_eq_of_apply_eq
+    {H₁ H₂ : CountableDiscreteGroup}
+    (action₁ : H₁ →* Multiplicative (AddAut PaperKernel.D)) (h₁ : H₁)
+    (action₂ : H₂ →* Multiplicative (AddAut PaperKernel.D)) (h₂ : H₂)
+    (h : action₁ h₁ = action₂ h₂) :
+    paperDualCharacterAction action₁ h₁ =
+      paperDualCharacterAction action₂ h₂ := by
+  unfold paperDualCharacterAction dualCharacterEquivOfAction
+  rw [h]
+
 /- The raw and additive character carriers differ only by a type tag. Paper: §3. -/
 def rawToPaper : Raw ≃ Paper := Additive.ofMul
 
@@ -225,7 +235,24 @@ theorem lambda_one_paper_sl3_invariance
   have hfull := paper_measure_invariant_of_raw
     (action := PaperSpectralPropertyT.lambdaOneExtension.action)
     μ hinv
-  exact hfull g
+  have hact :
+      PaperSpectralPropertyT.lambdaOneExtension.action g =
+        paperThetaOneAddAction
+          (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H) := by
+    apply Multiplicative.ext
+    apply AddEquiv.ext
+    intro d
+    rw [PaperSpectralPropertyT.lambdaOneExtension,
+      PaperSplitExtensions.lambdaExtension_action,
+      PaperPropertyT.sl3ToActingGroup_apply]
+    exact (paperThetaOneAddAction_apply _ d).symm
+  have hdual :
+      paperDualCharacterAction
+          PaperSpectralPropertyT.lambdaOneExtension.action g =
+        paperDualCharacterAction paperThetaOneAddAction
+          (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H) := by
+    exact paperDualCharacterAction_eq_of_apply_eq _ _ _ _ hact
+  simpa only [hdual] using hfull g
 
 /- The two paper actions agree on the SL₃ restriction used by the detector. Paper: §4. -/
 theorem paper_theta_two_sl3_addAction_eq (g : SpecialLinear.SL3) :
@@ -257,40 +284,28 @@ theorem lambda_two_paper_sl3_invariance
       PaperSpectralPropertyT.lambdaTwoExtension.action g =
         paperThetaTwoAddAction
           (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H) := by
-    rfl
+    apply Multiplicative.ext
+    apply AddEquiv.ext
+    intro d
+    rw [PaperSpectralPropertyT.lambdaTwoExtension,
+      PaperSplitExtensions.lambdaExtension_action,
+      PaperPropertyT.sl3ToActingGroup_apply]
+    exact (paperThetaTwoAddAction_apply _ d).symm
   have htwo := hfull g
   have hdualTwo :
       paperDualCharacterAction
           PaperSpectralPropertyT.lambdaTwoExtension.action g =
         paperDualCharacterAction paperThetaTwoAddAction
           (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H) := by
-    funext χ
-    unfold paperDualCharacterAction dualCharacterEquivOfAction
-    change (PaperDualAutomorphism.dualCharacterEquiv
-        (Multiplicative.toAdd
-          (PaperSpectralPropertyT.lambdaTwoExtension.action g))) χ =
-      (PaperDualAutomorphism.dualCharacterEquiv
-        (Multiplicative.toAdd
-          (paperThetaTwoAddAction
-            (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H)))) χ
-    rw [hact]
+    exact paperDualCharacterAction_eq_of_apply_eq _ _ _ _ hact
   rw [hdualTwo] at htwo
   have hdualOne :
       paperDualCharacterAction paperThetaTwoAddAction
           (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H) =
         paperDualCharacterAction paperThetaOneAddAction
           (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H) := by
-    funext χ
-    unfold paperDualCharacterAction dualCharacterEquivOfAction
-    change (PaperDualAutomorphism.dualCharacterEquiv
-        (Multiplicative.toAdd
-          (paperThetaTwoAddAction
-            (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H)))) χ =
-      (PaperDualAutomorphism.dualCharacterEquiv
-        (Multiplicative.toAdd
-          (paperThetaOneAddAction
-            (⟨g, (1 : PaperKernel.Q)⟩ : Construction.H)))) χ
-    rw [paper_theta_two_sl3_addAction_eq g]
+    exact paperDualCharacterAction_eq_of_apply_eq _ _ _ _
+      (paper_theta_two_sl3_addAction_eq g)
   rw [hdualOne] at htwo
   exact htwo
 
