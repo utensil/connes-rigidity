@@ -11,7 +11,7 @@ import Mathlib
 
 namespace Connes
 
-universe u v
+universe u v w
 
 /-- Countable discrete group carrier for the challenge. Paper: §7. -/
 structure CountableDiscreteGroup where
@@ -72,42 +72,27 @@ open scoped NNReal ENNReal
 /-- Challenge group-indexed Hilbert carrier. Paper: §3. -/
 abbrev GroupL2 (G : Type u) := lp (fun _ : G ↦ ℂ) 2
 
+/-- Challenge `ℓp` reindexing lemma. Paper: §3. -/
+theorem memℓp_reindex {α : Type u} {β : Type v} {E : Type w}
+    [NormedAddCommGroup E] {p : ℝ≥0∞} (e : α ≃ β) (hp : 0 < p.toReal)
+    (f : lp (fun _ : α ↦ E) p) : Memℓp (fun j : β ↦ f (e.symm j)) p := by
+  rw [memℓp_gen_iff hp]
+  exact (e.symm.summable_iff).2 ((lp.memℓp f).summable hp)
+
 /-- Challenge Hilbert reindexing boundary. Paper: §3. -/
 def l2Reindex {α : Type u} {β : Type v} (e : α ≃ β) :
     GroupL2 α ≃ₗᵢ[ℂ] GroupL2 β where
   toLinearEquiv :=
-    { toFun := fun f ↦ ⟨(fun j : β ↦ f (e.symm j)), by
-        change Memℓp (fun j : β ↦ f (e.symm j)) 2
-        rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
-        exact (e.symm.summable_iff).2
-          ((lp.memℓp f).summable (by norm_num : 0 < (2 : ℝ≥0∞).toReal))⟩
-      invFun := fun f ↦ ⟨(fun j : α ↦ f (e j)), by
-        change Memℓp (fun j : α ↦ f (e j)) 2
-        rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
-        exact e.summable_iff.mpr
-          ((lp.memℓp f).summable (by norm_num : 0 < (2 : ℝ≥0∞).toReal))⟩
-      left_inv := by
-        intro f
-        ext i
-        change f (e.symm (e i)) = f i
-        simp
-      right_inv := by
-        intro f
-        ext j
-        change f (e (e.symm j)) = f j
-        simp
-      map_add' := by
-        intro f g
-        ext j
-        rfl
-      map_smul' := by
-        intro c f
-        ext j
-        rfl }
+    { toFun := fun f ↦ ⟨(fun j : β ↦ f (e.symm j)), memℓp_reindex e (by norm_num) f⟩
+      invFun := fun f ↦ ⟨(fun j : α ↦ f (e j)), memℓp_reindex e.symm (by norm_num) f⟩
+      left_inv := fun f ↦ by ext; simp
+      right_inv := fun f ↦ by ext; simp
+      map_add' := fun _ _ ↦ by ext; rfl
+      map_smul' := fun _ _ ↦ by ext; rfl }
   norm_map' := by
     intro f
-    rw [lp.norm_eq_tsum_rpow (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
-    rw [lp.norm_eq_tsum_rpow (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
+    rw [lp.norm_eq_tsum_rpow (by norm_num : 0 < (2 : ℝ≥0∞).toReal),
+      lp.norm_eq_tsum_rpow (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
     congr 1
     exact e.symm.tsum_eq (fun i ↦ ‖f i‖ ^ (2 : ℝ≥0∞).toReal)
 
@@ -121,17 +106,13 @@ def leftRegularRepresentation (G : Type u) [Group G] :
     G →* unitary (GroupL2 G →L[ℂ] GroupL2 G) where
   toFun := leftRegularUnitary
   map_one' := by
-    apply Subtype.ext
-    apply ContinuousLinearMap.ext
-    intro f
-    ext h
+    -- Pin `λ(g)f(h) = f(g⁻¹ * h)` before discharging the representation law.
+    ext f h
     change f ((1 : G)⁻¹ * h) = f h
     simp
   map_mul' g h := by
-    apply Subtype.ext
-    apply ContinuousLinearMap.ext
-    intro f
-    ext k
+    -- Pin the same left-action convention for multiplication.
+    ext f k
     change f ((g * h)⁻¹ * k) = f (h⁻¹ * (g⁻¹ * k))
     simp [mul_assoc]
 

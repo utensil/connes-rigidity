@@ -263,17 +263,9 @@ def crossedIndexEquiv
     lp (fun _ : K ↦ H) 2 ≃ₗᵢ[ℂ] lp (fun _ : K ↦ H) 2 where
   toLinearEquiv :=
     { toFun := fun ξ ↦
-        ⟨fun k ↦ ξ (e.symm k), by
-          change Memℓp (fun k ↦ ξ (e.symm k)) 2
-          rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
-          exact (e.symm.summable_iff).2
-            ((lp.memℓp ξ).summable (by norm_num : 0 < (2 : ℝ≥0∞).toReal))⟩
+        ⟨fun k ↦ ξ (e.symm k), memℓp_reindex e (by norm_num) ξ⟩
       invFun := fun ξ ↦
-        ⟨fun k ↦ ξ (e k), by
-          change Memℓp (fun k ↦ ξ (e k)) 2
-          rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
-          exact (e.summable_iff).2
-            ((lp.memℓp ξ).summable (by norm_num : 0 < (2 : ℝ≥0∞).toReal))⟩
+        ⟨fun k ↦ ξ (e k), memℓp_reindex e.symm (by norm_num) ξ⟩
       left_inv := by
         intro ξ
         ext k
