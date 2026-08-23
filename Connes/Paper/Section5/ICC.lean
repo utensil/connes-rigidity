@@ -24,16 +24,6 @@ abbrev S := SpecialLinear.SL3
 abbrev Q := PaperKernel.Q
 abbrev H := S × Q
 
-/-- The actual semidirect carrier for one of Zhou's actions. Paper: §2, §5. -/
-abbrev Carrier (action : H →* MulAut N) := SemidirectProduct N H action
-
-/-- Countable wrapper used by the generic three-case ICC proof. Paper: §5. -/
-noncomputable def groupOf (action : H →* MulAut N) : CountableDiscreteGroup where
-  Carrier := Carrier action
-  group := SemidirectProduct.instGroup
-  countable := by
-    exact SemidirectProduct.equivProd.injective.countable
-
 /-- Infinite SL₃ orbits of nonzero kernel elements. Paper: §5. -/
 structure ActionData (action : H →* MulAut N) where
   kernel_orbit : ∀ a : N, a ≠ 1 →
@@ -45,19 +35,19 @@ structure ActionData (action : H →* MulAut N) where
           action (s, 1) (a * (action (1, q) a)⁻¹)).Infinite
 
 /-- The projection of the actual semidirect product to the SL₃ factor. -/
-def projectionS (action : H →* MulAut N) : Carrier action →* S where
+def projectionS (action : H →* MulAut N) : PaperKernel.paperGammaCarrier action →* S where
   toFun x := x.right.1
   map_one' := by rfl
   map_mul' x y := by simp [SemidirectProduct.mul_right]
 
 private theorem section_injective (action : H →* MulAut N) :
     Function.Injective (fun s : S =>
-      (SemidirectProduct.inr (s, 1) : Carrier action)) := by
+      (SemidirectProduct.inr (s, 1) : PaperKernel.paperGammaCarrier action)) := by
   intro s t h
-  exact congrArg (fun x : Carrier action => x.right.1) h
+  exact congrArg (fun x : PaperKernel.paperGammaCarrier action => x.right.1) h
 
 private theorem kernel_nontrivial_of_right_one
-    (action : H →* MulAut N) (x : Carrier action)
+    (action : H →* MulAut N) (x : PaperKernel.paperGammaCarrier action)
     (hx : x ≠ 1) (hright : x.right = 1) :
     x.left ≠ 1 := by
   intro hleft
@@ -77,13 +67,13 @@ private theorem action_commutes_with_q
   ext <;> simp
 
 private theorem q_displacement_conjugate
-    (action : H →* MulAut N) (x : Carrier action)
+    (action : H →* MulAut N) (x : PaperKernel.paperGammaCarrier action)
     (hs : x.right.1 = 1) (q : Q) (hqx : x.right.2 = q) (a : N) :
     ∀ s : S,
       (⟨x.left * action (s, (1 : Q))
-            (a * (action ((1 : S), q) a)⁻¹), x.right⟩ : Carrier action) =
-        (SemidirectProduct.inl (action (s, (1 : Q)) a) : Carrier action) * x *
-          (SemidirectProduct.inl (action (s, (1 : Q)) a) : Carrier action)⁻¹ := by
+            (a * (action ((1 : S), q) a)⁻¹), x.right⟩ : PaperKernel.paperGammaCarrier action) =
+        (SemidirectProduct.inl (action (s, (1 : Q)) a) : PaperKernel.paperGammaCarrier action) * x *
+          (SemidirectProduct.inl (action (s, (1 : Q)) a) : PaperKernel.paperGammaCarrier action)⁻¹ := by
   intro s
   have hxright : x.right = ((1 : S), q) := by
     apply Prod.ext
@@ -147,24 +137,24 @@ private theorem q_displacement_conjugate
 /-- Three-case ICC transfer for the product quotient in Zhou §5. -/
 theorem isICC_of_product_quotient
     (action : H →* MulAut N) (data : ActionData action) :
-    IsICC (groupOf action) := by
-  change Infinite (Carrier action) ∧
-    ∀ x : Carrier action, x ≠ 1 →
+    IsICC (PaperKernel.paperGammaOf action) := by
+  change Infinite (PaperKernel.paperGammaCarrier action) ∧
+    ∀ x : PaperKernel.paperGammaCarrier action, x ≠ 1 →
       Set.Infinite (conjugatesOf x)
   refine ⟨?_, ?_⟩
   · letI : Infinite S := SpecialLinear.sl3_isICC.1
     exact Infinite.of_injective
       (fun s : S =>
         (SemidirectProduct.inr (N := N) (G := H) (φ := action)
-          (s, (1 : Q)) : Carrier action))
+          (s, (1 : Q)) : PaperKernel.paperGammaCarrier action))
       (section_injective action)
-  · rintro (x : Carrier action) hx
+  · rintro (x : PaperKernel.paperGammaCarrier action) hx
     by_cases hs : x.right.1 ≠ 1
-    · let conjugates : S → Carrier action := fun s =>
+    · let conjugates : S → PaperKernel.paperGammaCarrier action := fun s =>
         (SemidirectProduct.inr (N := N) (G := H) (φ := action)
-          (s, (1 : Q)) : Carrier action) * x *
+          (s, (1 : Q)) : PaperKernel.paperGammaCarrier action) * x *
           (SemidirectProduct.inr (N := N) (G := H) (φ := action)
-            (s, (1 : Q)) : Carrier action)⁻¹
+            (s, (1 : Q)) : PaperKernel.paperGammaCarrier action)⁻¹
       apply Set.Infinite.of_image (projectionS action)
       apply (SpecialLinear.sl3_isICC.2 x.right.1 hs).mono
       rintro y hy
@@ -172,7 +162,7 @@ theorem isICC_of_product_quotient
       refine ⟨conjugates s,
         isConj_iff.mpr ⟨
           (SemidirectProduct.inr (N := N) (G := H) (φ := action)
-            (s, (1 : Q)) : Carrier action), rfl⟩, ?_⟩
+            (s, (1 : Q)) : PaperKernel.paperGammaCarrier action), rfl⟩, ?_⟩
       simp only [conjugates, projectionS]
       rfl
     · have hs' : x.right.1 = 1 := by exact not_ne_iff.mp hs
@@ -189,7 +179,7 @@ theorem isICC_of_product_quotient
         rintro y ⟨a, ⟨s, rfl⟩, rfl⟩
         apply isConj_iff.mpr
         refine ⟨(SemidirectProduct.inr (N := N) (G := H) (φ := action)
-          (s, (1 : Q)) : Carrier action), ?_⟩
+          (s, (1 : Q)) : PaperKernel.paperGammaCarrier action), ?_⟩
         have hxkernel : x = SemidirectProduct.inl x.left := by
           apply SemidirectProduct.ext
           · rfl
@@ -198,10 +188,10 @@ theorem isICC_of_product_quotient
         symm
         change
           (SemidirectProduct.inl (action (s, (1 : Q)) x.left) :
-            Carrier action) =
-            (SemidirectProduct.inr (s, (1 : Q)) : Carrier action) *
-              (SemidirectProduct.inl x.left : Carrier action) *
-                (SemidirectProduct.inr (s, (1 : Q)) : Carrier action)⁻¹
+            PaperKernel.paperGammaCarrier action) =
+            (SemidirectProduct.inr (s, (1 : Q)) : PaperKernel.paperGammaCarrier action) *
+              (SemidirectProduct.inl x.left : PaperKernel.paperGammaCarrier action) *
+                (SemidirectProduct.inr (s, (1 : Q)) : PaperKernel.paperGammaCarrier action)⁻¹
         simpa only [map_inv] using
           SemidirectProduct.inl_aut (φ := action) (s, (1 : Q)) x.left
       · obtain ⟨a, ha, horbit⟩ := data.q_displacement x.right.2 hq
@@ -233,7 +223,7 @@ theorem isICC_of_product_quotient
           rw [hset]
           exact himage
         have hinj : Function.Injective
-            (fun b : N => (⟨b, x.right⟩ : Carrier action)) := by
+            (fun b : N => (⟨b, x.right⟩ : PaperKernel.paperGammaCarrier action)) := by
           intro b c hbc
           exact congrArg SemidirectProduct.left hbc
         have hinfinite := htranslated.image
@@ -246,32 +236,13 @@ theorem isICC_of_product_quotient
             symm
             change
               (⟨x.left * action (s, (1 : Q)) displacement, x.right⟩ :
-                Carrier action) =
+                PaperKernel.paperGammaCarrier action) =
                 (SemidirectProduct.inl (action (s, (1 : Q)) a) :
-                  Carrier action) * x *
+                  PaperKernel.paperGammaCarrier action) * x *
                   (SemidirectProduct.inl (action (s, (1 : Q)) a) :
-                    Carrier action)⁻¹
+                    PaperKernel.paperGammaCarrier action)⁻¹
             dsimp [displacement]
             exact q_displacement_conjugate action x hs' x.right.2 rfl a s⟩
-
-/-- ICC inputs for both actual Zhou actions. Paper: §5. -/
-structure DataPair (actions : PaperKernel.ActionData) where
-  thetaOne : ActionData actions.thetaOne
-  thetaTwo : ActionData actions.thetaTwo
-
-/-- ICC for the first actual Zhou group. Paper: §5. -/
-theorem gammaOne_icc
-    (actions : PaperKernel.ActionData) (data : DataPair actions) :
-    IsICC (PaperKernel.paperGammaOneOf actions) := by
-  simpa only [PaperKernel.paperGammaOneOf, groupOf] using
-    isICC_of_product_quotient actions.thetaOne data.thetaOne
-
-/-- ICC for the second actual Zhou group. Paper: §5. -/
-theorem gammaTwo_icc
-    (actions : PaperKernel.ActionData) (data : DataPair actions) :
-    IsICC (PaperKernel.paperGammaTwoOf actions) := by
-  simpa only [PaperKernel.paperGammaTwoOf, groupOf] using
-    isICC_of_product_quotient actions.thetaTwo data.thetaTwo
 
 end
 end PaperICC

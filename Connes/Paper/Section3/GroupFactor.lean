@@ -25,31 +25,30 @@ noncomputable section
 
 abbrev D := PaperKernel.D
 abbrev H := Construction.H
-abbrev Kernel := Multiplicative D
-abbrev PaperGroupOne := SemidirectProduct Kernel H paperThetaOneHom
-abbrev PaperGroupTwo := SemidirectProduct Kernel H paperThetaTwoHom
+local notation "Γ₁" => PaperKernel.paperGammaCarrier paperThetaOneHom
+local notation "Γ₂" => PaperKernel.paperGammaCarrier paperThetaTwoHom
 abbrev CrossedOne := crossedHilbert paperHaarActionOne
 abbrev CrossedTwo := crossedHilbert paperHaarActionTwo
 
 /- The first concrete Zhou group-factor unitary. Paper: §3. -/
 def paperGroupFactorUnitaryOne :
-    GroupL2 PaperGroupOne ≃ₗᵢ[ℂ] CrossedOne :=
+    GroupL2 Γ₁ ≃ₗᵢ[ℂ] CrossedOne :=
   (semidirectFubini paperThetaOneHom).trans
     (crossedFiberwiseEquiv (K := H) paperFourierCoordinateUnitary)
 
 /- The second concrete Zhou group-factor unitary. Paper: §3. -/
 def paperGroupFactorUnitaryTwo :
-    GroupL2 PaperGroupTwo ≃ₗᵢ[ℂ] CrossedTwo :=
+    GroupL2 Γ₂ ≃ₗᵢ[ℂ] CrossedTwo :=
   (semidirectFubini paperThetaTwoHom).trans
     (crossedFiberwiseEquiv (K := H) paperFourierCoordinateUnitary)
 
 @[simp] theorem paperGroupFactorUnitaryOne_apply
-    (ξ : GroupL2 PaperGroupOne) (h : H) :
+    (ξ : GroupL2 Γ₁) (h : H) :
     paperGroupFactorUnitaryOne ξ h =
       paperFourierCoordinateUnitary (semidirectFubini paperThetaOneHom ξ h) := rfl
 
 @[simp] theorem paperGroupFactorUnitaryTwo_apply
-    (ξ : GroupL2 PaperGroupTwo) (h : H) :
+    (ξ : GroupL2 Γ₂) (h : H) :
     paperGroupFactorUnitaryTwo ξ h =
       paperFourierCoordinateUnitary (semidirectFubini paperThetaTwoHom ξ h) := rfl
 
@@ -61,17 +60,17 @@ set_option maxHeartbeats 1600000 in
 theorem paperGroupFactorUnitaryOne_conj_inl (d : D) :
     paperGroupFactorUnitaryOne.conjStarAlgEquiv
       (leftRegularUnitary
-        (SemidirectProduct.inl (Multiplicative.ofAdd d) : PaperGroupOne) :
-          GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne) =
+        (SemidirectProduct.inl (Multiplicative.ofAdd d) : Γ₁) :
+          GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁) =
       crossedKernelMultiplier d := by
   apply ContinuousLinearMap.ext
   intro η
   let ξ := paperGroupFactorUnitaryOne.symm η
   have hη : paperGroupFactorUnitaryOne ξ = η :=
     paperGroupFactorUnitaryOne.apply_symm_apply η
-  let T : GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne :=
+  let T : GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁ :=
     leftRegularUnitary
-      (SemidirectProduct.inl (Multiplicative.ofAdd d) : PaperGroupOne)
+      (SemidirectProduct.inl (Multiplicative.ofAdd d) : Γ₁)
   have hconj :=
     (LinearIsometryEquiv.conjStarAlgEquiv_apply_apply
       paperGroupFactorUnitaryOne T (paperGroupFactorUnitaryOne ξ)).trans
@@ -83,8 +82,8 @@ theorem paperGroupFactorUnitaryOne_conj_inl (d : D) :
   change paperFourierCoordinateUnitary
       (semidirectFubini paperThetaOneHom
         ((leftRegularUnitary
-          (SemidirectProduct.inl (Multiplicative.ofAdd d) : PaperGroupOne) :
-            GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne)
+          (SemidirectProduct.inl (Multiplicative.ofAdd d) : Γ₁) :
+            GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁)
           ξ) h) =
     crossedBaseMultiplier paperHaarActionOne
       (coordinateCharacterCoefficient d)
@@ -94,8 +93,8 @@ theorem paperGroupFactorUnitaryOne_conj_inl (d : D) :
   have hfiber :
       semidirectFubini paperThetaOneHom
           ((leftRegularUnitary
-            (SemidirectProduct.inl (Multiplicative.ofAdd d) : PaperGroupOne) :
-              GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne) ξ) h =
+            (SemidirectProduct.inl (Multiplicative.ofAdd d) : Γ₁) :
+              GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁) ξ) h =
         (leftRegularUnitary (Multiplicative.ofAdd d) :
           GroupL2 (Multiplicative D) →L[ℂ] GroupL2 (Multiplicative D))
           (semidirectFubini paperThetaOneHom ξ h) := by
@@ -131,17 +130,17 @@ set_option maxHeartbeats 1600000 in
 theorem paperGroupFactorUnitaryTwo_conj_inl (d : D) :
     paperGroupFactorUnitaryTwo.conjStarAlgEquiv
       (leftRegularUnitary
-        (SemidirectProduct.inl (Multiplicative.ofAdd d) : PaperGroupTwo) :
-          GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo) =
+        (SemidirectProduct.inl (Multiplicative.ofAdd d) : Γ₂) :
+          GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂) =
       crossedMultiplier paperHaarActionTwo (coordinateCharacterCoefficient d) := by
   apply ContinuousLinearMap.ext
   intro η
   let ξ := paperGroupFactorUnitaryTwo.symm η
   have hη : paperGroupFactorUnitaryTwo ξ = η :=
     paperGroupFactorUnitaryTwo.apply_symm_apply η
-  let T : GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo :=
+  let T : GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂ :=
     leftRegularUnitary
-      (SemidirectProduct.inl (Multiplicative.ofAdd d) : PaperGroupTwo)
+      (SemidirectProduct.inl (Multiplicative.ofAdd d) : Γ₂)
   have hconj :=
     (LinearIsometryEquiv.conjStarAlgEquiv_apply_apply
       paperGroupFactorUnitaryTwo T (paperGroupFactorUnitaryTwo ξ)).trans
@@ -153,8 +152,8 @@ theorem paperGroupFactorUnitaryTwo_conj_inl (d : D) :
   change paperFourierCoordinateUnitary
       (semidirectFubini paperThetaTwoHom
         ((leftRegularUnitary
-          (SemidirectProduct.inl (Multiplicative.ofAdd d) : PaperGroupTwo) :
-            GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo)
+          (SemidirectProduct.inl (Multiplicative.ofAdd d) : Γ₂) :
+            GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂)
           ξ) h) =
     crossedBaseMultiplier paperHaarActionTwo
       (coordinateCharacterCoefficient d)
@@ -164,8 +163,8 @@ theorem paperGroupFactorUnitaryTwo_conj_inl (d : D) :
   have hfiber :
       semidirectFubini paperThetaTwoHom
           ((leftRegularUnitary
-            (SemidirectProduct.inl (Multiplicative.ofAdd d) : PaperGroupTwo) :
-              GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo) ξ) h =
+            (SemidirectProduct.inl (Multiplicative.ofAdd d) : Γ₂) :
+              GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂) ξ) h =
         (leftRegularUnitary (Multiplicative.ofAdd d) :
           GroupL2 (Multiplicative D) →L[ℂ] GroupL2 (Multiplicative D))
           (semidirectFubini paperThetaTwoHom ξ h) := by

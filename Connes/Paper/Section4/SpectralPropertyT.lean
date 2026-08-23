@@ -2,9 +2,9 @@
 Copyright 2026 utensil
 SPDX-License-Identifier: Apache-2.0
 
-Concrete Zhou §4 wrappers for the positive scalar spectral bridge.  The
-analytic spectral measures are constructed by joint functional calculus, so
-the only paper-specific input is finite spectral detection. Paper: §4.
+The action-indexed positive scalar spectral bridge for Zhou §4. The analytic
+spectral measures are constructed by joint functional calculus, so the only
+paper-specific input is finite spectral detection. Paper: §4.
 -/
 import Connes.Paper.Section4.PropertyT
 import Connes.Paper.Section4.SplitExtensions
@@ -36,65 +36,58 @@ instance paperRawCharacterMeasurableSingletonClass :
   infer_instance
 
 /-- The first actual split extension used by the spectral argument. Paper: §4. -/
-noncomputable def lambdaOneExtension :
-    SplitAbelianExtension PaperKernel.D
-      (lambdaOneOf PaperKernel.paperActionData) SpecialLinear.sl3Group :=
-  PaperSplitExtensions.lambdaOne PaperKernel.paperActionData
+noncomputable abbrev lambdaOneExtension :
+    SplitAbelianExtension PaperKernel.D lambdaOne SpecialLinear.sl3Group :=
+  PaperSplitExtensions.lambdaExtension PaperKernel.paperThetaOneHom
 
 /-- The second actual split extension used by the spectral argument. Paper: §4. -/
-noncomputable def lambdaTwoExtension :
+noncomputable abbrev lambdaTwoExtension :
     SplitAbelianExtension PaperKernel.D
-      (lambdaTwoOf PaperKernel.paperActionData) SpecialLinear.sl3Group :=
-  PaperSplitExtensions.lambdaTwo PaperKernel.paperActionData
+      lambdaTwo SpecialLinear.sl3Group :=
+  PaperSplitExtensions.lambdaExtension PaperKernel.paperThetaTwoHom
 
-/-- Spectral data for the first concrete intermediate group. Paper: §4. -/
-structure LambdaOneSpectralData where
+/-- Spectral data for the intermediate group associated to an action. Paper: §4. -/
+structure SpectralData
+    (action : H →* MulAut (Multiplicative PaperKernel.D)) where
   J : Finset PaperKernel.D
   c : ℝ
   c_pos : 0 < c
-  detection : HasFiniteSpectralDetection lambdaOneExtension J c
+  detection : HasFiniteSpectralDetection
+    (PaperSplitExtensions.lambdaExtension action) J c
 
-/-- Spectral data for the second concrete intermediate group. Paper: §4. -/
-structure LambdaTwoSpectralData where
-  J : Finset PaperKernel.D
-  c : ℝ
-  c_pos : 0 < c
-  detection : HasFiniteSpectralDetection lambdaTwoExtension J c
-
-/-- The first concrete intermediate group is property-(T) from its spectral data. Paper: §4. -/
-theorem lambdaOne_propertyT_of_spectralData
-    (input : EJZKInput) (data : LambdaOneSpectralData) :
-    HasKazhdanPropertyT (lambdaOneOf PaperKernel.paperActionData) := by
+/-- The intermediate group of an action is property-(T) from spectral data. Paper: §4. -/
+theorem lambda_propertyT_of_spectralData
+    (input : EJZKInput)
+    (action : H →* MulAut (Multiplicative PaperKernel.D))
+    (data : SpectralData action) :
+    HasKazhdanPropertyT (lambdaOf action) := by
   exact spectral_criterion_unconditional
-    lambdaOneExtension (sl3_propertyT_from_EJZK input)
+    (PaperSplitExtensions.lambdaExtension action) (sl3_propertyT_from_EJZK input)
       data.J data.c_pos data.detection
 
-/-- The second concrete intermediate group is property-(T) from its spectral data. Paper: §4. -/
-theorem lambdaTwo_propertyT_of_spectralData
-    (input : EJZKInput) (data : LambdaTwoSpectralData) :
-    HasKazhdanPropertyT (lambdaTwoOf PaperKernel.paperActionData) := by
-  exact spectral_criterion_unconditional
-    lambdaTwoExtension (sl3_propertyT_from_EJZK input)
-      data.J data.c_pos data.detection
+/-- The full semidirect group of an action is property-(T) from spectral data. Paper: §4. -/
+theorem gamma_propertyT_of_spectralData
+    (input : EJZKInput)
+    (action : H →* MulAut (Multiplicative PaperKernel.D))
+    (data : SpectralData action) :
+    HasKazhdanPropertyT (PaperKernel.paperGammaOf action) := by
+  exact PropertyTTransfer.hasKazhdanPropertyT_of_finiteExtension
+    (PaperFiniteExtensions.finiteExtension action)
+    (lambda_propertyT_of_spectralData input action data)
+    PaperPropertyT.finiteSymplecticGroup_propertyT
 
 /-- Both concrete Zhou groups have property-(T) from the two spectral inputs. Paper: §4. -/
 theorem completion_of_spectralData
     (input : EJZKInput)
-    (dataOne : LambdaOneSpectralData)
-    (dataTwo : LambdaTwoSpectralData) :
-    HasKazhdanPropertyT
-      (PaperKernel.paperGammaOneOf PaperKernel.paperActionData) ∧
-      HasKazhdanPropertyT
-        (PaperKernel.paperGammaTwoOf PaperKernel.paperActionData) := by
+    (dataOne : SpectralData PaperKernel.paperThetaOneHom)
+    (dataTwo : SpectralData PaperKernel.paperThetaTwoHom) :
+    HasKazhdanPropertyT PaperKernel.paperGammaOne ∧
+      HasKazhdanPropertyT PaperKernel.paperGammaTwo := by
   exact ⟨
-    PropertyTTransfer.hasKazhdanPropertyT_of_finiteExtension
-      PaperFiniteExtensions.finiteExtensionOne
-      (lambdaOne_propertyT_of_spectralData input dataOne)
-      PaperPropertyT.finiteSymplecticGroup_propertyT,
-    PropertyTTransfer.hasKazhdanPropertyT_of_finiteExtension
-      PaperFiniteExtensions.finiteExtensionTwo
-      (lambdaTwo_propertyT_of_spectralData input dataTwo)
-      PaperPropertyT.finiteSymplecticGroup_propertyT⟩
+    gamma_propertyT_of_spectralData input
+      PaperKernel.paperThetaOneHom dataOne,
+    gamma_propertyT_of_spectralData input
+      PaperKernel.paperThetaTwoHom dataTwo⟩
 
 end
 end PaperSpectralPropertyT

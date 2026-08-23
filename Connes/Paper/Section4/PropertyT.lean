@@ -51,37 +51,38 @@ def sl3ToActingGroup : SpecialLinear.SL3 →* H where
   map_one' := by rfl
   map_mul' l m := by simp
 
+/-- Pointwise form of the standard inclusion of the SL₃ factor. Paper: §4. -/
+@[simp] theorem sl3ToActingGroup_apply (g : SpecialLinear.SL3) :
+    sl3ToActingGroup g = (g, 1) :=
+  rfl
+
 /-- The finite quotient in Zhou Proposition 4.8. Paper: §4. -/
 noncomputable def finiteSymplecticGroup : CountableDiscreteGroup where
   Carrier := Q
   group := inferInstance
   countable := by infer_instance
 
-/-- Carrier of the first actual SL₃ intermediate group. Paper: §4. -/
-abbrev lambdaOneCarrierOf (actions : PaperKernel.ActionData) :=
+/-- Carrier of the SL₃ intermediate group associated to an action. Paper: §4. -/
+abbrev lambdaCarrier (action : H →* MulAut (Multiplicative PaperKernel.D)) :=
   SemidirectProduct (Multiplicative PaperKernel.D) SpecialLinear.SL3
-    (actions.thetaOne.comp sl3ToActingGroup)
+    (action.comp sl3ToActingGroup)
 
-/-- Carrier of the second actual SL₃ intermediate group. Paper: §4. -/
-abbrev lambdaTwoCarrierOf (actions : PaperKernel.ActionData) :=
-  SemidirectProduct (Multiplicative PaperKernel.D) SpecialLinear.SL3
-    (actions.thetaTwo.comp sl3ToActingGroup)
-
-/-- The SL₃ intermediate group for the first actual action. Paper: §4. -/
-noncomputable def lambdaOneOf
-    (actions : PaperKernel.ActionData) : CountableDiscreteGroup :=
-  { Carrier := lambdaOneCarrierOf actions
+/-- Countable wrapper for the SL₃ intermediate group of an action. Paper: §4. -/
+noncomputable abbrev lambdaOf
+    (action : H →* MulAut (Multiplicative PaperKernel.D)) :
+    CountableDiscreteGroup :=
+  { Carrier := lambdaCarrier action
     group := SemidirectProduct.instGroup
     countable := by
       exact SemidirectProduct.equivProd.injective.countable }
 
-/-- The SL₃ intermediate group for the second actual action. Paper: §4. -/
-noncomputable def lambdaTwoOf
-    (actions : PaperKernel.ActionData) : CountableDiscreteGroup :=
-  { Carrier := lambdaTwoCarrierOf actions
-    group := SemidirectProduct.instGroup
-    countable := by
-      exact SemidirectProduct.equivProd.injective.countable }
+/-- Zhou's first concrete SL₃ intermediate group. Paper: §4. -/
+noncomputable abbrev lambdaOne : CountableDiscreteGroup :=
+  lambdaOf PaperKernel.paperThetaOneHom
+
+/-- Zhou's second concrete SL₃ intermediate group. Paper: §4. -/
+noncomputable abbrev lambdaTwo : CountableDiscreteGroup :=
+  lambdaOf PaperKernel.paperThetaTwoHom
 
 /- The finite quotient Property-(T) input is discharged by averaging. Paper: §4. -/
 theorem finiteSymplecticGroup_propertyT :

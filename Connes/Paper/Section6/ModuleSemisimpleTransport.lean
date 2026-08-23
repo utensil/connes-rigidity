@@ -52,8 +52,7 @@ theorem paper_moduleOne_semisimple :
 /-- The two concrete paper groups are nonisomorphic. This is the public §6 endpoint. -/
 theorem paperGroups_not_isomorphic :
     ¬ Nonempty
-      (PaperKernel.paperGammaOneOf PaperKernel.paperActionData ≃*
-        PaperKernel.paperGammaTwoOf PaperKernel.paperActionData) :=
+      (PaperKernel.paperGammaOne ≃* PaperKernel.paperGammaTwo) :=
   PaperNonisomorphism.paperNotIsomorphic paper_moduleOne_semisimple
 
 end

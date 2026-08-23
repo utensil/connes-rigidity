@@ -104,7 +104,7 @@ alignment:
   namespace: "Connes"
   statements:
     - source: "Zhou §2: the two groups and their actions"
-      lean: "Construction.PaperKernel.paperGammaOneOf; Construction.PaperKernel.paperGammaTwoOf"
+      lean: "Construction.PaperKernel.paperGammaOne; Construction.PaperKernel.paperGammaTwo"
       module: "Connes/Construction/PaperActionInstances.lean"
       status: "proved"
     - source: "Zhou §3: isomorphic tracial group factors"

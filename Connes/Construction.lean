@@ -194,23 +194,15 @@ noncomputable instance paperGammaKernelCountable :
   change Countable D
   infer_instance
 
-/-- Action pair over the paper-shaped kernel carrier. Paper: §2. -/
-structure ActionData where
-  thetaOne : H →* MulAut (Multiplicative D)
-  thetaTwo : H →* MulAut (Multiplicative D)
+/-- Carrier of the paper-shaped semidirect group associated to a kernel action. Paper: §2. -/
+abbrev paperGammaCarrier
+    (action : H →* MulAut (Multiplicative D)) :=
+  SemidirectProduct (Multiplicative D) H action
 
-/-- First paper-shaped semidirect group for an action input. Paper: §2. -/
-noncomputable def paperGammaOneOf
-    (actions : ActionData) : CountableDiscreteGroup where
-  Carrier := SemidirectProduct (Multiplicative D) H actions.thetaOne
-  group := inferInstance
-  countable := by
-    exact SemidirectProduct.equivProd.injective.countable
-
-/-- Second paper-shaped semidirect group for an action input. Paper: §2. -/
-noncomputable def paperGammaTwoOf
-    (actions : ActionData) : CountableDiscreteGroup where
-  Carrier := SemidirectProduct (Multiplicative D) H actions.thetaTwo
+/-- Paper-shaped semidirect group associated to a kernel action. Paper: §2. -/
+noncomputable abbrev paperGammaOf
+    (action : H →* MulAut (Multiplicative D)) : CountableDiscreteGroup where
+  Carrier := paperGammaCarrier action
   group := inferInstance
   countable := by
     exact SemidirectProduct.equivProd.injective.countable

@@ -51,6 +51,11 @@ def paperThetaTwoAddAction : H →* Multiplicative (AddAut D) :=
   (MulAutMultiplicative D).toMonoidHom.comp
     PaperKernel.paperThetaTwoHom
 
+/-- Pointwise form of the second Zhou action in the additive model. -/
+@[simp] theorem paperThetaTwoAddAction_apply (h : H) (d : D) :
+    Multiplicative.toAdd (paperThetaTwoAddAction h) d =
+      PaperKernel.paperThetaTwoLinearHom h d := rfl
+
 /- In Zhou's detector corollary only the SL₃ subgroup is used. Paper: §4. -/
 def IsInvariantPaperSL3SpectralMeasure
     (μ : ProbabilityMeasure CharacterSpace) : Prop :=

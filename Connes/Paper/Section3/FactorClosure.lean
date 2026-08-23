@@ -35,6 +35,8 @@ noncomputable section
 
 abbrev D := PaperKernel.D
 abbrev H := Construction.H
+local notation "Γ₁" => PaperKernel.paperGammaCarrier paperThetaOneHom
+local notation "Γ₂" => PaperKernel.paperGammaCarrier paperThetaTwoHom
 
 local instance paperHaarProbability
     (X : HaarProbabilityAction H PaperFactorIsomorphism.DualCoordinates) :
@@ -106,11 +108,11 @@ theorem paperGroupFactorUnitaryTwo_generatorSet_image :
       exact paperGroupFactorUnitaryTwo_conj_inr h
 
 theorem paperGroupFactorUnitaryOne_mem_reducedClosure_iff
-    (T : GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne) :
+    (T : GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁) :
     T ∈ vonNeumannClosure
-        (Set.range fun x : PaperGroupOne ↦
-          (leftRegularRepresentation PaperGroupOne x :
-            GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne)) ↔
+        (Set.range fun x : Γ₁ ↦
+          (leftRegularRepresentation Γ₁ x :
+            GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁)) ↔
       paperGroupFactorUnitaryOne.conjStarAlgEquiv T ∈
         vonNeumannClosure reducedCrossedGeneratorSetOne := by
   change T ∈ vonNeumannClosure
@@ -126,7 +128,7 @@ theorem paperGroupFactorUnitaryOne_mem_reducedClosure_iff
               GroupL2 (Multiplicative D ⋊[paperThetaOneHom] H))) ↔
         T ∈ vonNeumannClosure
           (SemidirectGeneratorTransport.generatorSet paperThetaOneHom) :=
-      Iff.of_eq (congrArg (fun M : VonNeumannAlgebra (GroupL2 PaperGroupOne) ↦
+      Iff.of_eq (congrArg (fun M : VonNeumannAlgebra (GroupL2 Γ₁) ↦
         T ∈ M) (semidirect_vonNeumannClosure_eq_inl_inr
           (A := Multiplicative D) (K := H) paperThetaOneHom))
     _ ↔ paperGroupFactorUnitaryOne.conjStarAlgEquiv T ∈
@@ -136,11 +138,11 @@ theorem paperGroupFactorUnitaryOne_mem_reducedClosure_iff
         exact paperGroupFactorUnitaryOne_generatorSet_image
 
 theorem paperGroupFactorUnitaryTwo_mem_reducedClosure_iff
-    (T : GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo) :
+    (T : GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂) :
     T ∈ vonNeumannClosure
-        (Set.range fun x : PaperGroupTwo ↦
-          (leftRegularRepresentation PaperGroupTwo x :
-            GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo)) ↔
+        (Set.range fun x : Γ₂ ↦
+          (leftRegularRepresentation Γ₂ x :
+            GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂)) ↔
       paperGroupFactorUnitaryTwo.conjStarAlgEquiv T ∈
         vonNeumannClosure reducedCrossedGeneratorSetTwo := by
   change T ∈ vonNeumannClosure
@@ -156,7 +158,7 @@ theorem paperGroupFactorUnitaryTwo_mem_reducedClosure_iff
               GroupL2 (Multiplicative D ⋊[paperThetaTwoHom] H))) ↔
         T ∈ vonNeumannClosure
           (SemidirectGeneratorTransport.generatorSet paperThetaTwoHom) :=
-      Iff.of_eq (congrArg (fun M : VonNeumannAlgebra (GroupL2 PaperGroupTwo) ↦
+      Iff.of_eq (congrArg (fun M : VonNeumannAlgebra (GroupL2 Γ₂) ↦
         T ∈ M) (semidirect_vonNeumannClosure_eq_inl_inr
           (A := Multiplicative D) (K := H) paperThetaTwoHom))
     _ ↔ paperGroupFactorUnitaryTwo.conjStarAlgEquiv T ∈
@@ -298,7 +300,7 @@ theorem paperHaarEquiv_mem_continuousClosure_iff
 /- The two paper Fourier models and the fiber shear compose to the concrete
 spatial equivalence of regular Hilbert spaces. Paper: §3. -/
 def paperSpatialUnitary :
-    GroupL2 PaperGroupOne ≃ₗᵢ[ℂ] GroupL2 PaperGroupTwo :=
+    GroupL2 Γ₁ ≃ₗᵢ[ℂ] GroupL2 Γ₂ :=
   paperGroupFactorUnitaryOne |>.trans
     (crossedHaarHilbertEquiv paperHaarEquiv) |>.trans
       paperGroupFactorUnitaryTwo.symm
@@ -306,16 +308,16 @@ def paperSpatialUnitary :
 /- The spatial equivalence carries the first regular group factor onto the
 second. Paper: §3. -/
 theorem paperSpatialUnitary_maps_group_factor
-    (T : GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne) :
+    (T : GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁) :
     T ∈ vonNeumannClosure
-        (Set.range fun x : PaperGroupOne ↦
-          (leftRegularRepresentation PaperGroupOne x :
-            GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne)) ↔
+        (Set.range fun x : Γ₁ ↦
+          (leftRegularRepresentation Γ₁ x :
+            GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁)) ↔
       paperSpatialUnitary.conjStarAlgEquiv T ∈
         vonNeumannClosure
-          (Set.range fun x : PaperGroupTwo ↦
-            (leftRegularRepresentation PaperGroupTwo x :
-              GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo)) := by
+          (Set.range fun x : Γ₂ ↦
+            (leftRegularRepresentation Γ₂ x :
+              GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂)) := by
   rw [paperGroupFactorUnitaryOne_mem_reducedClosure_iff]
   change paperGroupFactorUnitaryOne.conjStarAlgEquiv T ∈
       vonNeumannClosure reducedCrossedGeneratorSetOne ↔
@@ -323,9 +325,9 @@ theorem paperSpatialUnitary_maps_group_factor
         ((crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv
           (paperGroupFactorUnitaryOne.conjStarAlgEquiv T)) ∈
       vonNeumannClosure
-        (Set.range fun x : PaperGroupTwo ↦
-          (leftRegularRepresentation PaperGroupTwo x :
-            GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo))
+        (Set.range fun x : Γ₂ ↦
+          (leftRegularRepresentation Γ₂ x :
+            GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂))
   let S := paperGroupFactorUnitaryOne.conjStarAlgEquiv T
   let R := (crossedHaarHilbertEquiv paperHaarEquiv).conjStarAlgEquiv S
   calc
@@ -340,9 +342,9 @@ theorem paperSpatialUnitary_maps_group_factor
         reducedClosureTwo_eq_continuousClosure.symm)
     _ ↔ paperGroupFactorUnitaryTwo.symm.conjStarAlgEquiv R ∈
         vonNeumannClosure
-          (Set.range fun x : PaperGroupTwo ↦
-            (leftRegularRepresentation PaperGroupTwo x :
-              GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo)) := by
+          (Set.range fun x : Γ₂ ↦
+            (leftRegularRepresentation Γ₂ x :
+              GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂)) := by
       let X := paperGroupFactorUnitaryTwo.symm.conjStarAlgEquiv R
       have hR : paperGroupFactorUnitaryTwo.conjStarAlgEquiv
           X = R := by
@@ -354,9 +356,9 @@ theorem paperSpatialUnitary_maps_group_factor
           Iff.of_eq (congrArg (fun Z : CrossedTwo →L[ℂ] CrossedTwo ↦
             Z ∈ vonNeumannClosure reducedCrossedGeneratorSetTwo) hR.symm)
         _ ↔ X ∈ vonNeumannClosure
-            (Set.range fun x : PaperGroupTwo ↦
-              (leftRegularRepresentation PaperGroupTwo x :
-                GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo)) :=
+            (Set.range fun x : Γ₂ ↦
+              (leftRegularRepresentation Γ₂ x :
+                GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂)) :=
           (paperGroupFactorUnitaryTwo_mem_reducedClosure_iff X).symm
 
 /- The spatial equivalence preserves the canonical group vacuum. Paper: §3. -/
@@ -384,23 +386,22 @@ theorem paperSpatialUnitary_maps_vacuum :
 
 /- The concrete spatial witness for Zhou's pair of group factors. Paper: §3. -/
 def paperSpatialWitness : FactorWitness.SpatialWitness
-    (paperGammaOneOf PaperKernel.paperActionData)
-    (paperGammaTwoOf PaperKernel.paperActionData) where
+    paperGammaOne paperGammaTwo where
   unitary := by
-    change GroupL2 PaperGroupOne ≃ₗᵢ[ℂ] GroupL2 PaperGroupTwo
+    change GroupL2 Γ₁ ≃ₗᵢ[ℂ] GroupL2 Γ₂
     exact paperSpatialUnitary
   maps_group_factor := by
     intro T
     unfold groupVonNeumannAlgebra
     change T ∈ vonNeumannClosure
-        (Set.range fun x : PaperGroupOne ↦
-          (leftRegularRepresentation PaperGroupOne x :
-            GroupL2 PaperGroupOne →L[ℂ] GroupL2 PaperGroupOne)) ↔
+        (Set.range fun x : Γ₁ ↦
+          (leftRegularRepresentation Γ₁ x :
+            GroupL2 Γ₁ →L[ℂ] GroupL2 Γ₁)) ↔
       paperSpatialUnitary.conjStarAlgEquiv T ∈
         vonNeumannClosure
-          (Set.range fun x : PaperGroupTwo ↦
-            (leftRegularRepresentation PaperGroupTwo x :
-              GroupL2 PaperGroupTwo →L[ℂ] GroupL2 PaperGroupTwo))
+          (Set.range fun x : Γ₂ ↦
+            (leftRegularRepresentation Γ₂ x :
+              GroupL2 Γ₂ →L[ℂ] GroupL2 Γ₂))
     exact paperSpatialUnitary_maps_group_factor T
   maps_vacuum := by
     change paperSpatialUnitary paperIdentityOne = paperIdentityTwo
@@ -410,8 +411,7 @@ def paperSpatialWitness : FactorWitness.SpatialWitness
 Paper: §3. -/
 theorem paperGroupFactors_isomorphic :
     TracialGroupFactorsIsomorphic
-      (paperGammaOneOf PaperKernel.paperActionData)
-      (paperGammaTwoOf PaperKernel.paperActionData) :=
+      paperGammaOne paperGammaTwo :=
   FactorWitness.tracialEquiv_of_spatialWitness paperSpatialWitness
 
 end

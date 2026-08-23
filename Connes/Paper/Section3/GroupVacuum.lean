@@ -27,12 +27,14 @@ noncomputable section
 
 abbrev D := PaperKernel.D
 abbrev H := Construction.H
+local notation "Γ₁" => PaperKernel.paperGammaCarrier paperThetaOneHom
+local notation "Γ₂" => PaperKernel.paperGammaCarrier paperThetaTwoHom
 
 local instance paperDDecidableEq : DecidableEq D := Classical.decEq D
 local instance paperMultiplicativeDDecidableEq :
     DecidableEq (Multiplicative D) := Classical.decEq _
-local instance paperGroupOneDecidableEq : DecidableEq PaperGroupOne := Classical.decEq _
-local instance paperGroupTwoDecidableEq : DecidableEq PaperGroupTwo := Classical.decEq _
+local instance paperGroupOneDecidableEq : DecidableEq Γ₁ := Classical.decEq _
+local instance paperGroupTwoDecidableEq : DecidableEq Γ₂ := Classical.decEq _
 local instance paperHaarActionOneFinite :
     IsFiniteMeasure paperHaarActionOne.measure :=
   ⟨by
@@ -44,11 +46,11 @@ local instance paperHaarActionTwoFinite :
     rw [paperHaarActionTwo.probability.measure_univ]
     exact ENNReal.one_lt_top⟩
 
-def paperIdentityOne : GroupL2 PaperGroupOne :=
-  lp.single 2 (1 : PaperGroupOne) (1 : ℂ)
+def paperIdentityOne : GroupL2 Γ₁ :=
+  lp.single 2 (1 : Γ₁) (1 : ℂ)
 
-def paperIdentityTwo : GroupL2 PaperGroupTwo :=
-  lp.single 2 (1 : PaperGroupTwo) (1 : ℂ)
+def paperIdentityTwo : GroupL2 Γ₂ :=
+  lp.single 2 (1 : Γ₂) (1 : ℂ)
 
 /- The zero Fourier character is the constant vector. Paper: §3. -/
 theorem coordinateCharacterL2_zero :

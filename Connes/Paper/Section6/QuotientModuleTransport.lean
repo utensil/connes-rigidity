@@ -159,14 +159,14 @@ def restrictEquiv
 /- The quotient homomorphism induced by a semidirect-product isomorphism (Zhou §6). -/
 def quotientMap
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂) : H →* H :=
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂) : H →* H :=
   (SemidirectProduct.rightHom (N := N) (G := H) (φ := action₂)).comp
     (f.toMonoidHom.comp
       (SemidirectProduct.inr (N := N) (G := H) (φ := action₁)))
 
 /- Every semidirect element splits into kernel and quotient coordinates (Zhou §6). -/
 theorem semidirect_decompose
-    (action : H →* MulAut N) (x : Carrier action) :
+    (action : H →* MulAut N) (x : PaperKernel.paperGammaCarrier action) :
     x = SemidirectProduct.inl x.left * SemidirectProduct.inr x.right := by
   apply SemidirectProduct.ext
   · simp
@@ -175,10 +175,10 @@ theorem semidirect_decompose
 /- The induced quotient map agrees with the right coordinate (Zhou §6). -/
 theorem quotientMap_apply_right
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂)
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂)
     (hchar : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂)
-    (x : Carrier action₁) :
+    (x : PaperKernel.paperGammaCarrier action₁) :
     quotientMap action₁ action₂ f x.right = (f x).right := by
   have hkernel : f (SemidirectProduct.inl x.left) ∈
       kernelSubgroup action₂ := by
@@ -203,7 +203,7 @@ theorem quotientMap_apply_right
 /- The quotient homomorphism induced by an isomorphism is invertible (Zhou §6). -/
 def quotientEquiv
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂)
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂)
     (hchar : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂) : H ≃* H where
   toFun := quotientMap action₁ action₂ f
@@ -245,7 +245,7 @@ def quotientEquiv
 /- The induced quotient automorphism restricts to the finite factor (Zhou §6). -/
 def quotientAutomorphism
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂)
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂)
     (hchar : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂) : Q ≃* Q :=
   let ψ := quotientEquiv action₁ action₂ f hchar
@@ -276,7 +276,7 @@ def kernelSubgroupEquiv (action : H →* MulAut N) :
 /- The kernel map induced by a group isomorphism (Zhou §6). -/
 def kernelMap
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂)
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂)
     (hchar : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂) : N ≃* N :=
   (kernelSubgroupEquiv action₁).trans
@@ -285,7 +285,7 @@ def kernelMap
 /- The kernel map is read from the kernel coordinate (Zhou §6). -/
 theorem kernelMap_apply_left
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂)
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂)
     (hchar : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂) (n : N) :
     kernelMap action₁ action₂ f hchar n =
@@ -295,7 +295,7 @@ theorem kernelMap_apply_left
 /- The kernel map commutes with kernel inclusion (Zhou §6). -/
 theorem kernelMap_inl
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂)
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂)
     (hchar : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂) (n : N) :
     SemidirectProduct.inl (kernelMap action₁ action₂ f hchar n) =
@@ -317,29 +317,29 @@ theorem kernelMap_inl
 /- An abelian kernel coordinate does not affect quotient conjugation (Zhou §6). -/
 theorem inl_conjugation_ignores_kernel
     (action : H →* MulAut N) (a n : N) (h : H) :
-    ((SemidirectProduct.inl a : Carrier action) *
+    ((SemidirectProduct.inl a : PaperKernel.paperGammaCarrier action) *
         SemidirectProduct.inr h) * SemidirectProduct.inl n *
-          ((SemidirectProduct.inl a : Carrier action) *
+          ((SemidirectProduct.inl a : PaperKernel.paperGammaCarrier action) *
             SemidirectProduct.inr h)⁻¹ =
-      (SemidirectProduct.inr h : Carrier action) *
+      (SemidirectProduct.inr h : PaperKernel.paperGammaCarrier action) *
         SemidirectProduct.inl n * SemidirectProduct.inr h⁻¹ := by
-  have hinvr : (SemidirectProduct.inr h : Carrier action)⁻¹ =
+  have hinvr : (SemidirectProduct.inr h : PaperKernel.paperGammaCarrier action)⁻¹ =
       SemidirectProduct.inr h⁻¹ := by
     exact (map_inv (SemidirectProduct.inr (N := N) (G := H)
       (φ := action)) h).symm
   calc
-    _ = (SemidirectProduct.inl a : Carrier action) *
-        ((SemidirectProduct.inr h : Carrier action) *
+    _ = (SemidirectProduct.inl a : PaperKernel.paperGammaCarrier action) *
+        ((SemidirectProduct.inr h : PaperKernel.paperGammaCarrier action) *
           SemidirectProduct.inl n * SemidirectProduct.inr h⁻¹) *
-            (SemidirectProduct.inl a : Carrier action)⁻¹ := by
+            (SemidirectProduct.inl a : PaperKernel.paperGammaCarrier action)⁻¹ := by
               rw [← hinvr]
               group
-    _ = (SemidirectProduct.inl a : Carrier action) *
+    _ = (SemidirectProduct.inl a : PaperKernel.paperGammaCarrier action) *
         SemidirectProduct.inl (action h n) *
-          (SemidirectProduct.inl a : Carrier action)⁻¹ := by
+          (SemidirectProduct.inl a : PaperKernel.paperGammaCarrier action)⁻¹ := by
             rw [SemidirectProduct.inl_aut]
     _ = SemidirectProduct.inl (action h n) := by
-      have hinv : (SemidirectProduct.inl a : Carrier action)⁻¹ =
+      have hinv : (SemidirectProduct.inl a : PaperKernel.paperGammaCarrier action)⁻¹ =
           SemidirectProduct.inl a⁻¹ := by
         exact (map_inv (SemidirectProduct.inl (φ := action)) a).symm
       rw [hinv, ← map_mul, ← map_mul]
@@ -355,7 +355,7 @@ theorem inl_conjugation_ignores_kernel
 /- The group isomorphism transports the semidirect action (Zhou §6). -/
 theorem kernelMap_intertwines
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂)
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂)
     (hchar : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂) (h : H) (n : N) :
     kernelMap action₁ action₂ f hchar (action₁ h n) =
@@ -409,7 +409,7 @@ theorem kernelMap_intertwines
 /- The transported kernel group map is linear over the Boolean field (Zhou §6). -/
 def kernelLinearEquiv
     (action₁ action₂ : H →* MulAut N)
-    (f : Carrier action₁ ≃* Carrier action₂)
+    (f : PaperKernel.paperGammaCarrier action₁ ≃* PaperKernel.paperGammaCarrier action₂)
     (hchar : Subgroup.map f.toMonoidHom (kernelSubgroup action₁) =
       kernelSubgroup action₂) : PaperKernel.D ≃ₗ[k] PaperKernel.D := by
   let e : PaperKernel.D ≃+ PaperKernel.D := AddEquiv.toMultiplicative.symm
@@ -426,8 +426,8 @@ def kernelLinearEquiv
 
 /- The transported linear kernel map respects the paper actions (Zhou §6). -/
 theorem kernelLinearEquiv_intertwines
-    (f : Carrier PaperKernel.paperThetaOneHom ≃*
-      Carrier PaperKernel.paperThetaTwoHom)
+    (f : PaperKernel.paperGammaCarrier PaperKernel.paperThetaOneHom ≃*
+      PaperKernel.paperGammaCarrier PaperKernel.paperThetaTwoHom)
     (hchar : Subgroup.map f.toMonoidHom
         (kernelSubgroup PaperKernel.paperThetaOneHom) =
       kernelSubgroup PaperKernel.paperThetaTwoHom) (h : H)
@@ -446,8 +446,8 @@ theorem kernelLinearEquiv_intertwines
 
 /- The quotient automorphism has the expected finite-factor lift (Zhou §6). -/
 theorem quotientAutomorphism_lift
-    (f : Carrier PaperKernel.paperThetaOneHom ≃*
-      Carrier PaperKernel.paperThetaTwoHom)
+    (f : PaperKernel.paperGammaCarrier PaperKernel.paperThetaOneHom ≃*
+      PaperKernel.paperGammaCarrier PaperKernel.paperThetaTwoHom)
     (hchar : Subgroup.map f.toMonoidHom
         (kernelSubgroup PaperKernel.paperThetaOneHom) =
       kernelSubgroup PaperKernel.paperThetaTwoHom) (q : Q) :
@@ -503,8 +503,8 @@ theorem moduleMapOfLinearEquiv_bijective
 
 /- The concrete paper actions admit the transported intertwiner (Zhou §6). -/
 def paperModuleIntertwining
-    (f : Carrier PaperKernel.paperThetaOneHom ≃*
-      Carrier PaperKernel.paperThetaTwoHom)
+    (f : PaperKernel.paperGammaCarrier PaperKernel.paperThetaOneHom ≃*
+      PaperKernel.paperGammaCarrier PaperKernel.paperThetaTwoHom)
     (hchar : Subgroup.map f.toMonoidHom
         (kernelSubgroup PaperKernel.paperThetaOneHom) =
       kernelSubgroup PaperKernel.paperThetaTwoHom) :
@@ -533,8 +533,8 @@ def paperModuleIntertwining
 
 /- The concrete module map induced by a group isomorphism (Zhou §6). -/
 def paperModuleLinearMap
-    (f : Carrier PaperKernel.paperThetaOneHom ≃*
-      Carrier PaperKernel.paperThetaTwoHom)
+    (f : PaperKernel.paperGammaCarrier PaperKernel.paperThetaOneHom ≃*
+      PaperKernel.paperGammaCarrier PaperKernel.paperThetaTwoHom)
     (hchar : Subgroup.map f.toMonoidHom
         (kernelSubgroup PaperKernel.paperThetaOneHom) =
       kernelSubgroup PaperKernel.paperThetaTwoHom) :
@@ -551,8 +551,8 @@ def paperModuleLinearMap
 
 /- The concrete module map is an equivalence (Zhou §6). -/
 theorem paperModuleLinearMap_bijective
-    (f : Carrier PaperKernel.paperThetaOneHom ≃*
-      Carrier PaperKernel.paperThetaTwoHom)
+    (f : PaperKernel.paperGammaCarrier PaperKernel.paperThetaOneHom ≃*
+      PaperKernel.paperGammaCarrier PaperKernel.paperThetaTwoHom)
     (hchar : Subgroup.map f.toMonoidHom
         (kernelSubgroup PaperKernel.paperThetaOneHom) =
       kernelSubgroup PaperKernel.paperThetaTwoHom) :
