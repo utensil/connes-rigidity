@@ -3,6 +3,14 @@ version: "v0.4"
 
 project:
   name: "connes-rigidity"
+  description: >-
+    Formalization of Zhou's Theorem A, complete relative to the cited
+    Ershov–Jaikin-Zapirain–Kassabov property-(T) input for EL₃(𝔽₂[t]). It
+    constructs two countable discrete ICC groups satisfying the formal
+    property-(T) predicate that are not isomorphic, while their group von
+    Neumann algebras are related by a trace-preserving normal star-algebra
+    equivalence. The EL₃ = SL₃ transport and every other certificate used by the
+    final theorem are proved internally.
   authors:
     - "utensil"
   responsible_maintainers:
@@ -79,9 +87,13 @@ status:
 automation:
   methods:
     - method: "agent"
+      models:
+        - "GPT-5.6 Sol"
+      framework: "Codex"
       tool_setup: >-
-        Lean 4 and Mathlib development with Comparator statement and axiom
-        checks, lean4export, nanoda replay, and Linux landrun confinement.
+        Maintainer-directed Lean 4 and Mathlib development with Comparator
+        statement and axiom checks, lean4export, nanoda replay, and Linux
+        landrun confinement.
   notes: >-
     Maintainer-directed iterative formalization, review, and refactoring. The
     automated trust-boundary checks do not constitute mathematical review.
@@ -90,15 +102,21 @@ fidelity:
   divergences: >-
     The formalization follows Zhou's §§2–7 construction but leaves the cited
     EJZK property-(T) result as the explicit premise of Connes.theoremA rather
-    than formalizing that literature theorem. Its section proofs expose
-    proposition-valued endpoints before the final assembly.
+    than formalizing that literature theorem. The property-(T) predicate
+    quantifies over Hilbert-space carriers in the group's universe. Standard
+    property (T) implies this predicate, but the converse equivalence bridge is
+    not formalized. No other divergence is known.
 
 review:
   status: "agent-reviewed"
-  reviewers: []
+  reviewers:
+    - "GPT-5.6 Sol clean-room agents"
   notes: >-
-    Internal project review has been performed. No peer review, author
-    verification, or independent mathematical certification is claimed.
+    Internal clean-room agent reviews used the Tau Ceti rubrics and additional
+    project-level evidence checks documented in docs/AUDITS.md. The planned
+    internal human mathematical examination remains open. No peer review,
+    source-author verification, or independent mathematical certification is
+    claimed.
 
 alignment:
   namespace: "Connes"

@@ -235,7 +235,13 @@ noncomputable def elementaryGroup : CountableDiscreteGroup :=
 
 end PaperPropertyT
 
-/-- Comparator headline theorem. Paper: §7. -/
+/-- Comparator statement for Zhou's Theorem A at the explicit EJZK boundary.
+Assuming the cited property-(T) input for `EL₃(𝔽₂[t])`, it asserts the
+existence of two countable discrete ICC groups satisfying the formal
+property-(T) predicate that are not isomorphic although their group von
+Neumann algebras are related by a trace-preserving normal star-algebra
+equivalence. The solution proves `EL₃ = SL₃` and every other certificate used in
+the conclusion. Paper: §7. -/
 theorem theoremA
     (hEJZK : HasKazhdanPropertyT PaperPropertyT.elementaryGroup) :
     ∃ Γ₁ Γ₂ : CountableDiscreteGroup.{0},
