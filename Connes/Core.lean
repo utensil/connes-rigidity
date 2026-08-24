@@ -129,25 +129,37 @@ def leftRegularRepresentation (G : Type u) [Group G] :
     change f ((g * h)⁻¹ * k) = f (h⁻¹ * (g⁻¹ * k))
     simp [mul_assoc]
 
-/-- Von Neumann closure boundary. Paper: §3. -/
+/-- Bicommutant presentation of the von Neumann closure boundary. Paper: §3. -/
 def vonNeumannClosure
     {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (S : Set (H →L[ℂ] H)) :
-    VonNeumannAlgebra H where
-  toStarSubalgebra :=
-    StarSubalgebra.centralizer ℂ (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H))
-  centralizer_centralizer' := by
-    change
-      Set.centralizer
-          (Set.centralizer
-            ((StarSubalgebra.centralizer ℂ
-              (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H))) :
-                Set (H →L[ℂ] H))) =
-        ((StarSubalgebra.centralizer ℂ
-          (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H))) :
-            Set (H →L[ℂ] H))
-    rw [StarSubalgebra.coe_centralizer_centralizer]
-    exact Set.centralizer_centralizer_centralizer ((S ∪ star S).centralizer)
+    VonNeumannAlgebra H :=
+  ({ toStarSubalgebra := StarSubalgebra.centralizer ℂ S
+     centralizer_centralizer' :=
+       Set.centralizer_centralizer_centralizer (S ∪ star S) } :
+    VonNeumannAlgebra H).commutant
+
+/-- The von Neumann closure has the expected bicommutant carrier. -/
+@[simp]
+theorem coe_vonNeumannClosure
+    {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    (S : Set (H →L[ℂ] H)) :
+    (vonNeumannClosure S : Set (H →L[ℂ] H)) =
+      (StarSubalgebra.centralizer ℂ
+        (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H)) :
+          Set (H →L[ℂ] H)) := by
+  rfl
+
+/-- Membership in the von Neumann closure is membership in the star-algebraic
+bicommutant of the generating set. -/
+@[simp]
+theorem mem_vonNeumannClosure
+    {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {S : Set (H →L[ℂ] H)} {x : H →L[ℂ] H} :
+    x ∈ vonNeumannClosure S ↔
+      x ∈ StarSubalgebra.centralizer ℂ
+        (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H)) := by
+  rfl
 
 /-- Group von Neumann algebra boundary. Paper: §3. -/
 def groupVonNeumannAlgebra (G : CountableDiscreteGroup.{u}) :
