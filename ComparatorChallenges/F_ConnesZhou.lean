@@ -116,25 +116,15 @@ def leftRegularRepresentation (G : Type u) [Group G] :
     change f ((g * h)⁻¹ * k) = f (h⁻¹ * (g⁻¹ * k))
     simp [mul_assoc]
 
-/-- Challenge von Neumann closure boundary. Paper: §3. -/
+/-- Challenge bicommutant presentation of the von Neumann closure boundary. Paper: §3. -/
 def vonNeumannClosure
     {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (S : Set (H →L[ℂ] H)) :
-    VonNeumannAlgebra H where
-  toStarSubalgebra :=
-    StarSubalgebra.centralizer ℂ (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H))
-  centralizer_centralizer' := by
-    change
-      Set.centralizer
-          (Set.centralizer
-            ((StarSubalgebra.centralizer ℂ
-              (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H))) :
-                Set (H →L[ℂ] H))) =
-        ((StarSubalgebra.centralizer ℂ
-          (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H))) :
-            Set (H →L[ℂ] H))
-    rw [StarSubalgebra.coe_centralizer_centralizer]
-    exact Set.centralizer_centralizer_centralizer ((S ∪ star S).centralizer)
+    VonNeumannAlgebra H :=
+  ({ toStarSubalgebra := StarSubalgebra.centralizer ℂ S
+     centralizer_centralizer' :=
+       Set.centralizer_centralizer_centralizer (S ∪ star S) } :
+    VonNeumannAlgebra H).commutant
 
 /-- Challenge group von Neumann algebra boundary. Paper: §3. -/
 def groupVonNeumannAlgebra (G : CountableDiscreteGroup.{u}) :

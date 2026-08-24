@@ -244,35 +244,21 @@ def crossedGeneratorSetOfContinuousCoefficients
     Set.range fun k : K ↦
       (crossedGroupUnitary X k).toContinuousLinearEquiv.toContinuousLinearMap
 
-private theorem vonNeumannClosure_coe
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [CompleteSpace E] (S : Set (E →L[ℂ] E)) :
-    (vonNeumannClosure S : Set (E →L[ℂ] E)) =
-      (S ∪ star S).centralizer.centralizer := by
-  -- Unfold the bundled closure only at this double-centralizer boundary.
-  change (((StarSubalgebra.centralizer ℂ S : Set (E →L[ℂ] E)) ∪
-      star (StarSubalgebra.centralizer ℂ S : Set (E →L[ℂ] E))).centralizer) = _
-  rw [StarMemClass.star_coe_eq, Set.union_self]
-  rfl
-
 private theorem subset_vonNeumannClosure
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [CompleteSpace E] (S : Set (E →L[ℂ] E)) :
     S ⊆ vonNeumannClosure S := by
   intro x hx
-  rw [vonNeumannClosure_coe]
+  rw [coe_vonNeumannClosure, StarSubalgebra.coe_centralizer_centralizer]
   exact Set.subset_centralizer_centralizer (Or.inl hx)
 
 private theorem mem_vonNeumannClosure_of_subset
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [CompleteSpace E] {S T : Set (E →L[ℂ] E)} (hST : S ⊆ T)
     {x : E →L[ℂ] E} (hx : x ∈ vonNeumannClosure S) :
-    x ∈ vonNeumannClosure T := by
+  x ∈ vonNeumannClosure T := by
   -- Membership is compared through the double-centralizer representation.
-  change x ∈ StarSubalgebra.centralizer ℂ
-      (StarSubalgebra.centralizer ℂ T : Set (E →L[ℂ] E))
-  change x ∈ StarSubalgebra.centralizer ℂ
-      (StarSubalgebra.centralizer ℂ S : Set (E →L[ℂ] E)) at hx
+  rw [mem_vonNeumannClosure] at hx ⊢
   simp only [StarSubalgebra.mem_centralizer_iff] at hx ⊢
   intro z hzT
   apply hx z
@@ -302,7 +288,7 @@ private theorem continuousLinearMap_mem_vonNeumannClosure_of_dense_span
     -- Coercing the comap to a set exposes the preimage used by continuity.
     change IsClosed (F ⁻¹' (vonNeumannClosure S : Set (E →L[ℂ] E)))
     apply IsClosed.preimage F.continuous
-    rw [vonNeumannClosure_coe]
+    rw [coe_vonNeumannClosure]
     exact Set.isClosed_centralizer _
   have htop : (⊤ : Submodule ℂ Q) ≤ P := by
     rw [← hv]
@@ -315,8 +301,8 @@ private theorem vonNeumannClosure_coe_self
     [CompleteSpace E] (M : VonNeumannAlgebra E) :
     vonNeumannClosure (M : Set (E →L[ℂ] E)) = M := by
   apply SetLike.coe_injective
-  rw [vonNeumannClosure_coe, StarMemClass.star_coe_eq, Set.union_self,
-    M.centralizer_centralizer]
+  rw [coe_vonNeumannClosure, StarSubalgebra.coe_centralizer_centralizer,
+    StarMemClass.star_coe_eq, Set.union_self, M.centralizer_centralizer]
 
 private theorem vonNeumannClosure_le_of_subset
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
